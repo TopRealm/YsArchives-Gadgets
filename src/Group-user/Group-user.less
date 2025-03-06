@@ -1,38 +1,15 @@
+@import (reference) '../mixins.less';
 @group: user;
-
-div,
-p {
-	&.@{group}-show {
-		display: block !important;
-	}
-}
-
-span,
-small {
-	&.@{group}-show {
-		display: inline !important;
-	}
-}
-
-table.@{group}-show {
-	display: table !important;
-}
-
-tr.@{group}-show {
-	display: table-row !important;
-}
-
-td.@{group}-show {
-	display: table-cell !important;
-}
-
-li.@{group}-show {
-	display: list-item !important;
-}
+.group(@group);
 
 .anonymous-show,
 .user-hide {
 	display: none !important;
+}
+
+/* 仅登录用户可见“协作”菜单 */
+#p-collaboration {
+	display: block !important;
 }
 
 /* 仅登录用户可见“特殊页面”菜单 */
@@ -48,14 +25,12 @@ li#t-specialpages {
 	padding: 1em;
 }
 
-body {
-	&:not(.page-有兽档案馆_首页) {
-		#catlinks:not(.catlinks-allhidden) {
-			display: block !important;
+body:not(.page-Qiuwen_首页) {
+	#catlinks:not(.catlinks-allhidden) {
+		display: block !important;
 
-			.skin-citizen & {
-				display: flex !important;
-			}
+		.skin-citizen & {
+			display: flex !important;
 		}
 	}
 }
