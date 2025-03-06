@@ -1235,7 +1235,7 @@ import {generateArray} from 'ext.gadget.Util';
 			address = address.toUpperCase();
 			// Expand zero abbreviations
 			const abbrevPos = address.indexOf('::');
-			if (abbrevPos > -1) {
+			if (abbrevPos !== -1) {
 				// We know this is valid IPv6. Find the last index of the
 				// address before any CIDR number (e.g. "a:b:c::/24").
 				const CIDRStart = address.indexOf('/');
@@ -1653,7 +1653,7 @@ import {generateArray} from 'ext.gadget.Util';
 				return data.text;
 			}
 			const idx = data.text.toUpperCase().indexOf(searchTerm.toUpperCase());
-			if (idx < 0) {
+			if (idx === -1) {
 				return data.text;
 			}
 			return $('<span>').append(

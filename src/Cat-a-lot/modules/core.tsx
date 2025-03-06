@@ -363,10 +363,10 @@ const catALot = (): void => {
 		private doAPICall(
 			_params:
 				| Omit<ApiEditPageParams, 'format'>
-				| Omit<ApiOpenSearchParams, 'format'>
-				| Omit<ApiQueryCategoryMembersParams, 'format'>
-				| Omit<ApiQueryRevisionsParams, 'format'>
-				| Omit<ApiQueryTokensParams, 'format'>,
+				 
+				 
+				 
+				 ,
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			callback: (data: any) => void
 		) {
