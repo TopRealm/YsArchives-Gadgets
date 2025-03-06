@@ -17,19 +17,19 @@ overrides:
 
 patchedDependencies:
   alpha-sort:
-    hash: soz2x3l6v7xocle4w7vguzc5ha
+    hash: c180a2c10bb672edd958072717b8c947ace596f4b53761ea9c069740b698bfb5
     path: patches/alpha-sort.patch
   esbuild-css-modules-plugin:
-    hash: naix6jn47epfc4wru5wtuz5k5i
+    hash: 52637b2dc21e44de8397583cd25c399af213f1750053751107b2a26dcf5c8728
     path: patches/esbuild-css-modules-plugin.patch
   eslint-config-wikimedia:
-    hash: iaiepfmd777wt5zivqax6j6mj4
+    hash: 779abb8b17baef258fbe8f5e633874eae088a24ecaa2dcfd24e2c3ccba9cc2e5
     path: patches/eslint-config-wikimedia.patch
   eslint-plugin-no-jquery:
-    hash: j5tec5l4ch3r5tyouixtzytkrm
+    hash: cfd80f86ffba7fed0108d6e3bd94b6e14c8473a1548da3dd1b81beeda456f466
     path: patches/eslint-plugin-no-jquery.patch
   types-mediawiki:
-    hash: vq7dw26e2dx4lkf63ka2w3gisu
+    hash: 4957ddbd0fe611e2bd128d657a2ad085926e70f339264cb8a5527038c0a13cf3
     path: patches/types-mediawiki.patch
 
 importers:
@@ -147,7 +147,7 @@ importers:
         version: 2.2.0
       alpha-sort:
         specifier: ^5.0.0
-        version: 5.0.0(patch_hash=soz2x3l6v7xocle4w7vguzc5ha)
+        version: 5.0.0(patch_hash=c180a2c10bb672edd958072717b8c947ace596f4b53761ea9c069740b698bfb5)
       broadcastchannel-polyfill:
         specifier: ^1.0.1
         version: 1.0.1
@@ -168,7 +168,7 @@ importers:
         version: 0.24.2
       esbuild-css-modules-plugin:
         specifier: ^3.1.4
-        version: 3.1.4(patch_hash=naix6jn47epfc4wru5wtuz5k5i)(esbuild@0.24.2)
+        version: 3.1.4(patch_hash=52637b2dc21e44de8397583cd25c399af213f1750053751107b2a26dcf5c8728)(esbuild@0.24.2)
       esbuild-plugin-less:
         specifier: ^1.3.14
         version: 1.3.14(esbuild@0.24.2)
@@ -186,7 +186,7 @@ importers:
         version: 10.0.1(eslint@8.57.1)
       eslint-config-wikimedia:
         specifier: ^0.28.2
-        version: 0.28.2(patch_hash=iaiepfmd777wt5zivqax6j6mj4)(@typescript-eslint/eslint-plugin@8.22.0(@typescript-eslint/parser@8.22.0(eslint@8.57.1)(typescript@5.7.3))(eslint@8.57.1)(typescript@5.7.3))(typescript@5.7.3)
+        version: 0.28.2(patch_hash=779abb8b17baef258fbe8f5e633874eae088a24ecaa2dcfd24e2c3ccba9cc2e5)(@typescript-eslint/eslint-plugin@8.22.0(@typescript-eslint/parser@8.22.0(eslint@8.57.1)(typescript@5.7.3))(eslint@8.57.1)(typescript@5.7.3))(typescript@5.7.3)
       eslint-plugin-es5:
         specifier: ^1.5.0
         version: 1.5.0(eslint@8.57.1)
@@ -279,7 +279,7 @@ importers:
         version: 4.19.2
       types-mediawiki:
         specifier: ^1.9.1
-        version: 1.9.1(patch_hash=vq7dw26e2dx4lkf63ka2w3gisu)(typescript@5.7.3)
+        version: 1.9.1(patch_hash=4957ddbd0fe611e2bd128d657a2ad085926e70f339264cb8a5527038c0a13cf3)(typescript@5.7.3)
       typescript:
         specifier: ^5.7.3
         version: 5.7.3
@@ -6949,7 +6949,7 @@ snapshots:
 
   alien-signals@0.4.14: {}
 
-  alpha-sort@5.0.0(patch_hash=soz2x3l6v7xocle4w7vguzc5ha): {}
+  alpha-sort@5.0.0(patch_hash=c180a2c10bb672edd958072717b8c947ace596f4b53761ea9c069740b698bfb5): {}
 
   ansi-escapes@4.3.2:
     dependencies:
@@ -7613,7 +7613,7 @@ snapshots:
   esbuild-android-arm64@0.14.54:
     optional: true
 
-  esbuild-css-modules-plugin@3.1.4(patch_hash=naix6jn47epfc4wru5wtuz5k5i)(esbuild@0.24.2):
+  esbuild-css-modules-plugin@3.1.4(patch_hash=52637b2dc21e44de8397583cd25c399af213f1750053751107b2a26dcf5c8728)(esbuild@0.24.2):
     dependencies:
       esbuild: 0.24.2
       lightningcss: 1.29.1
@@ -7799,7 +7799,7 @@ snapshots:
     dependencies:
       eslint: 8.57.1
 
-  eslint-config-wikimedia@0.28.2(patch_hash=iaiepfmd777wt5zivqax6j6mj4)(@typescript-eslint/eslint-plugin@8.22.0(@typescript-eslint/parser@8.22.0(eslint@8.57.1)(typescript@5.7.3))(eslint@8.57.1)(typescript@5.7.3))(typescript@5.7.3):
+  eslint-config-wikimedia@0.28.2(patch_hash=779abb8b17baef258fbe8f5e633874eae088a24ecaa2dcfd24e2c3ccba9cc2e5)(@typescript-eslint/eslint-plugin@8.22.0(@typescript-eslint/parser@8.22.0(eslint@8.57.1)(typescript@5.7.3))(eslint@8.57.1)(typescript@5.7.3))(typescript@5.7.3):
     dependencies:
       browserslist-config-wikimedia: 0.7.0
       eslint: 8.57.1
@@ -7811,7 +7811,7 @@ snapshots:
       eslint-plugin-mediawiki: 0.7.0(eslint@8.57.1)
       eslint-plugin-mocha: 10.5.0(eslint@8.57.1)
       eslint-plugin-n: 17.15.1(eslint@8.57.1)
-      eslint-plugin-no-jquery: 3.1.0(patch_hash=j5tec5l4ch3r5tyouixtzytkrm)(eslint@8.57.1)
+      eslint-plugin-no-jquery: 3.1.0(patch_hash=cfd80f86ffba7fed0108d6e3bd94b6e14c8473a1548da3dd1b81beeda456f466)(eslint@8.57.1)
       eslint-plugin-qunit: 8.1.2(eslint@8.57.1)
       eslint-plugin-security: 1.7.1
       eslint-plugin-unicorn: 56.0.1(eslint@8.57.1)
@@ -7904,7 +7904,7 @@ snapshots:
       minimatch: 9.0.5
       semver: 7.7.0
 
-  eslint-plugin-no-jquery@3.1.0(patch_hash=j5tec5l4ch3r5tyouixtzytkrm)(eslint@8.57.1):
+  eslint-plugin-no-jquery@3.1.0(patch_hash=cfd80f86ffba7fed0108d6e3bd94b6e14c8473a1548da3dd1b81beeda456f466)(eslint@8.57.1):
     dependencies:
       eslint: 8.57.1
 
@@ -8889,7 +8889,7 @@ snapshots:
       form-data: 4.0.1
       oauth-1.0a: 2.2.6
       tough-cookie: 4.1.4
-      types-mediawiki: 1.9.1(patch_hash=vq7dw26e2dx4lkf63ka2w3gisu)(typescript@5.7.3)
+      types-mediawiki: 1.9.1(patch_hash=4957ddbd0fe611e2bd128d657a2ad085926e70f339264cb8a5527038c0a13cf3)(typescript@5.7.3)
     transitivePeerDependencies:
       - debug
       - typescript
@@ -10164,7 +10164,7 @@ snapshots:
       possible-typed-array-names: 1.0.0
       reflect.getprototypeof: 1.0.10
 
-  types-mediawiki@1.9.1(patch_hash=vq7dw26e2dx4lkf63ka2w3gisu)(typescript@5.7.3):
+  types-mediawiki@1.9.1(patch_hash=4957ddbd0fe611e2bd128d657a2ad085926e70f339264cb8a5527038c0a13cf3)(typescript@5.7.3):
     dependencies:
       '@types/jquery': 3.5.32
       '@types/oojs-ui': 0.49.4

@@ -1,17 +1,10 @@
 /**
  * Autolink [[wikilinks]], [external links] and {{templates}}
  */
-import {
-	IS_DIFF_ACTION,
-	IS_TARGET_SPECIAL_PAGE,
-	IS_WG_EDIT_OR_SUBMIT_ACTION,
-	IS_WG_HISTORY_ACTION,
-	REGEX_IMPORT_SCRIPT,
-	REGEX_INTERNAL_URL,
-	REGEX_TL,
-	REGEX_URL,
-} from './constant';
+import {REGEX_IMPORT_SCRIPT, REGEX_INTERNAL_URL, REGEX_TL, REGEX_URL} from './constant';
 import type {TargetElements} from './util/getTargetElements';
+import {isDiff} from './util/isDiff';
+import {isTargetSpecialPage} from './util/isTargetSpecialPage';
 
 const processElement = ({color, targetElements}: TargetElements): void => {
 	let isActivateHTML: boolean = false;
@@ -40,7 +33,7 @@ const processElement = ({color, targetElements}: TargetElements): void => {
 	let regexWikilink2: RegExp = regexWikilink1;
 	let regexSubstinWikilink2: string = regexSubstinWikilink1;
 	// Regex for comments or code sections
-	if (!IS_DIFF_ACTION) {
+	if (!isDiff()) {
 		// Activate some HTML (inline) and wikicode for bold and italic
 		isActivateHTML = true;
 		// External links in comments or code sections, wikicode without label
@@ -111,7 +104,8 @@ const processElement = ({color, targetElements}: TargetElements): void => {
 			);
 			html = html.replace(/([^']|^)'{3}(.+?)'{3}([^']|$)/gm, '$1<b>$2</b>$3');
 			html = html.replace(/([^']|^)'{2}(.+?)'{2}([^']|$)/gm, '$1<i>$2</i>$3');
-			if (IS_WG_EDIT_OR_SUBMIT_ACTION || IS_WG_HISTORY_ACTION || IS_TARGET_SPECIAL_PAGE) {
+			const {wgAction} = mw.config.get();
+			if (['edit', 'submit', 'history'].includes(wgAction) || isTargetSpecialPage()) {
 				html = html.replace(
 					/<i>(.*?)<\/i>/g,
 					'<span title="italic" style="border:1px solid #c0c0c0;padding:2px">$1</span>'
@@ -119,7 +113,7 @@ const processElement = ({color, targetElements}: TargetElements): void => {
 			}
 			// I'm in a comment field (italic)
 		}
-		if (IS_DIFF_ACTION) {
+		if (isDiff()) {
 			html = html.replace(/<a [^>]+><\/a>/g, ''); // Clean
 			html = html.replace(
 				/([^[]|^)\[\s*(<a [^>]+>)(?:https?|ftps?):\/\/[\w!#%&()+./:=?@\\~-]+(<\/a>)\s+([^\n\]]+)]/gm,

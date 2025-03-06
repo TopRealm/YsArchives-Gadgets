@@ -16,11 +16,22 @@ const parameters: ApiParseParams = {
 	page: OPTIONS.ajaxPageTitle,
 	uselang: wgUserLanguage,
 	variant: wgUserLanguage,
+	smaxage: 600,
+	maxage: 600,
 };
 
 const queryApi = async (): Promise<ReturnType<mw.Api['get']>> => {
 	try {
-		return await api.get(parameters);
+		let response;
+
+		if (mw.storage.getObject(OPTIONS.cacheKey)) {
+			response = mw.storage.getObject(OPTIONS.cacheKey) as ReturnType<mw.Api['get']>;
+		} else {
+			response = await api.get(parameters);
+			mw.storage.setObject(OPTIONS.cacheKey, response, 60 * 10);
+		}
+
+		return response;
 	} catch (error) {
 		console.error('[AdvancedSiteNotices] Ajax error:', error);
 		return {};

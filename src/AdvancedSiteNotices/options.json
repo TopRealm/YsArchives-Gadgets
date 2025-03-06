@@ -2,5 +2,6 @@
 	"ajaxPageTitle": "Template:AdvancedSiteNotices/ajax",
 	"mountPointSelector": "#siteNotice",
 	"storageKey": "ext.gadget.AdvancedSiteNotices_dismissASN",
+	"cacheKey": "ext.gadget.AdvancedSiteNotices_cache",
 	"version": "4.0"
 }

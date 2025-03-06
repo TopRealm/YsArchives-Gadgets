@@ -6,7 +6,7 @@
 	"dependencies": [
 		"ext.gadget.FilterAlteredClicks",
 		"ext.gadget.i18n",
-		"ext.gadget.React",
+		"ext.gadget.JSX",
 		"ext.gadget.Toastify",
 		"ext.gadget.Util",
 		"mediawiki.api",

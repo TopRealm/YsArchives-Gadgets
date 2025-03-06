@@ -1,6 +1,6 @@
 import * as OPTIONS from '../options.json';
 import {CLASS_NAME_DISMISS, CLASS_NAME_NOTICE_CONTENT} from './constant';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {type RemoteNotices} from './util/queryApi';
 import {generateArea} from './util/generateArea';
 import {getMessage} from './i18n';
@@ -23,7 +23,7 @@ const closeNotices = (): void => {
 	broadcastChannel.close();
 	clearTimeout(timer);
 	$area.remove();
-	mw.storage.set(OPTIONS.storageKey, currentVersion, 60 * 60 * 24 * 30 * 1000);
+	mw.storage.set(OPTIONS.storageKey, currentVersion, 60 * 60 * 24 * 30);
 };
 
 broadcastChannel.addEventListener('message', closeNotices);
@@ -67,14 +67,16 @@ const showNotices = ($mountPoint: JQuery, index: number, remoteNotices?: RemoteN
 	}
 
 	if (typeof $notice.data('asn-html') === 'string') {
-		$notice.data('asn-html-raw', mw.Uri.decode($notice.data('asn-html') as string));
+		$notice.data('asn-html-raw', decodeURIComponent(($notice.data('asn-html') as string).replace(/\+/g, '%20')));
 		$notice.data('asn-html', null);
 	}
 	if (typeof $notice.data('asn-style') === 'string') {
 		$notice.data('asn-style-id', noticeStyles.length);
-		const style: HTMLStyleElement = mw.loader.addStyleTag(mw.Uri.decode($notice.data('asn-style') as string));
+		const style: HTMLStyleElement = mw.loader.addStyleTag(
+			decodeURIComponent(($notice.data('asn-style') as string).replace(/\+/g, '%20'))
+		);
 		style.disabled = true;
-		noticeStyles[noticeStyles.length] = style; // Replace `[].push()` to avoid polyfilling core-js
+		noticeStyles[noticeStyles.length] = style; // Replace Array#push to avoid core-js polyfilling
 		$notice.data('asn-style', null);
 	}
 
@@ -82,6 +84,7 @@ const showNotices = ($mountPoint: JQuery, index: number, remoteNotices?: RemoteN
 	const noticeStyleId: number = $notice.data('asn-style-id') as number;
 	const currentNoticeHtml: string = $currentNotice.html();
 	if (currentNoticeHtml && currentNoticeHtml !== noticeHtml) {
+		// eslint-disable-next-line no-jquery/no-animate
 		$currentNotice.stop().fadeOut((): void => {
 			for (const style of noticeStyles) {
 				style.disabled = true;

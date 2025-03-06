@@ -5,7 +5,7 @@ import {
 	CLASS_NAME_NOTICE_CONTENT,
 	CLASS_NAME_TITLE,
 } from '../constant';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {getMessage} from '../i18n';
 
 const generateArea = (): JQuery => {
