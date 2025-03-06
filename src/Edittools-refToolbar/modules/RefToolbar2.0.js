@@ -1,8 +1,9 @@
-/* global CiteTB */
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 // @ts-nocheck
+import ajaxLoader from '../images/Ajax-loader.gif';
 import {api} from './util/api';
 import {getMessage} from './util/getMessage';
+import oojsUiCiteArticle from '../images/citeArticle.svg';
 import {refToolbarConfig} from './RefToolbarConfig';
 
 // TODO: make autodate an option in the CiteTemplate object, not a preference
@@ -144,7 +145,7 @@ const refToolbar2 = ($body) => {
 										type: 'dialog',
 										module: 'cite-toolbar-namedrefs',
 									},
-									icon: 'https://youshou.wiki/images/thumb/b/be/Nuvola_clipboard_lined.svg/22px-Nuvola_clipboard_lined.svg.png',
+									icon: `data:image/svg+xml,${encodeURIComponent(oojsUiCiteArticle)}`,
 									section: 'cites',
 									group: 'namedrefs',
 									label: getMessage('cite-named-refs-button'),
@@ -161,7 +162,7 @@ const refToolbar2 = ($body) => {
 				title: mw.message('cite-named-refs-title').parse(),
 				resizeme: false,
 				id: 'citetoolbar-namedrefs',
-				html: `<div id="cite-namedref-loading"> <img src="https://youshou.wiki/images/b/b1/Loading_icon.gif" /> &nbsp;${getMessage(
+				html: `<div id="cite-namedref-loading"> <img src="${ajaxLoader}" /> &nbsp;${getMessage(
 					'cite-loading'
 				)}</div>`,
 				init: () => {},
@@ -372,7 +373,7 @@ const refToolbar2 = ($body) => {
 			format: 'json',
 			formatversion: '2',
 		};
-		api.post(postdata).then(({parse}) => {
+		api.get(postdata).then(({parse}) => {
 			const html = parse.text;
 			callback(html);
 		});
@@ -387,7 +388,7 @@ const refToolbar2 = ($body) => {
 			format: 'json',
 			formatversion: '2',
 		};
-		api.post(postdata).then(({expandtemplates}) => {
+		api.get(postdata).then(({expandtemplates}) => {
 			const restext = expandtemplates.wikitext;
 			callback(restext);
 		});
@@ -411,6 +412,7 @@ const refToolbar2 = ($body) => {
 				action: 'query',
 				prop: 'revisions',
 				rvprop: 'content',
+				rvslots: 'main',
 				pageids: wgArticleId,
 				format: 'json',
 				formatversion: '2',
@@ -419,7 +421,7 @@ const refToolbar2 = ($body) => {
 				postdata.rvexpandtemplates = '1';
 			}
 			api.get(postdata).then(({query}) => {
-				const pagetext = query.pages[0].revisions[0].content;
+				const pagetext = query.pages[0].revisions[0].slots.main.content;
 				callback(pagetext);
 			});
 		}
@@ -881,69 +883,6 @@ const refToolbar2 = ($body) => {
 		const dialogs = $body.find('.ui-dialog-content.ui-widget-content:visible');
 		const templatename = $(dialogs[0]).find('.cite-template').val();
 		return CiteTB.Templates[templatename];
-	};
-
-	// Display the report for the error checks
-	CiteTB.displayErrors = (errors) => {
-		$body.find('#cite-err-report').remove();
-		const table = $('<table>').attr('id', 'cite-err-report').css({
-			width: '100%',
-			border: '1px solid #A9A9A9',
-			'background-color': '#FFEFD5',
-			padding: '0.25em',
-			'margin-top': '0.5em',
-		});
-		$body.find('#editpage-copywarn').before(table);
-		let tr;
-		const tr1 = $('<tr>').css('width', '100%');
-		const th1 = $('<th>').css('width', '60%').css('font-size', '110%').html(getMessage('cite-err-report-heading'));
-		const th2 = $('<th>').css('width', '40%').css('text-align', 'right;');
-		const im = $('<img>').attr('src', 'https://youshou.wiki/images/thumb/5/55/Gtk-stop.svg/20px-Gtk-stop.svg.png');
-		im.attr('alt', getMessage('cite-err-report-close')).attr('title', getMessage('cite-err-report-close'));
-		const ad = $('<a>').attr({
-			id: 'cite-err-check-close',
-			href: '#',
-		});
-		ad.append(im);
-		th2.append(ad);
-		tr1.append(th1).append(th2);
-		table.append(tr1);
-		$body.find('#cite-err-check-close').on('click', () => {
-			$body.find('#cite-err-report').remove();
-		});
-		if (errors.length === 0) {
-			tr = $('<tr>').css('width', '100%');
-			const td = $('<td>')
-				.css('text-align', 'center')
-				.css('margin', '1.5px')
-				.html(getMessage('cite-err-report-empty'));
-			tr.append(td);
-			table.append(tr);
-
-			return;
-		}
-		for (const error in errors) {
-			if (Object.hasOwn(errors, error)) {
-				const err = errors[error];
-				tr = $('<tr>').css('width', '100%');
-				const td1 = $('<td>')
-					.css({
-						border: '1px solid #000',
-						margin: '1.5px',
-						width: '60%',
-					})
-					.html(err.err);
-				const td2 = $('<td>')
-					.css({
-						border: '1px solid #000',
-						margin: '1.5px',
-						width: '40%',
-					})
-					.html(getMessage(err.msg));
-				tr.append(td1).append(td2);
-				table.append(tr);
-			}
-		}
 	};
 
 	// Load configuration for site

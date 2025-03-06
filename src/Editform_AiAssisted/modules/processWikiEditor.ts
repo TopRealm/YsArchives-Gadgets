@@ -7,7 +7,7 @@ const processWikiEditor = ({$body, $editForm}: {$body: JQuery<HTMLBodyElement>; 
 		return;
 	}
 
-	const $target: JQuery = ($editForm as JQuery).find('.editCheckboxes .oo-ui-horizontalLayout');
+	const $target: JQuery = ($editForm as JQuery).find(OPTIONS.targetWikiEditor);
 	if (!$target.length) {
 		return;
 	}
@@ -21,7 +21,7 @@ const processWikiEditor = ({$body, $editForm}: {$body: JQuery<HTMLBodyElement>; 
 	checkbox.setInputId(OPTIONS.inputId);
 
 	checkbox.on('change', (): void => {
-		const changeTag: string = 'AI_assisted';
+		const changeTag: string = OPTIONS.changeTag;
 		const generateChangeTags = (originChangeTags: string): string => {
 			return checkbox.isSelected()
 				? `${originChangeTags},${changeTag}`

@@ -1,18 +1,21 @@
 import * as OPTIONS from '~/Editform_AiAssisted/options.json';
 import {getMessage} from './i18n';
 
-const processVisualEditor = ({$body}: {$body: JQuery<HTMLBodyElement>}): void => {
+const processVisualEditor = (): void => {
 	// Guard against double inclusions
-	if (mw.config.get(OPTIONS.configKey)) {
+	if (mw.config.get(OPTIONS.configKeyVe)) {
 		return;
 	}
 
-	const $target: JQuery = $body.find(`.${OPTIONS.targetClass}`);
-	if (!$target.length) {
+	const {target} = window.ve.init;
+	const {saveDialog, saveFields} = target;
+	const {$saveCheckboxes} = saveDialog;
+	if (!$saveCheckboxes.length) {
 		return;
 	}
 
-	mw.config.set(OPTIONS.configKey, true);
+	// Set guard
+	mw.config.set(OPTIONS.configKeyVe, true);
 
 	const checkbox: OO.ui.CheckboxInputWidget = new OO.ui.CheckboxInputWidget({
 		selected: false,
@@ -21,7 +24,7 @@ const processVisualEditor = ({$body}: {$body: JQuery<HTMLBodyElement>}): void =>
 	checkbox.setInputId(OPTIONS.inputId);
 
 	checkbox.on('change', (): void => {
-		const changeTag: string = 'AI_assisted';
+		const changeTag: string = OPTIONS.changeTag;
 		const generateChangeTags = (originChangeTags: string): string => {
 			return checkbox.isSelected()
 				? `${originChangeTags},${changeTag}`
@@ -29,11 +32,8 @@ const processVisualEditor = ({$body}: {$body: JQuery<HTMLBodyElement>}): void =>
 		};
 
 		let changeTags: string = '';
-		// @ts-expect-error TS2304
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-call
-		changeTags = generateChangeTags(ve.init.target.saveFields.wpChangeTags?.() ?? '');
-		// @ts-expect-error TS2304
-		ve.init.target.saveFields.wpChangeTags = (): string => {
+		changeTags = generateChangeTags(saveFields.wpChangeTags?.() ?? '');
+		saveFields.wpChangeTags = (): string => {
 			return changeTags;
 		};
 	});
@@ -43,9 +43,16 @@ const processVisualEditor = ({$body}: {$body: JQuery<HTMLBodyElement>}): void =>
 		label: getMessage('AiAssisted'),
 	});
 
-	if (!$body.find(`#${OPTIONS.inputId}`).length) {
-		$target.append(checkboxLayout.$element);
+	if (!saveDialog.$element.find(`#${OPTIONS.inputId}`).length) {
+		$saveCheckboxes.append(checkboxLayout.$element);
 	}
+
+	// Reinitialization is required for switching between VisualEditor and New Wikitext Editor (2017)
+	mw.hook('ve.activationComplete').add(() => {
+		if (mw.config.get(OPTIONS.configKeyVe)) {
+			mw.config.set(OPTIONS.configKeyVe, false);
+		}
+	});
 };
 
 export {processVisualEditor};

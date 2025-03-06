@@ -1,4 +1,3 @@
-import './Edittools-refToolbar.less';
 import {getBody} from 'ext.gadget.Util';
 import {refToolbar2} from './modules/RefToolbar2.0';
 import {refToolbarBase} from './modules/RefToolbarBase';
