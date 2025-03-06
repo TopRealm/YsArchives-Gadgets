@@ -1,9 +1,8 @@
 import * as OPTIONS from './options.json';
 import type {GeoInfo} from './modules/types';
-import {STORAGE_KEY} from './modules/constant';
 
 const getGeoInfo = async (): Promise<GeoInfo> => {
-	const storeGeoInfo = mw.storage.getObject(STORAGE_KEY) as GeoInfo | null;
+	const storeGeoInfo = mw.storage.getObject(OPTIONS.storageKey) as GeoInfo | null;
 	if (storeGeoInfo) {
 		return storeGeoInfo;
 	}
@@ -18,7 +17,7 @@ const getGeoInfo = async (): Promise<GeoInfo> => {
 			city: response.city ?? '',
 		};
 
-		mw.storage.setObject(STORAGE_KEY, geoInfo, 60 * 60 * 1000);
+		mw.storage.setObject(OPTIONS.storageKey, geoInfo, 60 * 60 * 24); // 1 day
 
 		return geoInfo;
 	} catch {

@@ -1,5 +1,11 @@
 {
+	"defaultGeoInfo": {
+		"countryOrArea": "",
+		"region": "",
+		"city": ""
+	},
 	"mountPointSelector": "#footer-info,.page-info",
+	"storageKey": "ext.gadget.MarkRights_GeoLocationReader-",
 	"userNameSpaceNumber": 2,
-	"version": "2.0"
+	"version": "2.1"
 }

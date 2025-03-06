@@ -2,13 +2,14 @@
 	"enable": true,
 	"description": "<span id=\"Gadget-GeoLocationReader\"></span> 自动读取用户的IP地理位置信息",
 	"section": "compatibility",
+	"default": true,
 	"dependencies": [
 		"ext.gadget.i18n",
-		"ext.gadget.React",
+		"ext.gadget.JSX",
+		"ext.gadget.MarkRights",
 		"ext.gadget.Util",
 		"mediawiki.api",
-		"mediawiki.Title",
-		"mediawiki.Uri"
+		"mediawiki.Title"
 	],
 	"namespaces": [2],
 	"peers": ["GeoLocationReader-pagestyles"],

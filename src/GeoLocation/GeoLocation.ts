@@ -1,13 +1,17 @@
-import {SYSTEM_SCRIPT_LIST, WEBMASTER_LIST, WG_USER_EDIT_COUNT, WG_USER_GROUPS, WG_USER_NAME} from './modules/constant';
+import {SYSTEM_SCRIPT_LIST, WEBMASTER_LIST} from './modules/constant';
 import {getGeoInfo} from 'ext.gadget.Geo';
 import {storeLocation} from './modules/storeLocation';
+import {userIsInGroup} from 'ext.gadget.Util';
 
 (async function geoLocation(): Promise<void> {
-	if (SYSTEM_SCRIPT_LIST.includes(WG_USER_NAME) || WEBMASTER_LIST.includes(WG_USER_NAME) || !WG_USER_NAME) {
+	const {wgUserName} = mw.config.get();
+
+	if (!wgUserName || SYSTEM_SCRIPT_LIST.includes(wgUserName) || WEBMASTER_LIST.includes(wgUserName)) {
 		return;
 	}
 
-	if (WG_USER_GROUPS.includes('bot') || !WG_USER_EDIT_COUNT) {
+	// Disabled for official users
+	if (userIsInGroup(['steward', 'bot'])) {
 		return;
 	}
 

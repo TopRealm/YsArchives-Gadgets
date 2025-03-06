@@ -1,34 +1,18 @@
-import {WG_RELEVANT_USER_NAME} from './constant';
-import {api} from './api';
 import {appendGeoIcon} from './appendGeoIcon';
+import {getLocalUserGroups} from 'ext.gadget.MarkRights';
 
 const addElement = async (): Promise<void> => {
-	const queryUserGroupsParams: ApiQueryUsersParams = {
-		action: 'query',
-		format: 'json',
-		formatversion: '2',
-		list: 'users',
-		ususers: WG_RELEVANT_USER_NAME,
-		usprop: 'groups',
-	};
+	const {wgRelevantUserName} = mw.config.get();
+
+	if (!wgRelevantUserName) {
+		return;
+	}
 
 	try {
-		const {
-			query: {
-				users: [{groups}],
-			},
-		}: {
-			query: {
-				users: [
-					{
-						groups: string[];
-					},
-				];
-			};
-		} = (await api.get(queryUserGroupsParams)) as never;
+		const groupsMap = await getLocalUserGroups([wgRelevantUserName]);
+		const groups = groupsMap[wgRelevantUserName] ?? [];
 
 		if (groups.includes('bot') || groups.includes('qiuwen')) {
-			//站长预留，故意不改
 			/* empty */
 			// Already shown in MarkRights-Userpage
 		} else {

@@ -1,7 +1,7 @@
-import {WG_USER_LANGUAGE} from '../constant';
-
 const getCountryOrAreaNameList = () => {
-	if (['zh-hant', 'zh-hk', 'zh-mo'].includes(WG_USER_LANGUAGE)) {
+	const {wgUserLanguage} = mw.config.get();
+
+	if (['zh-hant', 'zh-hk', 'zh-mo'].includes(wgUserLanguage)) {
 		return {
 			AF: '阿富汗',
 			AX: '奧蘭',
@@ -253,7 +253,7 @@ const getCountryOrAreaNameList = () => {
 			ZM: '贊比亞',
 			ZW: '津巴布韋',
 		};
-	} else if (['zh-tw'].includes(WG_USER_LANGUAGE)) {
+	} else if (['zh-tw'].includes(wgUserLanguage)) {
 		return {
 			AF: '阿富汗',
 			AX: '奧蘭',
@@ -505,7 +505,7 @@ const getCountryOrAreaNameList = () => {
 			ZM: '尚比亞',
 			ZW: '辛巴威',
 		};
-	} else if (['zh-my', 'zh-sg'].includes(WG_USER_LANGUAGE)) {
+	} else if (['zh-my', 'zh-sg'].includes(wgUserLanguage)) {
 		return {
 			AF: '阿富汗',
 			AX: '奥兰',
@@ -1013,7 +1013,9 @@ const getCountryOrAreaNameList = () => {
 };
 
 const getRegionNameList = () => {
-	if (['zh-hant', 'zh-hk', 'zh-mo', 'zh-tw'].includes(WG_USER_LANGUAGE)) {
+	const {wgUserLanguage} = mw.config.get();
+
+	if (['zh-hant', 'zh-hk', 'zh-mo', 'zh-tw'].includes(wgUserLanguage)) {
 		return {
 			AH: '安徽',
 			BJ: '北京',

@@ -6,17 +6,18 @@
  */
 // Technique gleaned from [[enwiki:fr:Utilisateur:Od1n/AddLinksGadgetsDefinition.js]].
 import './GadgetsDefinition.less';
-import {IS_DEFINITION_PAGE} from './modules/constant';
 import {generateGadgetId} from './modules/util/generateGadgetId';
 import {getBody} from 'ext.gadget.Util';
 import {matchGadgetName} from './modules/util/matchGadgetName';
 import {processGadgetDefinition} from './modules/processGadgetDefinition';
 
 void getBody().then(function gadgetsDefinition($body: JQuery<HTMLBodyElement>): void {
+	const {wgCanonicalNamespace, wgTitle} = mw.config.get();
+	const isDefinitionPage: boolean = wgCanonicalNamespace === 'MediaWiki' && wgTitle === 'Gadgets-definition';
 	const $parserOutput: JQuery = $body.find('.mw-parser-output');
 
 	// Only operate on [[MediaWiki:Gadgets-definition]] when the text is visible.
-	if (!IS_DEFINITION_PAGE || !$parserOutput.length) {
+	if (!isDefinitionPage || !$parserOutput.length) {
 		return;
 	}
 

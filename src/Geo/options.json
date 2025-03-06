@@ -3,5 +3,6 @@
 		"countryOrArea": "",
 		"region": "",
 		"city": ""
-	}
+	},
+	"storageKey": "ext.gadget.Geo"
 }
