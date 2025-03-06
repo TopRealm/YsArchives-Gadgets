@@ -1,6 +1,6 @@
 {
 	"enable": true,
-	"description": "<span id=\"Gadget-Group-confirmed\"></span> 确认用户样式表",
+	"description": "<sup><abbr title=\"默认为所有确认用户启用\">C</abbr></sup><span id=\"Gadget-Group-confirmed\"></span> 确认用户样式表",
 	"section": "usergroup",
 	"default": true,
 	"hidden": true,

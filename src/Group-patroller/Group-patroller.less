@@ -1,31 +1,3 @@
+@import (reference) '../mixins.less';
 @group: patroller;
-
-div,
-p {
-	&.@{group}-show {
-		display: block !important;
-	}
-}
-
-span,
-small {
-	&.@{group}-show {
-		display: inline !important;
-	}
-}
-
-table.@{group}-show {
-	display: table !important;
-}
-
-tr.@{group}-show {
-	display: table-row !important;
-}
-
-td.@{group}-show {
-	display: table-cell !important;
-}
-
-li.@{group}-show {
-	display: list-item !important;
-}
+.group(@group);
