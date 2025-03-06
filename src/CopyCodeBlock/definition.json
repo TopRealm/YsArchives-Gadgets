@@ -12,6 +12,5 @@
 		"mediawiki.util",
 		"oojs-ui-core",
 		"oojs-ui.styles.icons-editing-advanced"
-	],
-	"peers": ["CopyCodeBlock-pagestyles"]
+	]
 }

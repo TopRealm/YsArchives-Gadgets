@@ -1,6 +1,6 @@
 import AgreeButton from './AgreeButton';
 import ConsentNotice from './ConsentNotice';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {warning} from './CookieWarning.module.less';
 
 interface Props {

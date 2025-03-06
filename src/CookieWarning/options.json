@@ -1,4 +1,4 @@
 {
-	"storageKey": "ext.gadget.CookieWarning_cookieConsent",
-	"readingPIPPKey": "consentRead"
+	"readingPIPPKey": "consentRead",
+	"storageKey": "ext.gadget.CookieWarning_cookieConsent"
 }

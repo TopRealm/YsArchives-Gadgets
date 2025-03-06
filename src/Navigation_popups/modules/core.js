@@ -2612,7 +2612,7 @@ const popups = () => {
 		}
 		namespaceId() {
 			const n = this.value.indexOf(':');
-			if (n < 0) {
+			if (n === -1) {
 				return 0; // mainspace
 			}
 			const namespaceId =
@@ -2677,7 +2677,7 @@ const popups = () => {
 		stripNamespace() {
 			// returns a string, not a Title
 			const n = this.value.indexOf(':');
-			if (n < 0) {
+			if (n === -1) {
 				return this.value;
 			}
 			const namespaceId = this.namespaceId();
@@ -2692,7 +2692,7 @@ const popups = () => {
 				return;
 			}
 			const anch = value.indexOf('#');
-			if (anch < 0) {
+			if (anch === -1) {
 				this.value = value.split('_').join(' ');
 				this.anchor = '';
 				return;
@@ -6693,7 +6693,7 @@ const popups = () => {
 		// take "<a href=...>...</a> and add a property
 		// not sophisticated at all, easily broken
 		const i = html.indexOf('>');
-		if (i < 0) {
+		if (i === -1) {
 			return html;
 		}
 		return `${html.slice(0, Math.max(0, i))} ${property}${html.slice(Math.max(0, i))}`;
