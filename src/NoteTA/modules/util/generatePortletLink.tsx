@@ -1,5 +1,5 @@
 import * as OPTIONS from '../../options.json';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {portletId} from '../initGlobalMethods';
 
 const generatePortletLink = (hash: string): JQuery | undefined => {

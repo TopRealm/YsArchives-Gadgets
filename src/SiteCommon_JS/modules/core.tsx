@@ -14,7 +14,7 @@ import {
 	WG_SCRIPT,
 	WG_USER_NAME,
 } from './constant';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {getMessage} from './i18n';
 
 const loadWithURL = (): void => {

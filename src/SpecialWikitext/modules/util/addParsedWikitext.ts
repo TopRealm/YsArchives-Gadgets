@@ -1,4 +1,4 @@
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {checkElementExist} from './checkElementExist';
 
 // 将解析后的wikitext加入页面中

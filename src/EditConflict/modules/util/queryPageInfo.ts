@@ -11,7 +11,7 @@ interface PageInfo {
 	};
 }
 
-const parameters: ApiQueryRevisionsParams = {
+const params: ApiQueryRevisionsParams = {
 	action: 'query',
 	format: 'json',
 	formatversion: '2',
@@ -21,10 +21,10 @@ const parameters: ApiQueryRevisionsParams = {
 
 const queryPageInfo = async (title: string): Promise<PageInfo> => {
 	try {
-		return (await api.post({
-			...parameters,
+		return (await api.get({
+			...params,
 			titles: title,
-		} as typeof parameters)) as PageInfo;
+		} as typeof params)) as PageInfo;
 	} catch (error: unknown) {
 		console.error('[EditConflict] Ajax error:', error);
 		return {};

@@ -1,5 +1,5 @@
 import {Clipboard} from 'ext.gadget.Clipboard';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {addEventListenerWithRemover} from 'ext.gadget.Util';
 import {getDomains} from './util/getDomains';
 import {getMessage} from './i18n';

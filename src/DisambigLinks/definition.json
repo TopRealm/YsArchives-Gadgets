@@ -1,5 +1,5 @@
 {
 	"enable": true,
 	"description": "<span id=\"Gadget-DisambigLinks\"></span> 在[[LIB:重定向|重定向]]、[[LIB:消歧义|消歧义]]链接后侧添加提示符号",
-	"section": "edit",
+	"section": "edit"
 }

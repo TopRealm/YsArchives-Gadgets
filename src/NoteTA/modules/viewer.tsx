@@ -1,7 +1,7 @@
 import * as OPTIONS from '../options.json';
 import {type ApiParseResponse, type ApiResponse, parseWikitext} from './parseWikitext';
 import {ApiRetryFailError} from './util/ApiRetryFailError';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {assert} from './util/assert';
 import {getMessage} from './i18n';
 import {viewerMap} from './initViewMap';

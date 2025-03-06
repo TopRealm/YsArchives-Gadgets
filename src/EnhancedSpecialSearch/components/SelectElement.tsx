@@ -1,5 +1,5 @@
 import * as OPTIONS from '../options.json';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {getMessage} from '../modules/i18n';
 import {getOptionData} from '../modules/getOptionData';
 

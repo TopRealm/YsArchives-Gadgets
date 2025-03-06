@@ -1,5 +1,5 @@
 import {getCJKCountByTextLength, getCountByTextLength, getUTF8CountByTextLength} from '../modules/getCount';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {tip} from './WordCount.module.less';
 
 interface Props {

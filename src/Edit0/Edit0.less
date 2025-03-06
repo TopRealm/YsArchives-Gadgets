@@ -8,7 +8,6 @@ body {
 	}
 
 	.page-heading .mw-editsection a {
-		-webkit-user-select: none;
 		user-select: none;
 	}
 
@@ -31,12 +30,8 @@ body {
 
 			&::before {
 				content: '首段：';
-				font-family: @serif-zh-hans, serif, @emoji-font;
+				font-family: var(--fonts-sans, sans-serif);
 				font-size: 0.75rem;
-
-				html:lang(zh-hant) & {
-					font-family: @serif-zh-hant, serif, @emoji-font;
-				}
 			}
 		}
 	}

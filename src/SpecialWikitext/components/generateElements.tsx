@@ -1,5 +1,5 @@
 import {previewLoadingContent, previewLoadingInner} from './SpecialWikitext.module.less';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {getMessage} from '../modules/i18n';
 
 const Failed = () => (

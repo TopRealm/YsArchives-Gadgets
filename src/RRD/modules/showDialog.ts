@@ -1,6 +1,6 @@
 import {config, updateConfig} from './rrdConfig';
 import DialogInner from '../components/DialogInner';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {getMessage} from './i18n';
 import {isSpecialLog} from './isSpecialLog';
 import {loadIds} from './loadIds';
