@@ -1,3 +1,4 @@
+@import (reference) '../mixins.less';
 @import (reference) '../variables.less';
 
 @shadow-color: rgba(0, 0, 0, 0.1);
@@ -47,10 +48,11 @@
 		}
 	}
 
-	.mw-mmv-lightbox-open &,
-	.ve-activated & {
+	.mw-mmv-lightbox-open & {
 		display: none !important;
 	}
+
+	.ve-activated-disabled('!important');
 }
 
 #floatToc-opener {
@@ -104,9 +106,7 @@
 		}
 	}
 
-	.ve-activated & {
-		display: none !important;
-	}
+	.ve-activated-disabled('!important');
 }
 
 .skin-citizen #toc .toctitle {
