@@ -1,4 +1,4 @@
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 
 const addLink = (element: Element, targetTitle: string): void => {
 	if (!(element instanceof Element)) {

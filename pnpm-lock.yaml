@@ -42,6 +42,9 @@ importers:
       '@types/toastify-js':
         specifier: ^1.12.3
         version: 1.12.3
+      chinese-days:
+        specifier: ^1.5.0
+        version: 1.5.0
       clipboard:
         specifier: ^2.0.11
         version: 2.0.11
@@ -2189,6 +2192,9 @@ packages:
 
   character-parser@2.2.0:
     resolution: {integrity: sha512-+UqJQjFEFaTAs3bNsF2j2kEN1baG/zghZbdqoYEDxGZtJo9LBzl1A+m0D4n3qKx8N2FNv8/Xp6yV9mQmBuptaw==}
+
+  chinese-days@1.5.0:
+    resolution: {integrity: sha512-itdSDf8nEio5cFj6EnuIWyQJen2uoXe2OM/EeaUZKOP5ytXD/7/2IauQbULpJDoK/sW00K5FC05MZgHsGafCNA==}
 
   chokidar@4.0.3:
     resolution: {integrity: sha512-Qgzu8kfBvo+cA4962jnP1KkS6Dop5NS6g7R5LFYJr4b8Ub94PPQXUksCw9PvXoeXPRRddRNC5C1JQUR2SMGtnA==}
@@ -7196,6 +7202,8 @@ snapshots:
   character-parser@2.2.0:
     dependencies:
       is-regex: 1.2.1
+
+  chinese-days@1.5.0: {}
 
   chokidar@4.0.3:
     dependencies:

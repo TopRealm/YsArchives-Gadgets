@@ -1,9 +1,9 @@
-import {CLASS_NAME_TOGGLER} from '../constant';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
+import {toggler} from './Collapsible.module.less';
 
 const generateTogglerElement = ($collapsible: JQuery, hideText: string, showText: string): JQuery => {
 	const $toggler = $(
-		<span className={[CLASS_NAME_TOGGLER, 'noprint']}>
+		<span className={[toggler, 'noprint']}>
 			{'['}
 			<a role="button" tabIndex={0}>
 				{$collapsible.hasClass('collapsed') ? showText : hideText}

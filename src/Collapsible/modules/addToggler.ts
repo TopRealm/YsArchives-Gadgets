@@ -14,6 +14,9 @@ const addToggler = ($collapsible: JQuery, $toggler: JQuery): void => {
 	} else if ($collapsible.hasClass('navbox')) {
 		// navbox 元素的折叠按钮添加至 navbox-title 中，且该 navbox-title 会避免被折叠影响到。
 		$collapsible.children('.navbox-title').first().addClass('collapsible-always-show').append($toggler);
+	} else if ($collapsible.hasClass('NavFrame')) {
+		// NavFrame 元素的折叠按钮添加至其子元素 NavHead 中，且该 NavHead 会避免被折叠影响到。
+		$collapsible.children('.NavHead').first().addClass('collapsible-always-show').append($toggler);
 	} else if ($collapsible.is('table')) {
 		// 对于 table 对象，尝试添加到 caption 中，若 caption 不存在，则添加到第一行的最后一列，并将第一行设为始终显示。
 		const $caption: JQuery = $collapsible.children('caption');
