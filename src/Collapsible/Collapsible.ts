@@ -1,5 +1,5 @@
 /*!
- * 为元素添加“隐藏”和“显示”的按钮。
+ * @description 为元素添加“隐藏”和“显示”的按钮。
  *
  * 用法说明：
  *
@@ -30,6 +30,18 @@
  * - data-expandtext 和 data-collapsetext 可用于控制折叠按钮的显示文字。不支持
  *   繁简转换，但是其默认值是可以正常根据界面语言繁简转换的。
  */
-import {addHook} from './modules/addHook';
+import {generateTargetElements} from './modules/util/generateTargetElements';
+import {makeCollapsible} from './modules/makeCollapsible';
+import {navFrame} from './modules/navFrame';
 
-addHook();
+mw.hook('wikipage.content').add(($content): void => {
+	// compatible with old navFrames (see {{HideH}} and {{HideF}})
+	navFrame($content);
+
+	const $collapsibles: JQuery = generateTargetElements($content);
+	if (!$collapsibles.length) {
+		return;
+	}
+
+	makeCollapsible($collapsibles);
+});

@@ -1,4 +1,4 @@
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import WordCount from '../components/WordCount';
 import {tip} from '../components/WordCount.module.less';
 

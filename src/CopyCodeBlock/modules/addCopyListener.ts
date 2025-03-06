@@ -1,12 +1,12 @@
-import {CLASS_NAME_COPY_BUTTON} from './constant';
 import {Clipboard} from 'ext.gadget.Clipboard';
+import {button} from './CopyCodeBlock.module.less';
 import {getMessage} from './i18n';
 import {toastify} from 'ext.gadget.Toastify';
 
 const addCopyListener = ($pres: JQuery<HTMLPreElement>): void => {
 	for (const pre of $pres) {
-		const clipboard = new Clipboard(pre.querySelector(`.${CLASS_NAME_COPY_BUTTON}`) as HTMLSpanElement, {
-			text: (): string => {
+		const clipboard = new Clipboard(pre.querySelector(`.${button}`) as HTMLSpanElement, {
+			text(): string {
 				return pre.textContent ?? '';
 			},
 		});

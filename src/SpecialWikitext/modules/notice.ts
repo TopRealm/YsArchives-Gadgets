@@ -1,5 +1,5 @@
 import {Failed, Loading} from '../components/generateElements';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {addParsedWikitext} from './util/addParsedWikitext';
 
 // [[File:Gnome-dialog-warning2.svg|32px]]

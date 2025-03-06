@@ -1,4 +1,4 @@
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {getMessage} from './i18n';
 
 type TimeSpan = 'ThisWeek' | 'ThisMonth' | 'ThisSeason' | 'ThisSemiyear' | 'ThisYear' | 'OverAYear';

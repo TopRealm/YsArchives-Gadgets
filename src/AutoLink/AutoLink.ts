@@ -1,10 +1,10 @@
 import {type TargetElements, getTargetElements} from './modules/util/getTargetElements';
-import {IS_IN_TARGET_SPECIAL_PAGE} from './modules/constant';
 import {getBody} from 'ext.gadget.Util';
+import {isInTargetSpecialPage} from './modules/util/isInTargetSpecialPage';
 import {processElement} from './modules/processElement';
 
 void getBody().then(function autoLink($body: JQuery<HTMLBodyElement>): void {
-	if (!IS_IN_TARGET_SPECIAL_PAGE) {
+	if (!isInTargetSpecialPage()) {
 		return; // Disabled in the other special pages
 	}
 

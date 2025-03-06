@@ -17,7 +17,7 @@ const queryLoginToken = async (
 
 	toastifyInstance.hideToast();
 	toastifyInstance = toastify({
-		text: getMessage('Login token getted'),
+		text: getMessage('Login token got'),
 		duration: -1,
 	});
 

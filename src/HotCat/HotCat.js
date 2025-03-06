@@ -2126,11 +2126,11 @@ hotCatMessages();
 			let v = this.text.value;
 			// Disregard anything after a pipe.
 			const pipe = v.indexOf('|');
-			if (pipe >= 0) {
+			if (pipe === -1) {
+				this.currentKey = null;
+			} else {
 				this.currentKey = v.slice(Math.max(0, pipe + 1));
 				v = v.slice(0, Math.max(0, pipe));
-			} else {
-				this.currentKey = null;
 			}
 			if (this.lastInput === v && !force) {
 				return;
@@ -2353,7 +2353,7 @@ hotCatMessages();
 				}
 				return;
 			}
-			let nofItems = this.list.options.length > HC.listSize ? HC.listSize : this.list.options.length;
+			let nofItems = Math.min(this.list.options.length, HC.listSize);
 			if (nofItems <= 1) {
 				nofItems = 2;
 			}
@@ -2651,7 +2651,7 @@ hotCatMessages();
 				tgt = curr;
 			} else {
 				tgt = curr < 0 ? 0 : curr + dir;
-				tgt = tgt < 0 ? 0 : tgt;
+				tgt = Math.max(tgt, 0);
 				if (tgt >= this.list.options.length) {
 					tgt = this.list.options.length - 1;
 				}

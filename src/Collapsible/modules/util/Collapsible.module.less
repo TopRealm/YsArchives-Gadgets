@@ -1,0 +1,18 @@
+.toggler {
+	font-weight: normal;
+	user-select: none;
+
+	:global(.mw-content-ltr) & {
+		margin-right: 0;
+		margin-left: 0.5em;
+		float: right;
+		text-align: right;
+	}
+
+	:global(.mw-content-rtl) & {
+		margin-right: 0.5em;
+		margin-left: 0;
+		float: left;
+		text-align: left;
+	}
+}

@@ -1,5 +1,7 @@
 {
+	"changeTag": "AI_assisted",
 	"configKey": "gadget-Editform_AiAssisted__Initialized",
+	"configKeyVe": "gadget-Editform_AiAssisted__Initialized__VE",
 	"inputId": "editform_ai_assisted",
-	"targetClass": "ve-ui-mwSaveDialog-checkboxes"
+	"targetWikiEditor": ".editCheckboxes .oo-ui-horizontalLayout"
 }

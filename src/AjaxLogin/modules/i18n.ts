@@ -62,8 +62,8 @@ const getI18nMessages = () => {
 			'zh-hans': '2FA验证码错误',
 			'zh-hant': '2FA驗證碼錯誤',
 		}),
-		'Invalid useruame or password': localize({
-			en: 'Invalid useruame or password',
+		'Invalid username or password': localize({
+			en: 'Invalid username or password',
 			ja: '利用者名またはパスワードが間違っています',
 			'zh-cn': '用户名或密码错误',
 			'zh-hk': '用戶名稱或密碼錯誤',
@@ -99,8 +99,8 @@ const getI18nMessages = () => {
 			'zh-hans': '登录成功',
 			'zh-hant': '登入成功',
 		}),
-		'Login token getted': localize({
-			en: 'Login token getted',
+		'Login token got': localize({
+			en: 'Login token got',
 			ja: 'ログイントークンの取得に成功しました',
 			'zh-hans': '获取登录令牌成功',
 			'zh-hant': '獲取登入權杖成功',
@@ -176,10 +176,10 @@ const getI18nMessages = () => {
 			'zh-hant': '網路異常。重新導向中……',
 		}),
 		SelectedOrNot: localize({
-			en: 'If selected, the login status will be kept for 6 months. If not selected, it will be kept for 1 month.',
-			ja: 'チェックを入れるとログイン状態が6ヶ月間保持され、入れない場合は1ヶ月間保持されます。',
-			'zh-hans': '勾选则保持登录状态6个月，不勾选则保持1个月。',
-			'zh-hant': '勾選则保持登入狀態6個月，不勾選則保持1個月。',
+			en: 'Keep logged in for 6 months if selected; otherwise until the browser closes.',
+			ja: 'チェックを入れるとログイン状態が6ヶ月間保持され、入れない場合はブラウザを閉じるまで保持されます。',
+			'zh-hans': '勾选则保持登录状态6个月，否则将在浏览器关闭时退出登录。',
+			'zh-hant': '勾選则保持登入狀態6個月，否則將在瀏覽器關閉時登出。',
 		}),
 		TooFrequent: localize({
 			en: 'The user login is too frequent, please try again in five minutes',

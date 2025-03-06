@@ -1,4 +1,4 @@
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {getMessage} from '../i18n';
 
 const generateElements = (

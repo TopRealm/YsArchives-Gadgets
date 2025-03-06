@@ -1,4 +1,4 @@
-import {CLASS_NAME, CLASS_NAME_EXPAND_BUTTON} from './constant';
+import {expand, refarea} from './FoldRef.module.less';
 import {processElement} from './util/processElement';
 
 const foldRef = ($body: JQuery<HTMLBodyElement>): void => {
@@ -6,7 +6,13 @@ const foldRef = ($body: JQuery<HTMLBodyElement>): void => {
 	const $foldRef: JQuery = $body.find('.mw-references-wrap,.refbegin');
 	for (const element of $foldRef) {
 		const $element = $(element);
-		if ($element.parent('div').parent('div').hasClass(CLASS_NAME) || $element.parent('div').hasClass(CLASS_NAME)) {
+		if (
+			$element
+				.parent('div')
+				.parent('div')
+				.hasClass(refarea as string) ||
+			$element.parent('div').hasClass(refarea as string)
+		) {
 			continue;
 		}
 
@@ -20,13 +26,13 @@ const foldRef = ($body: JQuery<HTMLBodyElement>): void => {
 	}
 
 	// attach event listener to the expand buttons
-	$body.find(`.${CLASS_NAME_EXPAND_BUTTON}`).on('click', (event: JQuery.ClickEvent<HTMLElement>): void => {
+	$body.find(`.${expand}`).on('click', (event: JQuery.ClickEvent<HTMLElement>): void => {
 		const $element = $(event.currentTarget) as JQuery;
 
 		// The following classes are used here:
 		// * see constant.ts
 		// * for more information
-		$element.prev(`.${CLASS_NAME}`).removeClass(CLASS_NAME);
+		$element.prev(`.${refarea}`).removeClass(refarea as string);
 		$element.remove();
 	});
 };

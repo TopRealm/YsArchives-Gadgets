@@ -1,8 +1,8 @@
-import {WG_USER_EDIT_COUNT} from './constant';
+const {wgUserEditCount} = mw.config.get();
 
 mw.loader.addStyleTag(
 	`#pt-mycontris > a::after,
 	.menu__item--userContributions > span > span::after {
-		content:" (${WG_USER_EDIT_COUNT ?? 0})"
+		content:" (${wgUserEditCount ?? 0})"
 	}`
 );

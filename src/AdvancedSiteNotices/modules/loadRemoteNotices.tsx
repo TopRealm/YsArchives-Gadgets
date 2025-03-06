@@ -1,5 +1,5 @@
 import {type RemoteNotices, queryApi} from './util/queryApi';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 
 type ApiResponse = {
 	parse: {

@@ -1,5 +1,5 @@
 import {REGEX_URL} from './constant';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 
 const processComment = (element: Element): void => {
 	const {firstChild} = element;

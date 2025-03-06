@@ -1,0 +1,5 @@
+{
+	"rules": {
+		"mediawiki/class-doc": "off"
+	}
+}

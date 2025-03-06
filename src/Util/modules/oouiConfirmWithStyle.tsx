@@ -1,4 +1,4 @@
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 
 type OouiConfirmWithStyle = (message: string) => JQuery.Promise<boolean>;
 

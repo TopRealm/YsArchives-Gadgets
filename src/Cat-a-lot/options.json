@@ -1,5 +1,6 @@
 {
 	"apiTag": "Cat-a-lot",
 	"targetNamespace": 14,
-	"version": "6.0"
+	"version": "6.0",
+	"storageKey": "ext.gadget.Cat-a-Lot_results-"
 }

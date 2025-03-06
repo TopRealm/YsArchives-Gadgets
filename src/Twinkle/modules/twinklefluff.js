@@ -342,8 +342,8 @@
 		const pagename = page || mw.config.get('wgPageName');
 		const revid = rev || mw.config.get('wgCurRevisionId');
 		let summary = '';
-		if (document.getElementsByName('revertsummary')[0] !== undefined) {
-			summary = document.getElementsByName('revertsummary')[0].value;
+		if (document.querySelectorAll('[name="revertsummary"]')[0] !== undefined) {
+			summary = document.querySelectorAll('[name="revertsummary"]')[0].value;
 		}
 		if (Twinkle.fluff.rollbackInPlace) {
 			const notifyStatus = document.createElement('span');
@@ -387,8 +387,8 @@
 	};
 	Twinkle.fluff.revertToRevision = (oldrev) => {
 		let summary = '';
-		if (document.getElementsByName('revertsummary')[0] !== undefined) {
-			summary = document.getElementsByName('revertsummary')[0].value;
+		if (document.querySelectorAll('[name="revertsummary"]')[0] !== undefined) {
+			summary = document.querySelectorAll('[name="revertsummary"]')[0].value;
 		}
 		Morebits.status.init(document.querySelector('#mw-content-text'));
 		const query = {

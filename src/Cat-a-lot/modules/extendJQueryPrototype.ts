@@ -1,4 +1,3 @@
-/* eslint-disable mediawiki/class-doc */
 import {CLASS_NAME_LABEL, CLASS_NAME_LABEL_LAST_SELECTED, CLASS_NAME_LABEL_SELECTED} from './constant';
 
 type OnCatALotShiftClick = (this: JQuery, callback: () => unknown) => JQuery;
@@ -9,7 +8,6 @@ declare global {
 }
 
 const extendJQueryPrototype = (): void => {
-	/*! jQuery checkboxShiftClick | GPL-2.0 <https://qwbk.cc/H:GPL> */
 	$.fn.extend({
 		onCatALotShiftClick: function (callback) {
 			let prevCheckbox: JQuery | undefined;

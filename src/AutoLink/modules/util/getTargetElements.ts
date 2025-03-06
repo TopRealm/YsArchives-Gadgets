@@ -1,4 +1,5 @@
-import {IS_DIFF_ACTION, IS_TARGET_SPECIAL_PAGE, IS_WG_EDIT_OR_SUBMIT_ACTION, IS_WG_HISTORY_ACTION} from '../constant';
+import {isDiff} from './isDiff';
+import {isTargetSpecialPage} from './isTargetSpecialPage';
 
 interface TargetElements {
 	color: string;
@@ -8,17 +9,20 @@ interface TargetElements {
 const getTargetElements = ($body: JQuery<HTMLBodyElement>): TargetElements => {
 	let color: string = ''; // links color (coloured links)
 	let targetElements: HTMLElement[] = [];
+	const {wgAction} = mw.config.get();
 
-	if (IS_DIFF_ACTION) {
+	if (isDiff()) {
 		// in diff pages
 		color = 'inherit'; // not coloured links
-		targetElements = [...$body.find('.diff,.firstrevisionheader')];
-	} else if (IS_WG_EDIT_OR_SUBMIT_ACTION || IS_WG_HISTORY_ACTION || IS_TARGET_SPECIAL_PAGE) {
+		targetElements = [...$body.find(['.diff', '.firstrevisionheader'].join(','))];
+	} else if (['edit', 'submit', 'history'].includes(wgAction) || isTargetSpecialPage()) {
 		// in comments
 		targetElements = [...$body.find('.comment')];
 	} else {
 		// in code sections
-		targetElements = [...$body.find('source,.css,.source-css,.javascript,.source-javascript')];
+		targetElements = [
+			...$body.find(['source', '.css', '.source-css', '.javascript', '.source-javascript'].join(',')),
+		];
 	}
 
 	return {

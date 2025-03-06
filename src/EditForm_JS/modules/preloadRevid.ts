@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 /**
  * @description Preload contents from Revision ID (oldid)
  */
@@ -37,7 +35,7 @@ const preloadRevid = ($editForm: JQuery<HTMLElement>): void => {
 	};
 
 	void api.get(params).then(({query}) => {
-		const {content} = query.pages[0].revisions[0].slots.main;
+		const {content} = query.pages[0].revisions[0].slots.main as {content: string};
 		setWpTextbox1Content({$editForm, content});
 		void mw.notify(getMessage('RevisionPreloaded').replace('$1', revid), {type: 'success'});
 	});

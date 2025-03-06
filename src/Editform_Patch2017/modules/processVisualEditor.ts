@@ -1,7 +1,7 @@
 import * as OPTIONS from '~/Editform_Patch2017/options.json';
 import {getMessage} from './i18n';
 
-const processVisualEditor = ({$body}: {$body: JQuery<HTMLBodyElement>}) => {
+const processVisualEditor = ($body: JQuery<HTMLBodyElement>): void => {
 	// Missing label messages
 	const $labels: JQuery = $body.find(`.${OPTIONS.targetClass}`).find('label');
 	for (const label of $labels) {

@@ -3,8 +3,15 @@ import {toastify} from 'ext.gadget.Toastify';
 
 const {wgScript} = mw.config.get();
 
-const refresh = (targetPage?: string): void => {
-	toastify(
+const refresh = ({
+	targetPage,
+	toastifyInstance,
+}: {targetPage?: string; toastifyInstance?: ToastifyInstance} = {}): void => {
+	toastifyInstance ||= {
+		hideToast: () => {},
+	};
+	toastifyInstance.hideToast();
+	toastifyInstance = toastify(
 		{
 			text: getMessage('Refreshing'),
 			duration: -1,

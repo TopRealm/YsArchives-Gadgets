@@ -1,4 +1,4 @@
-import {CLASS_NAME, CLASS_NAME_EXPAND_BUTTON} from '../constant';
+import {expand, refarea} from '../FoldRef.module.less';
 import {getMessage} from '../i18n';
 
 // create a div, place {{Reflist}}s inside
@@ -6,7 +6,7 @@ const processElement = ($element: JQuery): void => {
 	// The following classes are used here:
 	// * see constant.ts
 	// * for more information
-	const $refFolder: JQuery = $('<div>').addClass(CLASS_NAME);
+	const $refFolder: JQuery = $('<div>').addClass(refarea as string);
 
 	$refFolder.insertBefore($element);
 	$element.appendTo($refFolder);
@@ -15,7 +15,9 @@ const processElement = ($element: JQuery): void => {
 	// The following classes are used here:
 	// * see constant.ts
 	// * for more information
-	const $expandButton: JQuery = $('<div>').addClass(CLASS_NAME_EXPAND_BUTTON).text(getMessage('Expand'));
+	const $expandButton: JQuery = $('<div>')
+		.addClass(expand as string)
+		.text(getMessage('Expand'));
 	$refFolder.after($expandButton);
 };
 

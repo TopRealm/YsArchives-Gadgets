@@ -1,6 +1,6 @@
 import * as OPTIONS from '../options.json';
 import {noChanges, publishChanges, submitAll, warning} from '../TranslateVariants.module.less';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {api} from './api';
 
 type Langs = 'zh' | 'zh-hans' | 'zh-cn' | 'zh-my' | 'zh-sg' | 'zh-hant' | 'zh-hk' | 'zh-mo' | 'zh-tw';

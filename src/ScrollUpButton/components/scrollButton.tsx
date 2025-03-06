@@ -1,5 +1,5 @@
 import {CLASS_NAME, CLASS_NAME_DOWN, CLASS_NAME_UP} from '../modules/constant';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {getMessage} from '../modules/i18n';
 import {scrollTop} from 'ext.gadget.Util';
 

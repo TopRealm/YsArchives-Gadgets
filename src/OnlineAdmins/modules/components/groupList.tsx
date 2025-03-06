@@ -1,5 +1,5 @@
 import {section, sectionList, talkPageLink} from './OnlineAdmins.module.less';
-import React from 'ext.gadget.React';
+import React from 'ext.gadget.JSX';
 import {getMessage} from '../i18n';
 
 const sanitize = (string: string) =>

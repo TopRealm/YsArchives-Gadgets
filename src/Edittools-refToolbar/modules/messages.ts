@@ -38,6 +38,7 @@ const refToolbarMesages = (): void => {
 			'cite-err-report-empty': '未找到錯誤',
 			// Message displayed in the error report list if there are no errors
 			'cite-autofill-alt': '自動填充',
+			'cite-increment-alt': '添加作者',
 			// Alt text for autofill button image
 			'cite-ref-tooltip': '錨點的標識符（使該引用可以成為內部連結的目標）',
 			'cite-postscript-tooltip': '如果設定這一參數，則覆蓋使用句點終止引文的默認行爲',
@@ -157,6 +158,7 @@ const refToolbarMesages = (): void => {
 			'cite-err-report-empty': '未找到错误',
 			// Message displayed in the error report list if there are no errors
 			'cite-autofill-alt': '自动填充',
+			'cite-increment-alt': '添加作者',
 			// Alt text for autofill button image
 			'cite-ref-tooltip': '锚点的标识符（使该引用可以成为内部链接的目标）',
 			'cite-postscript-tooltip': '如果设定这一参数，则覆盖使用句点终止引文的默认行为',
