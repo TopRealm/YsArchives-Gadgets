@@ -1,4 +1,4 @@
-import {api} from '../api';
+import {api} from './api';
 
 const getSections = async (title: string) => {
 	const params: ApiParseParams = {
@@ -10,16 +10,13 @@ const getSections = async (title: string) => {
 	};
 
 	const {parse} = await api.get(params);
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-	const {
-		sections,
-	}: {
+	const {sections} = parse as {
 		sections: {
 			level: string;
 			index: string;
 			anchor: string;
 		}[];
-	} = parse;
+	};
 
 	const sectionsToArchive = [];
 
@@ -40,21 +37,21 @@ const getSections = async (title: string) => {
 	return sectionsToArchive;
 };
 
-const getSectionContent = async (title: string, section: string): Promise<string | null> => {
+const getSectionContent = async ({title, section}: {title: string; section: string}): Promise<string | null> => {
 	const params: ApiQueryRevisionsParams = {
 		action: 'query',
-		prop: ['revisions'],
+		prop: 'revisions',
 		rvprop: 'content',
 		format: 'json',
 		formatversion: '2',
 		titles: title,
 		rvsection: section,
+		rvslots: 'main',
 	};
 
 	const response = await api.get(params);
 
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-return
-	return response['query'].pages[0].revisions[0].content ?? null;
+	return (response['query'].pages[0]?.revisions?.[0].slots.main.content as string) ?? null;
 };
 
 export {getSections, getSectionContent};

@@ -1,4 +1,5 @@
 {
+	"elementId": "gadget-easy_archive",
 	"mountPointSelector": "#footer-info,.page-info",
 	"version": "1.0"
 }

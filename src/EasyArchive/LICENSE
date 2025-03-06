@@ -1,9 +1,22 @@
 /**
  * SPDX-License-Identifier: CC-BY-SA-4.0
- * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
+ * _addText: '{{Gadget Header|license=CC-BY-SA-4.0|license2=Qiuwen Public Licence}}'
  *
- * @base {@link https://zh.wikipedia.org/wiki/MediaWiki:Gadget-easy-archive.js}
- * @base {@link https://meta.wikimedia.org/w/index.php?oldid=18915644}
  * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/EasyArchive}
- * @license CC-BY-SA-4.0 {@link https://youshou.wiki/wiki/H:CC-BY-SA-4.0}
+ * @author WaitSpring <me@waitspring.com>
+ * @license CC-BY-SA-4.0 {@link https://https://youshou.wiki/wiki/H:CC-BY-SA-4.0}
+ * @license Qiuwen Public License {@link https://www.qiuwenbaike.cn/wiki/QW:QWL}
+ */
+
+/**
+ * Copyright 2024 WaitSpring <me@waitspring.com>
+ * Licensed under the "Qiuwen Public Licence"
+ * (the "License", formerly the "Qiuwen Licence"),
+ * either version 1.0 of the Licence, or any
+ * later version.
+ * You may obtain a copy of the License at
+ *
+ *  http://www.qiuwenbaike.cn/wiki/QW:QWL
+ *
+ * See the License for details.
  */

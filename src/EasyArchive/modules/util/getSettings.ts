@@ -52,6 +52,7 @@ const isNotAllowed = () => {
 
 	return false;
 };
+
 const isNotSupported = () => {
 	const {wgIsMainPage, wgNamespaceNumber, wgCurRevisionId, wgRevisionId} = mw.config.get();
 
@@ -66,4 +67,20 @@ const isNotSupported = () => {
 	return false;
 };
 
-export {ifArcLocNotAllowed, isInBlacklist, isNotAllowed, isNotSupported};
+const getSettings = () => {
+	const settings = document.querySelector('.easy_archive_data_point_collection') as HTMLElement;
+	if (!settings) {
+		return null;
+	}
+
+	const {dataset} = settings;
+	const {arcLevel, arcLoc, secArc, secDel} = dataset;
+	return {
+		arcLevel: arcLevel ?? '2',
+		arcLoc: arcLoc ?? '',
+		secArc: secArc ?? '1',
+		secDel: secDel ?? '1',
+	};
+};
+
+export {getSettings, ifArcLocNotAllowed, isInBlacklist, isNotAllowed, isNotSupported};

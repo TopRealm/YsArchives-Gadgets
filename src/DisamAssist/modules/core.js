@@ -946,7 +946,8 @@ const loadPage = (pageTitle) => {
 		formatversion: '2',
 		titles: pageTitle,
 		prop: 'revisions',
-		rvprop: 'timestamp|content',
+		rvprop: ['timestamp', 'content'],
+		rvslots: 'main',
 		meta: 'tokens',
 		type: 'csrf',
 	};
@@ -957,7 +958,7 @@ const loadPage = (pageTitle) => {
 			page.redirect = rawPage.redirect !== undefined;
 			page.missing = rawPage.missing !== undefined;
 			if (rawPage.revisions) {
-				page.content = rawPage.revisions[0].content;
+				page.content = rawPage.revisions[0].slots.main.content;
 				page.baseTimeStamp = rawPage.revisions[0].timestamp;
 			} else {
 				page.content = '';

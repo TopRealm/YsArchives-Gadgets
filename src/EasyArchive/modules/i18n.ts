@@ -23,7 +23,7 @@ const getI18nMessages = () => {
 			'zh-hant': '一般而言，不應向條目名稱空間進行存檔。此外，存檔地址不得和此頁面名稱相同。請檢查存檔地址。',
 		}),
 		Archiving: localize({
-			en: 'being archived',
+			en: 'Archiving',
 			'zh-hans': '存档中',
 			'zh-hant': '存檔中',
 		}),
@@ -32,13 +32,20 @@ const getI18nMessages = () => {
 			'zh-hans': '已存档',
 			'zh-hant': '已存檔',
 		}),
+		'Edit Confilict Notice': localize({
+			en: 'You have already archived and/or deleted a section on this page. Please refresh the page and continue archiving or deleting other sections to avoid editing conflicts.',
+			'zh-hans':
+				'您已经在本页面执行了存档、删除章节的操作。请刷新页面，然后继续存档、删除本页面的其他章节，以避免编辑冲突。',
+			'zh-hant':
+				'您已經在本頁面執行了存檔、刪除章節的操作。請刷新頁面，然後繼續存檔、刪除本頁面的其他章節，以避免編輯衝突。',
+		}),
 		Delete: localize({
 			en: 'delete',
 			'zh-hans': '删除',
 			'zh-hant': '刪除',
 		}),
 		Deleting: localize({
-			en: 'being deleted',
+			en: 'Deleting',
 			'zh-hans': '删除中',
 			'zh-hant': '刪除中',
 		}),
@@ -91,6 +98,10 @@ const getI18nMessages = () => {
 			'zh-hant':
 				'若需要，此頁面可以啟用 Easy Archive。若要在此頁面使用 Easy Archive，請在頁面上添加模板 {{Easy Archive|to=存檔位置}}。',
 		}),
+		'Section $1': localize({
+			en: 'Section $1',
+			zh: '第 $1 章节',
+		}),
 		'(': localize({
 			en: ' (',
 			zh: '（',
@@ -102,6 +113,15 @@ const getI18nMessages = () => {
 		'.': localize({
 			en: '.',
 			zh: '。',
+		}),
+		':': localize({
+			en: ': ',
+			zh: '：',
+		}),
+		Refresh: localize({
+			en: 'Refresh the page',
+			'zh-hans': '刷新当前页面',
+			'zh-hant': '重新載入當前頁',
 		}),
 		Refreshing: localize({
 			en: 'Refreshing...',

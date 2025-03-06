@@ -1,0 +1,24 @@
+a {
+	&.mw-disambig::after,
+	&.mw-redirect::after {
+		font-weight: normal;
+		line-height: 0;
+		text-indent: 0.1em;
+		vertical-align: super;
+	}
+
+	&.mw-disambig::after {
+		content: '⇄';
+		font-size: 0.75em;
+	}
+
+	&.mw-redirect::after {
+		content: '↳';
+		font-size: 0.9em;
+	}
+
+	&.mw-disambig.mw-redirect::after {
+		content: '⇄↳';
+		font-size: 0.75em;
+	}
+}
