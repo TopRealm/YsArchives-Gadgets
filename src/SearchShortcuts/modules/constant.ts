@@ -1,3 +1,0 @@
-const SEARCH_INPUT_ELEMENT_SELECTOR: string = '#searchInput';
-
-export {SEARCH_INPUT_ELEMENT_SELECTOR};

@@ -1,0 +1,40 @@
+@import (reference) '../../variables.less';
+
+/* {{Kaiti}} */
+.kaiti,
+.Kaiti,
+.KaiTi {
+	font-family: @cursive-zh-hans, cursive, var(--fonts-serif, serif), var(--fonts-sans, sans-serif);
+}
+
+/* {{Fangsong}} */
+.fangsong,
+.fangSong,
+.Fangsong,
+.FangSong {
+	font-family: @fangsong, fangsong, var(--fonts-serif, serif), var(--fonts-sans, sans-serif);
+}
+
+/* {{MongolUnicode}} */
+.font-mong {
+	&,
+	&-mon,
+	&:lang(mn),
+	&:lang(mon),
+	&:lang(mvf),
+	&:lang(xal),
+	&:lang(xwo),
+	&:lang(bua),
+	&:lang(bxu),
+	&:lang(evn),
+	&:lang(cmg) {
+		font-family: @monfont, var(--fonts-serif, serif), var(--fonts-sans, sans-serif);
+	}
+
+	&-mnc,
+	&:lang(mnc),
+	&:lang(dta),
+	&:lang(sjo) {
+		font-family: @mncfont, var(--fonts-serif, serif), var(--fonts-sans, sans-serif);
+	}
+}

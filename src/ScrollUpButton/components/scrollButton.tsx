@@ -7,48 +7,57 @@ interface Props {
 	additionalClassName: string;
 	alt: string;
 	ariaLabel: string;
-	onClick: () => void;
+	onClick: (event?: MouseEvent) => void;
+	onMouseEnter: (event: MouseEvent) => void;
+	onMouseLeave: (event: MouseEvent) => void;
 }
 
-const IMAGE_URI: string =
-	"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E";
+function ScrollButton(props: Props) {
+	const {additionalClassName, alt, ariaLabel, onClick, onMouseEnter, onMouseLeave} = props;
 
-const TO_BOTTOM: string = getMessage('ToBottom');
-
-const TO_TOP: string = getMessage('ToTop');
-
-const scrollButton = (props: Props) => {
-	const {additionalClassName, alt, ariaLabel, onClick} = props;
 	return (
 		<img
-			className={[CLASS_NAME, additionalClassName]}
-			src={IMAGE_URI}
+			className={[CLASS_NAME, additionalClassName, 'noprint']}
+			src={"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'%3E%3C/svg%3E"}
 			width="32"
 			height="32"
 			draggable={false}
 			alt={alt}
 			aria-label={ariaLabel}
 			onClick={onClick}
+			onMouseEnter={onMouseEnter}
+			onMouseLeave={onMouseLeave}
 		/>
 	);
-};
+}
 
-const scrollDownButton = scrollButton({
-	additionalClassName: CLASS_NAME_DOWN,
-	alt: TO_BOTTOM,
-	ariaLabel: TO_BOTTOM,
-	onClick: (): void => {
-		scrollTop(($(document).height() ?? 0) - ($(window).height() ?? 0));
-	},
-});
+const TO_BOTTOM: string = getMessage('ToBottom');
+const TO_TOP: string = getMessage('ToTop');
 
-const scrollUpButton = scrollButton({
-	additionalClassName: CLASS_NAME_UP,
-	alt: TO_TOP,
-	ariaLabel: TO_TOP,
-	onClick: (): void => {
-		scrollTop(0);
-	},
-});
+const ScrollDownButton = (onMouseEnterMouseLeave: (event: MouseEvent) => void) => (
+	<ScrollButton
+		additionalClassName={CLASS_NAME_DOWN}
+		alt={TO_BOTTOM}
+		ariaLabel={TO_BOTTOM}
+		onClick={(): void => {
+			scrollTop(($(document).height() ?? 0) - ($(window).height() ?? 0));
+		}}
+		onMouseEnter={onMouseEnterMouseLeave}
+		onMouseLeave={onMouseEnterMouseLeave}
+	/>
+);
 
-export {scrollDownButton, scrollUpButton};
+const ScrollUpButton = (onMouseEnterMouseLeave: (event: MouseEvent) => void) => (
+	<ScrollButton
+		additionalClassName={CLASS_NAME_UP}
+		alt={TO_TOP}
+		ariaLabel={TO_TOP}
+		onClick={(): void => {
+			scrollTop(0);
+		}}
+		onMouseEnter={onMouseEnterMouseLeave}
+		onMouseLeave={onMouseEnterMouseLeave}
+	/>
+);
+
+export {ScrollDownButton, ScrollUpButton};

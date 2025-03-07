@@ -1,32 +1,22 @@
 /**
- * SPDX-License-Identifier: CC-BY-SA-4.0
- * _addText: '{{Gadget Header|title=Wikiplus|license=CC-BY-SA-4.0}}'
+ * SPDX-License-Identifier: CC-BY-SA-4.0 OR Apache-2.0
+ * _addText: '{{Gadget Header|title=Wikiplus|license=CC-BY-SA-4.0|license2=Apache-2.0}}'
  *
  * Wikiplus
  *
- * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/Wikiplus/module/core.js}
+ * @base {@link https://github.com/Wikiplus/Wikiplus}
+ * @source {@link https://git.qiuwen.net.cn/InterfaceAdmin/Wikiplus}
+ * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/Wikiplus/}
  * @author Eridanus Sora (妹空酱)
- * @license CC-BY-SA-4.0 {@link https://youshou.wiki/wiki/H:CC-BY-SA-4.0}
+ * @license CC-BY-SA-4.0 {@link https://youshou.wiki/wiki/H:CC-BY-SA-4.0} OR Apache-2.0 {@link http://www.apache.org/licenses/LICENSE-2.0}
  */
 
 /**
- * SPDX-License-Identifier: GPL-3.0-or-later
- * _addText: '{{Gadget Header|title=Wikiplus-highlight|license=GPL-3.0-or-later}}'
+ * Copyright 2014-2024 Eridanus Sora (妹空酱)
  *
- * Wikiplus-highlight
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- * @base {@link https://github.com/bhsd-harry/Wikiplus-highlight/blob/main/main.js}
- * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/Wikiplus/module/highlight.js}
- * @author Bhsd <https://github.com/bhsd-harry>, 机智的小鱼君 <https://github.com/Dragon-Fish>
- * @license GPL-3.0-or-later {@link https://youshou.wiki/wiki/H:GPL-3.0}
- */
-
-/**
- * SPDX-License-Identifier: MIT
- *
- * settings Icon (ltr) from OOjs UI
- *
- * @base {@link https://github.com/wikimedia/oojs-ui/blob/e17952e413cfc00c15cfd861d47463c29062afe7/src/themes/wikimediaui/images/icons/settings.svg}
- * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/GeoLocationReader/images}
- * @license MIT {@link https://github.com/wikimedia/oojs-ui/blob/master/LICENSE-MIT}
+ *     http://www.apache.org/licenses/LICENSE-2.0
  */

@@ -1,11 +1,11 @@
 import {checkRevisionPage} from './modules/util/checkRevisionPage';
-import {getDomains} from './modules/util/getDomains';
+import {getShortDomains} from './modules/util/getShortDomains';
 import {processId} from './modules/processId';
 
 (function shortURL() {
 	const {wgAction, wgArticleId, wgNamespaceNumber} = mw.config.get();
 
-	const domains = getDomains();
+	const domains = getShortDomains();
 
 	if (!domains.length || wgNamespaceNumber < 0) {
 		return;

@@ -1,53 +1,17 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import {
-	EDIT_TAG,
-	IS_CATEGORY,
-	SUFFIX_APPEND,
-	SUFFIX_REPLACE,
-	SUFFIX_SETDEFAULT,
-	VARIANTS,
-	WG_NAMESPACE_IDS,
-	WG_NAMESPACE_NUMBER,
-	WG_PAGE_NAME,
-} from './constant';
-import {getMessage} from './util/getMessages';
-import {initMwApi} from 'ext.gadget.Util';
+import * as OPTIONS from '../options.json';
+import {SUFFIX_APPEND, SUFFIX_REPLACE, SUFFIX_SETDEFAULT, VARIANTS} from './constant';
+import {generateArray, uniqueArray} from 'ext.gadget.Util';
+import {api} from './api';
+import {fixNamespace} from './util/fixNamespace';
+import {getMessage} from './util/getMessage';
 
-const api = initMwApi('ToolsRedirect/2.0');
-
-const findRedirectCallbacks = [];
+const {wgNamespaceNumber, wgPageName} = mw.config.get();
+const IS_CATEGORY = wgNamespaceNumber === 14;
+let findRedirectCallbacks = [];
 const pageWithRedirectTextSuffix = {};
 const redirectExcludes = {};
-const nsPrefixes = [];
-let nsCanonPrefix, nsPrefixPattern;
-
-for (const [text, nsid] of Object.entries(WG_NAMESPACE_IDS)) {
-	if (nsid === WG_NAMESPACE_NUMBER && !!text) {
-		nsPrefixes.push(text);
-	}
-}
-
-if (WG_NAMESPACE_NUMBER === 0) {
-	// articles
-	nsCanonPrefix = '';
-	nsPrefixPattern = /^/;
-} else {
-	nsCanonPrefix = `${WG_PAGE_NAME.split(':')[0]}:`;
-	nsPrefixPattern = new RegExp(`^(${nsPrefixes.join('|')}):`, 'i');
-}
-
-const fixNamespace = (title) => {
-	if (WG_NAMESPACE_NUMBER === 0) {
-		// do nothing if it's articles
-		return title;
-	} else if (nsPrefixPattern.test(title)) {
-		// canonize the namespace
-		return title.replace(nsPrefixPattern, nsCanonPrefix);
-	}
-	// don't have a namespace
-	return nsCanonPrefix + title;
-};
 
 /**
  * Add new custom callback for finding new potential redirect titles.
@@ -58,9 +22,9 @@ const fixNamespace = (title) => {
  */
 const findRedirectCallback = function (callback, ...args) {
 	if (callback) {
-		findRedirectCallbacks.push(callback);
+		findRedirectCallbacks[findRedirectCallbacks.length] = callback;
 	} else {
-		findRedirectCallbacks.push(callback, ...args);
+		findRedirectCallbacks = generateArray(findRedirectCallbacks, callback, ...args);
 	}
 	return this;
 };
@@ -73,11 +37,11 @@ const findRedirectCallback = function (callback, ...args) {
  */
 const findRedirectBySelector = function (selector) {
 	/* A shortcut to add CSS selectors as rule to find new potential redirect titles. */
-	findRedirectCallbacks.push(() => {
+	findRedirectCallbacks[findRedirectCallbacks.length] = () => {
 		return $(selector).map((_index, element) => {
 			return $(element).eq(0).text().trim() || null;
 		});
-	});
+	};
 	return this;
 };
 
@@ -93,30 +57,19 @@ const setRedirectTextSuffix = (title, suffix, flag) => {
 		// if not exist, every flag can set
 		flag_set = true;
 	}
-	pageWithRedirectTextSuffix[title] = [];
 	if (flag_set) {
-		pageWithRedirectTextSuffix[title] = [suffix];
+		pageWithRedirectTextSuffix[title] = generateArray(suffix);
 	} else if (flag_append) {
-		pageWithRedirectTextSuffix[title].push(suffix);
-		// De-duplicate
-		pageWithRedirectTextSuffix[title] = [...new Set(pageWithRedirectTextSuffix[title])];
+		pageWithRedirectTextSuffix[title] = generateArray(pageWithRedirectTextSuffix[title], suffix);
 	}
 };
 
-/* export global object */
-window.toolsRedirect = {
-	findRedirectCallback,
-	findRedirectBySelector,
-	setRedirectTextSuffix,
-};
-
-export const ToolsRedirect = {
+const ToolsRedirect = {
 	tabselem: null,
 	tagselem: null,
 	variants: VARIANTS,
-	init() {
+	init($body) {
 		const self = this;
-		const $body = $('body');
 		const button = $('<li>')
 			.addClass('mw-list-item collapsible vector-tab-noicon')
 			.attr('id', 'ca-redirect')
@@ -188,7 +141,7 @@ export const ToolsRedirect = {
 		$('p[class!=desc]', self.tabs.view.cont).remove();
 		self.loading(self.tabs.view.cont);
 		void self
-			.bulkEditByRegex(pagenames, /\s*\[\[.*?\]\]/, ` [[${WG_PAGE_NAME}]]`, getMessage('fixsummary'))
+			.bulkEditByRegex(pagenames, /\s*\[\[.*?(#.*?)?\]\]/, ` [[${wgPageName}$1]]`, getMessage('fixsummary'))
 			.then(() => {
 				// delay load before the asynchronous tasks on server finished
 				setTimeout(() => {
@@ -205,8 +158,8 @@ export const ToolsRedirect = {
 		void self
 			.bulkEdit(
 				pagenames,
-				getMessage('createtext').replace('$1', WG_PAGE_NAME),
-				getMessage('createsummary').replace('$1', WG_PAGE_NAME)
+				getMessage(IS_CATEGORY ? 'createtext-category' : 'createtext').replace('$1', wgPageName),
+				getMessage('createsummary').replace('$1', wgPageName)
 			)
 			.then(() => {
 				// delay load before the asynchronous tasks on server finished
@@ -219,7 +172,7 @@ export const ToolsRedirect = {
 	},
 	addRedirectTextSuffix(title, text) {
 		if (title in pageWithRedirectTextSuffix) {
-			text += pageWithRedirectTextSuffix[title].join('');
+			text += `\n${uniqueArray(pageWithRedirectTextSuffix[title]).join('\n')}`; // Replace Set with uniqueArray, avoiding core-js polyfilling
 		}
 		return text;
 	},
@@ -228,7 +181,6 @@ export const ToolsRedirect = {
 		titles = titles.filter((v, i, arr) => {
 			return arr.indexOf(v) === i;
 		});
-		titles = titles.join('|');
 		return api
 			.post({
 				action: 'query',
@@ -240,17 +192,15 @@ export const ToolsRedirect = {
 			.then(({query}) => {
 				const deferreds = [];
 				for (const {title} of query.pages) {
-					deferreds.push(
-						api.postWithToken('csrf', {
-							action: 'edit',
-							format: 'json',
-							formatversion: '2',
-							title,
-							text: self.addRedirectTextSuffix(title, text),
-							summary,
-							tags: EDIT_TAG,
-						})
-					);
+					deferreds[deferreds.length] = api.postWithToken('csrf', {
+						action: 'edit',
+						format: 'json',
+						formatversion: '2',
+						title,
+						text: self.addRedirectTextSuffix(title, text),
+						summary,
+						tags: OPTIONS.apiTag,
+					});
 				}
 				return $.when(...deferreds);
 			});
@@ -259,7 +209,6 @@ export const ToolsRedirect = {
 		titles = titles.filter((v, i, arr) => {
 			return arr.indexOf(v) === i;
 		});
-		titles = titles.join('|');
 		return api
 			.post({
 				action: 'query',
@@ -275,18 +224,16 @@ export const ToolsRedirect = {
 				for (const page of query.pages) {
 					const {content} = page.revisions[0].slots['main'];
 					const newContent = content.replace(regex, text);
-					deferreds.push(
-						api.postWithToken('csrf', {
-							action: 'edit',
-							format: 'json',
-							formatversion: '2',
-							title: page.title,
-							text: newContent,
-							tags: EDIT_TAG,
-							basetimestamp: page.revisions[0].timestamp,
-							summary,
-						})
-					);
+					deferreds[deferreds.length] = api.postWithToken('csrf', {
+						action: 'edit',
+						format: 'json',
+						formatversion: '2',
+						title: page.title,
+						text: newContent,
+						tags: OPTIONS.apiTag,
+						basetimestamp: page.revisions[0].timestamp,
+						summary,
+					});
 				}
 				return $.when(...deferreds);
 			});
@@ -360,7 +307,7 @@ export const ToolsRedirect = {
 	selectAction(cont, cb) {
 		const pagenames = [];
 		$('input[type=checkbox]:checked', cont).each((_index, pagename) => {
-			pagenames.push($(pagename).data('page-title'));
+			pagenames[pagenames.length] = $(pagename).data('page-title');
 		});
 		if (pagenames.length > 0) {
 			cb.call(this, pagenames);
@@ -418,7 +365,7 @@ export const ToolsRedirect = {
 		this.loadTabCont(
 			'view',
 			function () {
-				return this.loadRedirect(WG_PAGE_NAME, $container, 0);
+				return this.loadRedirect(wgPageName, $container, 0);
 			},
 			reload
 		);
@@ -427,7 +374,7 @@ export const ToolsRedirect = {
 		this.loadTabCont(
 			'create',
 			function () {
-				return this.findRedirect(WG_PAGE_NAME);
+				return this.findRedirect(wgPageName);
 			},
 			reload
 		);
@@ -476,11 +423,11 @@ export const ToolsRedirect = {
 							const isCycleRedirect = rdtitle in loaded;
 							loaded[rdtitle] = true;
 							if (!isCycleRedirect && deep) {
-								methods.push({
+								methods[methods.length] = {
 									href: '#fix-redirect',
 									title: getMessage('tabviewfix'),
 									click: onClickFix,
-								});
+								};
 							}
 							const $container = self
 								.buildSelection(
@@ -565,10 +512,10 @@ export const ToolsRedirect = {
 					// - After: 有兽档案馆:沙盒
 					let title = $('<span>').append(displaytitle).eq(0).text().trim();
 					title = fixNamespace(title);
-					setRedirectTextSuffix(title, '\n{{简繁重定向}}', SUFFIX_APPEND);
+					setRedirectTextSuffix(title, '{{简繁重定向}}', SUFFIX_APPEND);
 					return title;
 				});
-			deferreds.push(xhr);
+			deferreds[deferreds.length] = xhr;
 		}
 		return $.when(...deferreds).then((...args) => {
 			const suffixes = [];
@@ -582,11 +529,11 @@ export const ToolsRedirect = {
 				} else {
 					suffix = '';
 				}
-				retTitles.push(title);
-				suffixes.push(suffix);
+				retTitles[retTitles.length] = title;
+				suffixes[suffixes.length] = suffix;
 			}
 			// append suffixes
-			for (const suffix of new Set(suffixes)) {
+			for (const suffix of uniqueArray(suffixes)) {
 				retTitles = [
 					...retTitles,
 					...titles.map((title) => {
@@ -595,28 +542,26 @@ export const ToolsRedirect = {
 					}),
 				];
 			}
-			return self.findNotExists([...new Set(retTitles)]);
+
+			return self.findNotExists(uniqueArray(retTitles)); // Replace Set with uniqueArray, avoiding core-js polyfilling
 		});
 	},
 	findNotExists(titles) {
 		const deferreds = [];
-		const excludes = new Set(['用字模式']);
+		const excludes = ['用字模式'];
 		let alltitles = [];
-		titles = titles.join('|');
 		for (const variant of VARIANTS) {
-			deferreds.push(
-				api.post({
-					action: 'parse',
-					format: 'json',
-					formatversion: '2',
-					text: titles,
-					prop: 'text',
-					title: 'MediaWiki:Gadget-ToolsRedirect.js/-',
-					contentmodel: 'wikitext',
-					uselang: variant,
-					variant,
-				})
-			);
+			deferreds[deferreds.length] = api.get({
+				action: 'parse',
+				format: 'json',
+				formatversion: '2',
+				text: titles,
+				prop: 'text',
+				title: 'MediaWiki:Gadget-ToolsRedirect.js/-',
+				contentmodel: 'wikitext',
+				uselang: variant,
+				variant,
+			});
 		}
 		return $.when(...deferreds).then((...args) => {
 			for (const [{parse}] of args) {
@@ -625,7 +570,6 @@ export const ToolsRedirect = {
 			alltitles = alltitles.filter((v, i, arr) => {
 				return arr.indexOf(v) === i;
 			});
-			alltitles = alltitles.join('|');
 			return api
 				.post({
 					action: 'query',
@@ -638,18 +582,18 @@ export const ToolsRedirect = {
 					titles = [];
 					for (const page of query.pages) {
 						const {title} = page;
-						if (page.missing && !excludes.has(title)) {
+						if (page.missing && !excludes.includes(title)) {
 							if (title in redirectExcludes) {
 								// exclude special titles
 								return;
 							}
-							titles.push(title);
+							titles[titles.length] = title;
 							if (IS_CATEGORY) {
-								const target = WG_PAGE_NAME.replace(/^Category:/, '');
-								setRedirectTextSuffix(title, '\n{{分类重定向|$1}}'.replace('$1', target));
+								const target = wgPageName.replace(/^Category:/, '');
+								setRedirectTextSuffix(title, '{{分类重定向|$1}}'.replace('$1', target));
 							}
 							// only set default suffix
-							setRedirectTextSuffix(title, '\n{{别名重定向}}', SUFFIX_SETDEFAULT);
+							setRedirectTextSuffix(title, '{{别名重定向}}', SUFFIX_SETDEFAULT);
 						}
 					}
 					return titles;
@@ -668,12 +612,12 @@ export const ToolsRedirect = {
 		for (const callback of findRedirectCallbacks) {
 			const ret = callback(pagename, $content, titles);
 			if (typeof ret === 'string') {
-				titles.push(ret);
+				titles[titles.length] = ret;
 			} else if ('done' in ret) {
 				// is Deferred
-				frcDeferreds.push(ret);
+				frcDeferreds[frcDeferreds.length] = ret;
 			} else {
-				titles = [...new Set([...titles, ...ret])];
+				titles = uniqueArray([...titles, ...ret]); // Replace Set with uniqueArray, avoiding core-js polyfilling
 			}
 		}
 		// remove all empty titles
@@ -690,9 +634,9 @@ export const ToolsRedirect = {
 			.then((...args) => {
 				for (const ret of args) {
 					if (typeof ret === 'string') {
-						titles.push(ret);
+						titles[titles.length] = ret;
 					} else {
-						titles = [...new Set([...titles, ...ret])];
+						titles = uniqueArray([...titles, ...ret]); // Replace Set with uniqueArray, avoiding core-js polyfilling
 					}
 				}
 				return self.findVariants(pagename, titles);
@@ -756,3 +700,5 @@ export const ToolsRedirect = {
 		return deferred.promise();
 	},
 };
+
+export {ToolsRedirect, findRedirectCallback, findRedirectBySelector, setRedirectTextSuffix};

@@ -1,4 +1,6 @@
 {
+	"elementId": "footer-info-patroller",
 	"mountPointSelector": "#footer-info,.page-info",
+	"storageKey": "ext.gadget.PagePatroller_getPatroller-",
 	"version": "3.0"
 }

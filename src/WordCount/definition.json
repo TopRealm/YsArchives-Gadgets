@@ -3,5 +3,5 @@
 	"description": "<span id=\"Gadget-WordCount\"></span> 字数统计功能，方便计算CJK字数",
 	"section": "browser",
 	"actions": ["view"],
-	"dependencies": ["ext.gadget.i18n", "ext.gadget.React", "ext.gadget.Util"]
+	"dependencies": ["ext.gadget.i18n", "ext.gadget.JSX", "ext.gadget.Util"]
 }

@@ -185,43 +185,38 @@
 					const missing = !!page.missing;
 					let editProt;
 					if (missing) {
-						metadata.push('页面不存在');
-						editProt = page.protection
-							.filter((protection) => {
-								return protection.type === 'create' && protection.level === 'sysop';
-							})
-							.pop();
+						metadata[metadata.length] = '页面不存在';
+						editProt = page.protection.findLast((protection) => {
+							return protection.type === 'create' && protection.level === 'sysop';
+						});
 					} else {
 						if (page.redirect) {
-							metadata.push('重定向');
+							metadata[metadata.length] = '重定向';
 						}
 						if (page.ns === 6) {
-							metadata.push(`上传者：${page.imageinfo[0].user}`, `最后编辑者：${page.revisions[0].user}`);
+							metadata[metadata.length] =
+								(`上传者：${page.imageinfo[0].user}`, `最后编辑者：${page.revisions[0].user}`);
 						} else {
-							metadata.push(`${mw.language.convertNumber(page.revisions[0].size)}字节`);
+							metadata[metadata.length] = `${mw.language.convertNumber(page.revisions[0].size)}字节`;
 						}
-						editProt = page.protection
-							.filter((protection) => {
-								return protection.type === 'edit' && protection.level === 'sysop';
-							})
-							.pop();
+						editProt = page.protection.findLast((protection) => {
+							return protection.type === 'edit' && protection.level === 'sysop';
+						});
 					}
 					if (editProt) {
-						metadata.push(
-							`${missing ? '白纸' : ''}全保护${
-								editProt.expiry === 'infinity'
-									? '（永久）'
-									: `（${new Morebits.date(editProt.expiry).calendar('utc')} (UTC)过期）`
-							}`
-						);
+						metadata[metadata.length] = `${missing ? '白纸' : ''}全保护${
+							editProt.expiry === 'infinity'
+								? '（永久）'
+								: `（${new Morebits.date(editProt.expiry).calendar('utc')} (UTC)过期）`
+						}`;
 					}
 					const {title} = page;
-					list.push({
+					list[list.length] = {
 						label: title + (metadata.length > 0 ? ` (${metadata.join('; ')})` : ''),
 						value: title,
 						checked: true,
 						style: editProt ? 'color: #f00' : '',
-					});
+					};
 				}
 				form.append({
 					type: 'header',
@@ -280,7 +275,7 @@
 		}
 		const input = Morebits.quickForm.getInputData(form);
 		if (!input.reason) {
-			mw.notify('您必须给出一个理由。', {
+			void mw.notify('您必须给出一个理由。', {
 				type: 'warn',
 				tag: 'twinklebatchprotect',
 			});

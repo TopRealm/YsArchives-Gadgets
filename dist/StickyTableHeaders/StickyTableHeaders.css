@@ -1,0 +1,60 @@
+/**
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * _addText: '{{Gadget Header|license=GPL-3.0-or-later}}'
+ *
+ * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/StickyTableHeaders}
+ * @author 安忆 <i@anyi.in>
+ * @license GPL-3.0-or-later {@link https://youshou.wiki/wiki/H:GPL-3.0}
+ */
+
+/**
+ * Copyright (C)  安忆
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+/**
+ * +------------------------------------------------------------+
+ * |            === WARNING: GLOBAL GADGET FILE ===             |
+ * +------------------------------------------------------------+
+ * |       All changes should be made in the repository,        |
+ * |                otherwise they will be lost.                |
+ * +------------------------------------------------------------+
+ * |        Changes to this page may affect many users.         |
+ * | Please discuss changes by opening an issue before editing. |
+ * +------------------------------------------------------------+
+ */
+/* <nowiki> */
+
+/* esbuild-css-modules-plugin-ns-css:src/StickyTableHeaders/StickyTableHeaders.module.less */
+.StickyTableHeaders-module__stickyheader_eOk_LG__490 .StickyTableHeaders-module__thead_eOk_LG__490 {
+  position: sticky;
+  top: -1px;
+}
+.skin-gongbi :is(.StickyTableHeaders-module__stickyheader_eOk_LG__490 .StickyTableHeaders-module__thead_eOk_LG__490) {
+  top: calc(3.125rem + 6px);
+}
+@media screen and (min-width: 1440px) and (max-width: 1524px), screen and (max-width: 950px) {
+  .skin-gongbi :is(.StickyTableHeaders-module__stickyheader_eOk_LG__490 .StickyTableHeaders-module__thead_eOk_LG__490) {
+    top: -1px;
+  }
+}
+@media screen and (min-width: 1000px) {
+  .skin-vector-2022.vector-sticky-header-visible :is(.StickyTableHeaders-module__stickyheader_eOk_LG__490 .StickyTableHeaders-module__thead_eOk_LG__490) {
+    top: calc(3.125rem - 1px);
+  }
+}
+
+/* </nowiki> */
+
+/*# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiZXNidWlsZC1jc3MtbW9kdWxlcy1wbHVnaW4tbnMtY3NzOnNyYy9TdGlja3lUYWJsZUhlYWRlcnMvU3RpY2t5VGFibGVIZWFkZXJzLm1vZHVsZS5sZXNzIl0sCiAgInNvdXJjZXNDb250ZW50IjogWyIvKiA8c3RkaW4+ICovXG4uU3RpY2t5VGFibGVIZWFkZXJzLW1vZHVsZV9fc3RpY2t5aGVhZGVyX2VPa19MR19fNDkwIC5TdGlja3lUYWJsZUhlYWRlcnMtbW9kdWxlX190aGVhZF9lT2tfTEdfXzQ5MCB7XG4gIHBvc2l0aW9uOiBzdGlja3k7XG4gIHRvcDogLTFweDtcbn1cbi5za2luLWdvbmdiaSA6aXMoLlN0aWNreVRhYmxlSGVhZGVycy1tb2R1bGVfX3N0aWNreWhlYWRlcl9lT2tfTEdfXzQ5MCAuU3RpY2t5VGFibGVIZWFkZXJzLW1vZHVsZV9fdGhlYWRfZU9rX0xHX180OTApIHtcbiAgdG9wOiBjYWxjKDMuMTI1cmVtICsgNnB4KTtcbn1cbkBtZWRpYSBzY3JlZW4gYW5kIChtaW4td2lkdGg6IDE0NDBweCkgYW5kIChtYXgtd2lkdGg6IDE1MjRweCksIHNjcmVlbiBhbmQgKG1heC13aWR0aDogOTUwcHgpIHtcbiAgLnNraW4tZ29uZ2JpIDppcyguU3RpY2t5VGFibGVIZWFkZXJzLW1vZHVsZV9fc3RpY2t5aGVhZGVyX2VPa19MR19fNDkwIC5TdGlja3lUYWJsZUhlYWRlcnMtbW9kdWxlX190aGVhZF9lT2tfTEdfXzQ5MCkge1xuICAgIHRvcDogLTFweDtcbiAgfVxufVxuQG1lZGlhIHNjcmVlbiBhbmQgKG1pbi13aWR0aDogMTAwMHB4KSB7XG4gIC5za2luLXZlY3Rvci0yMDIyLnZlY3Rvci1zdGlja3ktaGVhZGVyLXZpc2libGUgOmlzKC5TdGlja3lUYWJsZUhlYWRlcnMtbW9kdWxlX19zdGlja3loZWFkZXJfZU9rX0xHX180OTAgLlN0aWNreVRhYmxlSGVhZGVycy1tb2R1bGVfX3RoZWFkX2VPa19MR19fNDkwKSB7XG4gICAgdG9wOiBjYWxjKDMuMTI1cmVtIC0gMXB4KTtcbiAgfVxufVxuIl0sCiAgIm1hcHBpbmdzIjogIjs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQ0EsQ0FBQyxvREFBb0QsQ0FBQztBQUNwRCxZQUFVO0FBQ1YsT0FBSztBQUNQO0FBQ0EsQ0FBQyxZQUFZLElBQUksQ0FKaEIsb0RBSXFFLENBSmhCO0FBS3BELE9BQUssS0FBSyxTQUFTLEVBQUU7QUFDdkI7QUFDQSxPQUFPLE9BQU8sSUFBSSxDQUFDLFNBQVMsRUFBRSxRQUFRLElBQUksQ0FBQyxTQUFTLEVBQUUsT0FBTyxFQUFFLE9BQU8sSUFBSSxDQUFDLFNBQVMsRUFBRTtBQUNwRixHQUpELFlBSWMsSUFBSSxDQVJsQixvREFRdUUsQ0FSbEI7QUFTbEQsU0FBSztBQUNQO0FBQ0Y7QUFDQSxPQUFPLE9BQU8sSUFBSSxDQUFDLFNBQVMsRUFBRTtBQUM1QixHQUFDLGdCQUFnQixDQUFDLDZCQUE2QixJQUFJLENBYnBELG9EQWF5RyxDQWJwRDtBQWNsRCxTQUFLLEtBQUssU0FBUyxFQUFFO0FBQ3ZCO0FBQ0Y7IiwKICAibmFtZXMiOiBbXQp9Cg== */

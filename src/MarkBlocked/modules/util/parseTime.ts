@@ -1,12 +1,7 @@
 import {getMessage} from '../i18n';
 
-const zz = (v: number): string => {
-	let _v: string = String(v);
-	if (v <= 9) {
-		_v = `0${v}`;
-	}
-
-	return _v;
+const addZero = (v: number): string => {
+	return v <= 9 ? `0${v}` : `${v}`;
 };
 
 const inHours = (ms: number): string => {
@@ -22,10 +17,10 @@ const inHours = (ms: number): string => {
 	hh %= 24;
 
 	if (dd) {
-		return `${dd + (dd < 10 ? `.${zz(hh)}` : '')}${getMessage('d')}`;
+		return `${dd + (dd < 10 ? `.${addZero(hh)}` : '')}${getMessage('d')}`;
 	}
 
-	return `${hh}:${zz(mm)}`;
+	return `${hh}:${addZero(mm)}`;
 };
 
 // 20081226220605 or 2008-01-26T06:34:19Z -> number

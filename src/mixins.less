@@ -1,0 +1,43 @@
+.group(@group) {
+	/*!
+ * SPDX-License-Identifier: CC-BY-SA-4.0
+ *
+ * @base {@link https://zh.wikipedia.org/wiki/MediaWiki:Group-user.css}
+ * @license CC-BY-SA-4.0 {@link https://www.qiuwenbaike.cn/wiki/H:CC-BY-SA-4.0}
+ */
+	div,
+	p {
+		&.@{group}-show {
+			display: block !important;
+		}
+	}
+
+	span,
+	small {
+		&.@{group}-show {
+			display: inline !important;
+		}
+	}
+
+	table.@{group}-show {
+		display: table !important;
+	}
+
+	tr.@{group}-show {
+		display: table-row !important;
+	}
+
+	td.@{group}-show {
+		display: table-cell !important;
+	}
+
+	li.@{group}-show {
+		display: list-item !important;
+	}
+}
+
+.ve-activated-disabled(@important: '') {
+	.ve-activated & {
+		display: none ~'@{important}';
+	}
+}

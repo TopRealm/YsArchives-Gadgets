@@ -5,7 +5,7 @@
 	"excludeSites": ["loginwiki"],
 	"dependencies": [
 		"ext.gadget.i18n",
-		"ext.gadget.React",
+		"ext.gadget.JSX",
 		"ext.gadget.Util",
 		"jquery.ui",
 		"mediawiki.api",

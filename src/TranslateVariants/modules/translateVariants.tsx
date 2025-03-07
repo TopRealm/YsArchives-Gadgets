@@ -4,7 +4,7 @@ import React from 'ext.gadget.JSX';
 import {api} from './api';
 
 type Langs = 'zh' | 'zh-hans' | 'zh-cn' | 'zh-my' | 'zh-sg' | 'zh-hant' | 'zh-hk' | 'zh-mo' | 'zh-tw';
-const langs: Set<Langs> = new Set(['zh', 'zh-hans', 'zh-cn', 'zh-my', 'zh-sg', 'zh-hant', 'zh-hk', 'zh-mo', 'zh-tw']);
+const langs: Langs[] = ['zh', 'zh-hans', 'zh-cn', 'zh-my', 'zh-sg', 'zh-hant', 'zh-hk', 'zh-mo', 'zh-tw'];
 const nameOfLangs = {
 	zh: '原始',
 	'zh-hans': '简体',
@@ -69,7 +69,7 @@ const translateVariants = (wgPageName: string): void => {
 
 	const langQueue: Langs[] = runLangs
 		.map((lang: Langs): Langs => lang.trim() as Langs)
-		.filter((lang: Langs): boolean => langs.has(lang));
+		.filter((lang: Langs): boolean => langs.includes(lang));
 
 	const process = (pageContent: string): void => {
 		if (!langQueue.length) {
@@ -87,6 +87,7 @@ const translateVariants = (wgPageName: string): void => {
 		let newPageContent: string = '';
 		void api
 			.parse(`{{NoteTA|G1=IT|G2=MediaWiki}}<div id="${OPTIONS.contentID}">${pageContent}</div>`, {
+				action: 'parse',
 				uselang: lang,
 			})
 			.then(
@@ -95,7 +96,7 @@ const translateVariants = (wgPageName: string): void => {
 						.find(`#${OPTIONS.contentID}`)
 						.text();
 
-					const _params: ApiQueryRevisionsParams = {
+					const queryDiffParams: ApiQueryRevisionsParams = {
 						action: 'query',
 						format: 'json',
 						formatversion: '2',
@@ -104,7 +105,7 @@ const translateVariants = (wgPageName: string): void => {
 						rvdifftotext: newPageContent,
 					};
 
-					return api.post(_params);
+					return api.get(queryDiffParams);
 				},
 				(error): null => {
 					void mw.notify(
@@ -251,7 +252,7 @@ const translateVariants = (wgPageName: string): void => {
 			});
 	};
 
-	const params: ApiQueryRevisionsParams = {
+	const queryContentParams = {
 		action: 'query',
 		format: 'json',
 		formatversion: '2',
@@ -259,10 +260,10 @@ const translateVariants = (wgPageName: string): void => {
 		titles: wgPageName,
 		curtimestamp: true,
 		rvprop: ['content', 'timestamp'],
-	};
+	} as const satisfies ApiQueryRevisionsParams;
 
 	void api
-		.get(params)
+		.get(queryContentParams)
 		.then((data) => {
 			if (!data['query']?.pages) {
 				return $.Deferred().reject('unknown');

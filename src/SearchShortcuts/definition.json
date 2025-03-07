@@ -1,5 +1,6 @@
 {
 	"enable": true,
 	"description": "<span id=\"Gadget-SearchShortcuts\"></span> 输入搜索关键词时，自动替换部分源代码语法",
-	"section": "browser"
+	"section": "browser",
+	"dependencies": ["ext.gadget.Util"]
 }

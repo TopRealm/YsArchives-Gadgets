@@ -6,9 +6,7 @@ withDefaults(
 		icon: Icon;
 		size: number;
 	}>(),
-	{
-		size: 20,
-	}
+	{}
 );
 
 export type {Icon};

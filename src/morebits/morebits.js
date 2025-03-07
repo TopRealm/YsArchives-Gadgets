@@ -88,7 +88,7 @@ import {generateArray} from 'ext.gadget.Util';
 	 * @returns {boolean}
 	 */
 	Morebits.userIsInGroup = (group) => {
-		return mw.config.get('wgUserGroups').includes(group);
+		return mw.config.get('wgUserGroups').includes(group) || mw.config.get('wgGlobalGroups').includes(group);
 	};
 	/**
 	 * Hardcodes whether the user is a sysop, used a lot.
@@ -2465,7 +2465,7 @@ import {generateArray} from 'ext.gadget.Util';
 			return JSON.parse(wikitext);
 		});
 	};
-	let morebitsWikiApiUserAgent = 'YsArchives/1.1 (morebits.js)';
+	let morebitsWikiApiUserAgent = 'Qiuwen/1.1 (morebits.js)';
 	/**
 	 * Set the custom user agent header, which is used for server-side logging.
 	 * Note that doing so will set the useragent for every `Morebits.wiki.api`
@@ -3690,11 +3690,9 @@ import {generateArray} from 'ext.gadget.Util';
 			// extract protection info, to alert admins when they are about to edit a protected page
 			// Includes cascading protection
 			if (Morebits.userIsSysop) {
-				const editProt = page.protection
-					.filter((pr) => {
-						return pr.type === 'edit' && pr.level === 'sysop';
-					})
-					.pop();
+				const editProt = page.protection.findLast((pr) => {
+					return pr.type === 'edit' && pr.level === 'sysop';
+				});
 				if (editProt) {
 					ctx.fullyProtected = editProt.expiry;
 				} else {
@@ -4089,17 +4087,13 @@ import {generateArray} from 'ext.gadget.Util';
 			// extract protection info
 			let editprot;
 			if (action === 'undelete') {
-				editprot = response.pages[0].protection
-					.filter((pr) => {
-						return pr.type === 'create' && pr.level === 'sysop';
-					})
-					.pop();
+				editprot = response.pages[0].protection.findLast((pr) => {
+					return pr.type === 'create' && pr.level === 'sysop';
+				});
 			} else if (action === 'delete' || action === 'move') {
-				editprot = response.pages[0].protection
-					.filter((pr) => {
-						return pr.type === 'edit' && pr.level === 'sysop';
-					})
-					.pop();
+				editprot = response.pages[0].protection.findLast((pr) => {
+					return pr.type === 'edit' && pr.level === 'sysop';
+				});
 			}
 			if (
 				editprot &&

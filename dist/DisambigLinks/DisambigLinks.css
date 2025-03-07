@@ -2,8 +2,9 @@
  * SPDX-License-Identifier: CC-BY-SA-4.0
  * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
  *
- * @source <https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/DisambigLinks>
- * @author Kaldari, Cyberpower678, Alexander Misel, Artoria2e5, WaitSpring <me@waitspring.com>, Qiuwen Baike Contributors and YsArchives Contributors.
+ * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/DisambigLinks}
+ * @author Kaldari, Cyberpower678, Alexander Misel, Artoria2e5, WaitSpring <me@waitspring.com> and other Qiuwen Baike Contributors.
+ * @license CC-BY-SA-4.0 {@link https://youshou.wiki/wiki/H:CC-BY-SA-4.0}
  */
 /**
  * +------------------------------------------------------------+
@@ -18,7 +19,7 @@
  */
 /* <nowiki> */
 
-/* src/DisambigLinks/DisambigLinks.css */
+/* src/DisambigLinks/DisambigLinks.less */
 a.mw-disambig::after,
 a.mw-redirect::after {
   font-weight: normal;
@@ -41,4 +42,4 @@ a.mw-disambig.mw-redirect::after {
 
 /* </nowiki> */
 
-/*# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiLi4vLi4vc3JjL0Rpc2FtYmlnTGlua3MvRGlzYW1iaWdMaW5rcy5jc3MiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImEubXctZGlzYW1iaWc6OmFmdGVyLFxuYS5tdy1yZWRpcmVjdDo6YWZ0ZXIge1xuXHRmb250LXdlaWdodDogbm9ybWFsO1xuXHRsaW5lLWhlaWdodDogMDtcblx0dGV4dC1pbmRlbnQ6IDAuMWVtO1xuXHR2ZXJ0aWNhbC1hbGlnbjogc3VwZXI7XG59XG5cbmEubXctZGlzYW1iaWc6OmFmdGVyIHtcblx0Y29udGVudDogJ+KHhCc7XG5cdGZvbnQtc2l6ZTogMC43NWVtO1xufVxuXG5hLm13LXJlZGlyZWN0OjphZnRlciB7XG5cdGNvbnRlbnQ6ICfihrMnO1xuXHRmb250LXNpemU6IDAuOWVtO1xufVxuXG5hLm13LWRpc2FtYmlnLm13LXJlZGlyZWN0OjphZnRlciB7XG5cdGNvbnRlbnQ6ICfih4TihrMnO1xuXHRmb250LXNpemU6IDAuNzVlbTtcbn1cbiJdLAogICJtYXBwaW5ncyI6ICI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLENBQUMsQ0FBQyxXQUFXO0FBQ2IsQ0FBQyxDQUFDLFdBQVc7QUFDWixlQUFhO0FBQ2IsZUFBYTtBQUNiLGVBQWE7QUFDYixrQkFBZ0I7QUFDakI7QUFFQSxDQUFDLENBUkMsV0FRVztBQUNaLFdBQVM7QUFDVCxhQUFXO0FBQ1o7QUFFQSxDQUFDLENBWkMsV0FZVztBQUNaLFdBQVM7QUFDVCxhQUFXO0FBQ1o7QUFFQSxDQUFDLENBbEJDLFdBa0JXLENBakJYLFdBaUJ1QjtBQUN4QixXQUFTO0FBQ1QsYUFBVztBQUNaOyIsCiAgIm5hbWVzIjogW10KfQo= */
+/*# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiLi4vLi4vc3JjL0Rpc2FtYmlnTGlua3MvRGlzYW1iaWdMaW5rcy5sZXNzIl0sCiAgInNvdXJjZXNDb250ZW50IjogWyJhLm13LWRpc2FtYmlnOjphZnRlcixcbmEubXctcmVkaXJlY3Q6OmFmdGVyIHtcbiAgZm9udC13ZWlnaHQ6IG5vcm1hbDtcbiAgbGluZS1oZWlnaHQ6IDA7XG4gIHRleHQtaW5kZW50OiAwLjFlbTtcbiAgdmVydGljYWwtYWxpZ246IHN1cGVyO1xufVxuYS5tdy1kaXNhbWJpZzo6YWZ0ZXIge1xuICBjb250ZW50OiAn4oeEJztcbiAgZm9udC1zaXplOiAwLjc1ZW07XG59XG5hLm13LXJlZGlyZWN0OjphZnRlciB7XG4gIGNvbnRlbnQ6ICfihrMnO1xuICBmb250LXNpemU6IDAuOWVtO1xufVxuYS5tdy1kaXNhbWJpZy5tdy1yZWRpcmVjdDo6YWZ0ZXIge1xuICBjb250ZW50OiAn4oeE4oazJztcbiAgZm9udC1zaXplOiAwLjc1ZW07XG59XG4iXSwKICAibWFwcGluZ3MiOiAiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsQ0FBQyxDQUFDLFdBQVc7QUFDYixDQUFDLENBQUMsV0FBVztBQUNYLGVBQWE7QUFDYixlQUFhO0FBQ2IsZUFBYTtBQUNiLGtCQUFnQjtBQUNsQjtBQUNBLENBQUMsQ0FQQyxXQU9XO0FBQ1gsV0FBUztBQUNULGFBQVc7QUFDYjtBQUNBLENBQUMsQ0FWQyxXQVVXO0FBQ1gsV0FBUztBQUNULGFBQVc7QUFDYjtBQUNBLENBQUMsQ0FmQyxXQWVXLENBZFgsV0FjdUI7QUFDdkIsV0FBUztBQUNULGFBQVc7QUFDYjsiLAogICJuYW1lcyI6IFtdCn0K */

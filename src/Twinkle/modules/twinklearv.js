@@ -29,7 +29,7 @@
 	};
 	Twinkle.arv.callback = (uid, isIP) => {
 		if (uid === mw.config.get('wgUserName')) {
-			mw.notify(window.wgULS('你不想报告你自己，对吧？', '你不想報告你自己，對吧？'), {
+			void mw.notify(window.wgULS('你不想报告你自己，对吧？', '你不想報告你自己，對吧？'), {
 				type: 'warn',
 				tag: 'twinklearv',
 			});
@@ -180,7 +180,7 @@
 					style: 'display: none',
 				});
 				work_area = work_area.render();
-				old_area.parentNode.replaceChild(work_area, old_area);
+				old_area.replaceWith(work_area);
 				break;
 			case 'username':
 				work_area = new Morebits.quickForm.element({
@@ -276,7 +276,7 @@
 					style: 'display: none',
 				});
 				work_area = work_area.render();
-				old_area.parentNode.replaceChild(work_area, old_area);
+				old_area.replaceWith(work_area);
 				break;
 			case 'spi':
 				work_area = new Morebits.quickForm.element({
@@ -350,7 +350,7 @@
 				});
 				work_area = work_area.render();
 				$('input:text[name=sockpuppet]', work_area).first().val(root_.uid.value);
-				old_area.parentNode.replaceChild(work_area, old_area);
+				old_area.replaceWith(work_area);
 				root_.spinoticepreviewer = new Morebits.wiki.preview(
 					$(work_area).find('#twinklearv-spinoticebox').last()[0]
 				);
@@ -471,7 +471,7 @@
 					style: 'display: none',
 				});
 				work_area = work_area.render();
-				old_area.parentNode.replaceChild(work_area, old_area);
+				old_area.replaceWith(work_area);
 				break;
 		}
 		root_.previewer = new Morebits.wiki.preview($(work_area).find('#twinklearv-previewbox').last()[0]);
@@ -509,7 +509,7 @@
 		const {uid} = input;
 		const checkTitle = (title, revid) => {
 			if (/https?:\/\//.test(title)) {
-				mw.notify(window.wgULS('页面名称不能使用网址。', '頁面名稱不能使用網址。'), {
+				void mw.notify(window.wgULS('页面名称不能使用网址。', '頁面名稱不能使用網址。'), {
 					type: 'warn',
 					tag: 'twinklearv',
 				});
@@ -519,7 +519,7 @@
 			try {
 				page_ = new mw.Title(title);
 			} catch {
-				mw.notify(
+				void mw.notify(
 					`${
 						window.wgULS('“', '「') +
 						title +
@@ -537,7 +537,7 @@
 				return false;
 			}
 			if (page_.namespace === -1) {
-				mw.notify(
+				void mw.notify(
 					`${
 						window.wgULS('“', '「') +
 						title +
@@ -561,7 +561,7 @@
 			// Report 3RR
 			case 'ewip': {
 				if (input.reason === '') {
-					mw.notify(window.wgULS('您必须指定理由', '您必須指定理由'), {
+					void mw.notify(window.wgULS('您必须指定理由', '您必須指定理由'), {
 						type: 'warn',
 						tag: 'twinklearv',
 					});
@@ -644,7 +644,7 @@
 			// LIB:SPI
 			case 'spi': {
 				if (!input.reason) {
-					mw.notify(window.wgULS('请输入证据。', '請輸入證據。'), {
+					void mw.notify(window.wgULS('请输入证据。', '請輸入證據。'), {
 						type: 'warn',
 						tag: 'twinklearv',
 					});
@@ -656,7 +656,7 @@
 					})
 				);
 				if (!sockpuppets[0]) {
-					mw.notify(window.wgULS('您没有指定任何傀儡。', '您沒有指定任何傀儡。'), {
+					void mw.notify(window.wgULS('您没有指定任何傀儡。', '您沒有指定任何傀儡。'), {
 						type: 'warn',
 						tag: 'twinklearv',
 					});
@@ -689,7 +689,7 @@
 			/* falls through */
 			default: {
 				if (!input.arvtype.length && input.reason === '') {
-					mw.notify(window.wgULS('您必须指定理由', '您必須指定理由'), {
+					void mw.notify(window.wgULS('您必须指定理由', '您必須指定理由'), {
 						type: 'warn',
 						tag: 'twinklearv',
 					});

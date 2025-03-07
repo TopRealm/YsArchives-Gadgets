@@ -48,7 +48,7 @@ import {generateArray} from 'ext.gadget.Util';
 		Window.addFooterLink(window.wgULS('小作品设置', '小作品設定'), 'H:TW/PREF#stub');
 		Window.addFooterLink(window.wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#stub');
 		const form = new Morebits.quickForm(Twinkle.stub.callback.evaluate);
-		if (document.querySelectorAll('.patrollink').length) {
+		if (document.querySelector('.patrollink')) {
 			form.append({
 				type: 'checkbox',
 				list: [

@@ -206,7 +206,7 @@
 	Twinkle.copyvio.callback.evaluate = (e) => {
 		const params = Morebits.quickForm.getInputData(e.target);
 		if (!params.source.trim()) {
-			mw.notify(window.wgULS('请指定侵权来源', '請指定侵權來源'), {
+			void mw.notify(window.wgULS('请指定侵权来源', '請指定侵權來源'), {
 				type: 'warn',
 				tag: 'twinklecopyvio',
 			});

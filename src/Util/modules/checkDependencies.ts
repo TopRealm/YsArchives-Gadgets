@@ -2,21 +2,29 @@ import {generateArray} from './generateArray';
 import {initMwApi} from './initMwApi';
 import {uniqueArray} from './uniqueArray';
 
-type CheckDependencies = (gadgetNames: string | string[]) => Promise<void>;
+type Boolean = '0' | '1' | 0 | 1;
+type CheckDependencies = typeof checkDependencies;
 
-const checkDependencies = async (gadgetNames: string | string[]): Promise<void> => {
+function checkDependencies(gadgetNames: string | string[]): Promise<void>;
+function checkDependencies(gadgetNames: string, option: Boolean): Promise<void>;
+// eslint-disable-next-line func-style
+async function checkDependencies(gadgetNames: string | string[], option?: Boolean): Promise<void> {
 	const api: mw.Api = initMwApi('Util-CheckDependencies');
-	gadgetNames = uniqueArray(generateArray(gadgetNames));
+	const gadgets = uniqueArray(generateArray(gadgetNames));
+	option ||= 1;
 
-	for (const gadgetName of gadgetNames) {
-		if (!mw.user.options.get(`gadget-${gadgetName}`)) {
+	for (const gadget of gadgets) {
+		if (
+			(option === '0' && mw.user.options.get(`gadget-${gadget}`)) ||
+			(option === '1' && !mw.user.options.get(`gadget-${gadget}`))
+		) {
 			await api.postWithEditToken({
 				action: 'options',
-				change: `gadget-${gadgetName}=1`,
+				change: `gadget-${gadget}=${option}`,
 			} as ApiOptionsParams);
-			await mw.loader.using(`ext.gadget.${gadgetName}`);
+			await mw.loader.using(`ext.gadget.${gadget}`);
 		}
 	}
-};
+}
 
 export {type CheckDependencies, checkDependencies};

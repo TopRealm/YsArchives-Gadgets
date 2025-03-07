@@ -1,0 +1,34 @@
+/**
+ * SPDX-License-Identifier: CC-BY-SA-4.0
+ * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
+ *
+ * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/LinkSpacing}
+ * @license CC-BY-SA-4.0 {@link https://youshou.wiki/wiki/H:CC-BY-SA-4.0}
+ */
+
+/**
+ * Inspired by Kcx36 at {@link https://zh.wikipedia.org/w/index.php?diff=prev&oldid=84670731}
+ */
+/**
+ * +------------------------------------------------------------+
+ * |            === WARNING: GLOBAL GADGET FILE ===             |
+ * +------------------------------------------------------------+
+ * |       All changes should be made in the repository,        |
+ * |                otherwise they will be lost.                |
+ * +------------------------------------------------------------+
+ * |        Changes to this page may affect many users.         |
+ * | Please discuss changes by opening an issue before editing. |
+ * +------------------------------------------------------------+
+ */
+/* <nowiki> */
+
+/* esbuild-css-modules-plugin-ns-css:src/LinkSpacing/util/LinkSpacing.module.less */
+.LinkSpacing-module__linkSpace_E9P2BW__490 {
+  pointer-events: none;
+  width: 1px;
+  display: inline-block;
+}
+
+/* </nowiki> */
+
+/*# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiZXNidWlsZC1jc3MtbW9kdWxlcy1wbHVnaW4tbnMtY3NzOnNyYy9MaW5rU3BhY2luZy91dGlsL0xpbmtTcGFjaW5nLm1vZHVsZS5sZXNzIl0sCiAgInNvdXJjZXNDb250ZW50IjogWyIvKiA8c3RkaW4+ICovXG4uTGlua1NwYWNpbmctbW9kdWxlX19saW5rU3BhY2VfRTlQMkJXX180OTAge1xuICBwb2ludGVyLWV2ZW50czogbm9uZTtcbiAgd2lkdGg6IDFweDtcbiAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xufVxuIl0sCiAgIm1hcHBpbmdzIjogIjs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUNBLENBQUM7QUFDQyxrQkFBZ0I7QUFDaEIsU0FBTztBQUNQLFdBQVM7QUFDWDsiLAogICJuYW1lcyI6IFtdCn0K */

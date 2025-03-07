@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import {api} from './api';
 /*! Twinkle.js - twinkle.js */
 (function twinkle($) {
 	const $body = $('body');
@@ -31,10 +32,10 @@
 	 * If name is not given, module is loaded unconditionally.
 	 */
 	Twinkle.addInitCallback = (func, name) => {
-		Twinkle.initCallbacks.push({
+		Twinkle.initCallbacks[Twinkle.initCallbacks.length] = {
 			func,
 			name,
-		});
+		};
 	};
 	Twinkle.defaultConfig = {};
 	/**
@@ -232,7 +233,7 @@
 				$body.find('#page-tools .sidebar-inner').length > 0 ? 'page-more' : null;
 			break;
 		case 'citizen':
-			Twinkle.defaultConfig.portletArea = '#page-actions-more__card';
+			Twinkle.defaultConfig.portletArea = '#page-actions-more__card .citizen-menu__card-content';
 			Twinkle.defaultConfig.portletId = 'p-twinkle';
 			Twinkle.defaultConfig.portletName = 'Twinkle';
 			Twinkle.defaultConfig.portletType = 'nav';
@@ -305,6 +306,7 @@
 		}
 		let outerNavClass;
 		let innerDivClass;
+		let ulClassName;
 		switch (skin) {
 			case 'vector':
 			case 'vector-2022':
@@ -321,14 +323,16 @@
 					outerNavClass += ' vector-menu-tabs';
 				}
 				innerDivClass = 'vector-menu-content vector-dropdown-content';
+				ulClassName = 'vector-menu-content-list';
 				break;
 			case 'gongbi':
 				outerNavClass = 'mw-portlet';
 				innerDivClass = 'mw-portlet-body';
 				break;
 			case 'citizen':
-				outerNavClass = 'mw-portlet';
-				innerDivClass = 'mw-portlet-twinkle';
+				outerNavClass = 'citizen-menu mw-portlet';
+				innerDivClass = 'citizen-menu__content mw-portlet-twinkle';
+				ulClassName = 'citizen-menu__content-list';
 				break;
 			default:
 				navigation = 'column-one';
@@ -387,6 +391,9 @@
 			}
 		} else {
 			// Basically just Gongbi
+			if (ulClassName) {
+				ul.className = ulClassName;
+			}
 			heading.appendChild(document.createTextNode(text));
 		}
 		outerNav.appendChild(heading);
@@ -449,17 +456,37 @@
 	/**
 	 * **************** General initialization code ****************
 	 */
-	const scripturl = mw.util.getUrl(`User:${mw.config.get('wgUserName')}/twinkleoptions.js`, {
-		action: 'raw',
-		ctype: 'text/javascript',
-		happy: 'yes',
-	});
 	// Retrieve the user's Twinkle preferences (window.Twinkle.prefs)
 	Twinkle.prefs ||= {};
-	mw.loader
-		.getScript(scripturl)
+	void api
+		.get({
+			action: 'query',
+			prop: ['revisions'],
+			rvprop: 'content',
+			format: 'json',
+			formatversion: '2',
+			titles: `User:${mw.config.get('wgUserName')}/twinkleoptions.js`,
+			rvlimit: '1',
+			rvslots: 'main',
+		})
+		.then((response) => {
+			if (!response['query'].pages[0].missing) {
+				const content = response['query'].pages[0].revisions[0].slots.main.content ?? '';
+				if (content !== '') {
+					try {
+						// eslint-disable-next-line no-eval
+						window.eval(content);
+					} catch {
+						void mw.notify(window.wgULS('未能加载您的Twinkle参数设置', '未能載入您的Twinkle偏好設定'), {
+							type: 'error',
+							tag: 'twinkle',
+						});
+					}
+				}
+			}
+		})
 		.fail(() => {
-			mw.notify(window.wgULS('未能加载您的Twinkle参数设置', '未能載入您的Twinkle偏好設定'), {
+			void mw.notify(window.wgULS('未能加载您的Twinkle参数设置', '未能載入您的Twinkle偏好設定'), {
 				type: 'error',
 				tag: 'twinkle',
 			});

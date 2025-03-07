@@ -9,4 +9,9 @@ mw.hook('wikipage.content').add(function markRights($content): void {
 	}
 });
 
-export {queryGlobalUserGroups, queryUserGroups} from './modules/query';
+export {
+	getLocalUserGroups,
+	getGlobalUserGroups,
+	queryUserGroups,
+	queryGlobalUserGroups,
+} from './modules/util/getUserGroups';

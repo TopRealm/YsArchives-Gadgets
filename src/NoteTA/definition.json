@@ -5,10 +5,11 @@
 	"default": true,
 	"dependencies": [
 		"ext.gadget.i18n",
-		"ext.gadget.React",
+		"ext.gadget.JSX",
 		"ext.gadget.Util",
 		"jquery.makeCollapsible",
 		"mediawiki.api",
+		"mediawiki.util",
 		"oojs-ui-core",
 		"oojs-ui-windows"
 	],

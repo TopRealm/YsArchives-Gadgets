@@ -1,7 +1,7 @@
-import {SEARCH_INPUT_ELEMENT_SELECTOR} from './constant';
+import * as OPTIONS from '../options.json';
 
 const getSearchInput = ($body: JQuery<HTMLBodyElement>): JQuery<HTMLInputElement> => {
-	const $searchInput: JQuery<HTMLInputElement> = $body.find<HTMLInputElement>(SEARCH_INPUT_ELEMENT_SELECTOR);
+	const $searchInput: JQuery<HTMLInputElement> = $body.find<HTMLInputElement>(OPTIONS.searchInputSelector);
 
 	return $searchInput;
 };

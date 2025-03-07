@@ -1,10 +1,8 @@
 import {
 	addTargetBlank,
 	fixLocationHash,
-	//hideNewUsersLog,
 	highLightRev,
 	loadWithURL,
-	//noPermWarning,
 	openSearchInNewTab,
 	removeTitleFromPermalink,
 	titleCleanUp,
@@ -13,40 +11,46 @@ import {
 } from './modules/core';
 import {tippyForCitizenHeader, tippyForExtension} from './modules/tippy';
 import {deprecatedFunctions} from './modules/deprecatedFunctions';
+import {getBody} from 'ext.gadget.Util';
+import {resizeJQueryUI} from './modules/resizeJQueryUI';
 
 (function siteCommon(): void {
+	const configKey: string = 'gadget-SiteCommon_JS__Initialized';
+	const {skin} = mw.config.get();
+
 	// Guard against double inclusions
-	if (mw.config.get('wgSiteCommonInstalled')) {
+	if (mw.config.get(configKey)) {
 		return;
 	}
 	// Set guard
-	mw.config.set('wgSiteCommonInstalled', true);
+	mw.config.set(configKey, true);
 
 	// Core modules
-	loadWithURL();
-	//noPermWarning();
+	void loadWithURL();
 	fixLocationHash();
 
-	$((): void => {
-		const $body: JQuery<HTMLBodyElement> = $('body');
-
+	void getBody().then(($body: JQuery<HTMLBodyElement>): void => {
 		// Core modules (need $.ready)
 		highLightRev($body);
 		addTargetBlank($body);
 		removeTitleFromPermalink($body);
 		openSearchInNewTab($body);
 		titleCleanUp($body);
-		unihanPopup($body);
-		//hideNewUsersLog($body);
+		void unihanPopup($body);
 		toggleLink($body);
+		resizeJQueryUI($body);
 
 		// Tippy-related codes (need $.ready)
-		tippyForCitizenHeader($body);
+		if (skin === 'citizen') {
+			tippyForCitizenHeader($body);
+		}
 	});
 
 	// Deprecated functions
 	deprecatedFunctions();
 
 	// Tippy-related codes
-	void tippyForExtension();
+	if (!['vector-2022', 'citizen'].includes(skin)) {
+		void tippyForExtension();
+	}
 })();

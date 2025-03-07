@@ -1,0 +1,20 @@
+/**
+ * 移动端显示相关类
+ * - .mobileonly
+ * - .onlymobile
+ * - .desktoponly
+ * - .onlydesktop
+ */
+@media screen and (min-width: 768px) {
+	.mobileonly,
+	.onlymobile {
+		display: none;
+	}
+}
+
+@media screen and not (max-width: 768px) {
+	.desktoponly,
+	.onlydesktop {
+		display: none;
+	}
+}

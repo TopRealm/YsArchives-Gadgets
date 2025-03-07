@@ -3,7 +3,7 @@ import {api} from './api';
 import {getMessage} from './i18n';
 
 const patrolAllPages = ($body: JQuery<HTMLBodyElement>) => (
-	<li>
+	<div>
 		<a
 			id="gadget-quick_patrol__all"
 			onClick={(): void => {
@@ -19,7 +19,7 @@ const patrolAllPages = ($body: JQuery<HTMLBodyElement>) => (
 		>
 			{`[${getMessage('Patrol all pages')}]`}
 		</a>
-	</li>
+	</div>
 );
 
 const patrolSinglePage = (index: string, revId: string) => (

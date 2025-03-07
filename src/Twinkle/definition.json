@@ -8,7 +8,8 @@
 		"ext.gadget.select2",
 		"ext.gadget.Util",
 		"mediawiki.api",
-		"mediawiki.language"
+		"mediawiki.language",
+		"mediawiki.util"
 	],
 	"rights": ["skipcaptcha"]
 }

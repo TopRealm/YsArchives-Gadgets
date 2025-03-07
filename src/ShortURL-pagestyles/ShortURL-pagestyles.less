@@ -8,18 +8,6 @@
 	text-indent: -9999px;
 	user-select: none;
 
-	.skin-gongbi & {
-		vertical-align: sub;
-	}
-
-	.citizen-body-header--sticky &,
-	.ve-init-mw-desktopArticleTarget-originalContent & {
-		display: none;
-	}
-}
-
-.gadget-short-link__icon,
-.mw-ui-icon-wikimedia-shortlink {
 	&::before {
 		background-image: data-uri('./images/link.svg');
 		background-image: linear-gradient(transparent, transparent), data-uri('./images/link.svg');
@@ -31,5 +19,14 @@
 		background-size: contain;
 		content: '';
 		opacity: 0.6;
+	}
+
+	.skin-gongbi & {
+		vertical-align: sub;
+	}
+
+	.citizen-body-header--sticky &,
+	.ve-init-mw-desktopArticleTarget-originalContent & {
+		display: none;
 	}
 }

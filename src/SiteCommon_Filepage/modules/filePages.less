@@ -1,0 +1,33 @@
+.ns-6 {
+	table {
+		/* Lots of crappy tables on file pages without classes etc */
+		box-sizing: border-box !important;
+	}
+
+	#mw-imagepage-section-duplicates {
+		display: none;
+	}
+
+	#mw-imglangselector-line option[value^='zh-'] {
+		/* Hide unsupported SVG variants */
+		display: none;
+	}
+
+	.exif-gps {
+		&latitude,
+		&longitude,
+		&altitude {
+			/* Hide GPS */
+			display: none;
+		}
+	}
+}
+
+/* 仅当文件页图像具有透明背景时，在图像描述页上显示棋盘格背景；<gallery>情况类似 */
+#file,
+.gallerybox .thumb {
+	img {
+		background: data-uri('../images/gallery-background.svg') repeat;
+		background-color: #f8f9fa;
+	}
+}

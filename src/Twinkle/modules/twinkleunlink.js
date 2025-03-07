@@ -129,7 +129,7 @@
 		const form = event.target;
 		const input = Morebits.quickForm.getInputData(form);
 		if (!input.reason) {
-			mw.notify(window.wgULS('您必须指定取消链入的理由。', '您必須指定取消連入的理由。'), {
+			void mw.notify(window.wgULS('您必须指定取消链入的理由。', '您必須指定取消連入的理由。'), {
 				type: 'warn',
 				tag: 'twinkleunlink',
 			});
@@ -139,10 +139,13 @@
 		input.imageusage ||= [];
 		const pages = Morebits.array.uniq([...input.backlinks, ...input.imageusage]);
 		if (!pages.length) {
-			mw.notify(window.wgULS('您必须至少选择一个要取消链入的页面。', '您必須至少選擇一個要取消連入的頁面。'), {
-				type: 'warn',
-				tag: 'twinkleunlink',
-			});
+			void mw.notify(
+				window.wgULS('您必须至少选择一个要取消链入的页面。', '您必須至少選擇一個要取消連入的頁面。'),
+				{
+					type: 'warn',
+					tag: 'twinkleunlink',
+				}
+			);
 			return;
 		}
 		Morebits.simpleWindow.setButtonsEnabled(false);
@@ -188,11 +191,11 @@
 					list = [];
 					for (i = 0; i < imageusage.length; ++i) {
 						// Label made by Twinkle.generateBatchPageLinks
-						list.push({
+						list[list.length] = {
 							label: '',
 							value: imageusage[i].title,
 							checked: true,
-						});
+						};
 					}
 					if (list.length) {
 						apiobj.params.form.append({
@@ -201,11 +204,10 @@
 						});
 						namespaces = [];
 						for (const v of Twinkle.getPref('unlinkNamespaces')) {
-							namespaces.push(
+							namespaces[namespaces.length] =
 								v === '0'
 									? window.wgULS('（条目）', '（條目）')
-									: mw.config.get('wgFormattedNamespaces')[v]
-							);
+									: mw.config.get('wgFormattedNamespaces')[v];
 						}
 						apiobj.params.form.append({
 							type: 'div',
@@ -257,11 +259,11 @@
 					list = [];
 					for (i = 0; i < backlinks.length; ++i) {
 						// Label made by Twinkle.generateBatchPageLinks
-						list.push({
+						list[list.length] = {
 							label: '',
 							value: backlinks[i].title,
 							checked: true,
-						});
+						};
 					}
 					apiobj.params.form.append({
 						type: 'header',
@@ -269,9 +271,10 @@
 					});
 					namespaces = [];
 					for (const v of Twinkle.getPref('unlinkNamespaces')) {
-						namespaces.push(
-							v === '0' ? window.wgULS('（条目）', '（條目）') : mw.config.get('wgFormattedNamespaces')[v]
-						);
+						namespaces[namespaces.length] =
+							v === '0'
+								? window.wgULS('（条目）', '（條目）')
+								: mw.config.get('wgFormattedNamespaces')[v];
 					}
 					apiobj.params.form.append({
 						type: 'div',
@@ -362,7 +365,7 @@
 						? window.wgULS('取消链入或文件使用', '取消連入或檔案使用')
 						: window.wgULS('取消链入', '取消連入');
 				} else {
-					summaryText = (summaryText ? `${summaryText} / ` : '') + window.wgULS('取消链结到', '取消連結到');
+					summaryText = (summaryText ? `${summaryText} / ` : '') + window.wgULS('取消链接到', '取消連結到');
 					oldtext = text;
 				}
 			}

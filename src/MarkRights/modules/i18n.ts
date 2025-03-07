@@ -2,6 +2,11 @@ import {localize} from 'ext.gadget.i18n';
 
 const getI18nMessages = () => {
 	return {
+		webmaster: localize({
+			en: 'Webmaster',
+			'zh-hans': '站长',
+			'zh-hant': '站長',
+		}),
 		responsibleoperator: localize({
 			en: 'Responsible Operator',
 			'zh-hans': '责任运营',

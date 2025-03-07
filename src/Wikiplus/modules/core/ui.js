@@ -453,7 +453,9 @@ class UI {
 	 * @param root0.onSuccess
 	 */
 	showSimpleRedirectPanel({onEdit = () => {}, onSuccess = () => {}} = {}) {
-		const input = $('<input>').addClass('Wikiplus-InterBox-Input');
+		const input = $('<input>').addClass('Wikiplus-InterBox-Input').attr('id', 'Wikiplus-SR-Title');
+		const summaryInputTitle = $('<p>').text(i18n.translate('redirect_summary_desc'));
+		const summaryInput = $('<input>').addClass('Wikiplus-InterBox-Input').attr('id', 'Wikiplus-SR-Summary');
 		const applyBtn = $('<div>')
 			.addClass('Wikiplus-InterBox-Btn')
 			.attr('id', 'Wikiplus-SR-Apply')
@@ -466,16 +468,24 @@ class UI {
 			.addClass('Wikiplus-InterBox-Btn')
 			.attr('id', 'Wikiplus-SR-Continue')
 			.text(i18n.translate('continue'));
-		const content = $('<div>').append(input).append($('<hr>')).append(applyBtn).append(cancelBtn); //拼接
+		const content = $('<div>')
+			.append(input)
+			.append(summaryInputTitle)
+			.append(summaryInput)
+			.append($('<hr>'))
+			.append(applyBtn)
+			.append(cancelBtn); //拼接
 		const dialog = this.createDialogBox(i18n.translate('redirect_desc'), content, 600);
 		applyBtn.on('click', async () => {
-			const title = $('.Wikiplus-InterBox-Input').val();
+			const title = $('#Wikiplus-SR-Title').val();
+			const summary = $('#Wikiplus-SR-Summary').val();
 			$('.Wikiplus-InterBox-Content').html(
 				`<div class="Wikiplus-Banner">${i18n.translate('submitting_edit')}</div>`
 			);
 			try {
 				await onEdit({
 					title,
+					summary,
 					forceOverwrite: false,
 				});
 				$('.Wikiplus-Banner').text(i18n.translate('redirect_saved'));
@@ -496,6 +506,7 @@ class UI {
 						try {
 							await onEdit({
 								title,
+								summary,
 								forceOverwrite: true,
 							});
 							$('.Wikiplus-Banner').text(i18n.translate('redirect_saved'));

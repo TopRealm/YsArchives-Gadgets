@@ -34,7 +34,10 @@ const queueDomMutation = (element: Element, callback: DomMutationFunc): void => 
 		pendingActions.set(element, []);
 	}
 
-	pendingActions.get(element)?.push(callback);
+	if (pendingActions.get(element) !== undefined) {
+		(pendingActions.get(element) as DomMutationFunc[])[(pendingActions.get(element) as DomMutationFunc[]).length] =
+			callback;
+	}
 	observer.observe(element);
 };
 

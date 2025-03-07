@@ -22,9 +22,9 @@ const processId = (
 			void compareWithRemoteDiffId(diffId);
 		}
 	} else if (revisionId && isRevisionPage) {
-		addLink(`/p/${revisionId}`);
+		addLink(`/p/${revisionId}`, `/wiki/Special:Permalink/${revisionId}`);
 	} else if (articleId) {
-		addLink(`/c/${articleId}`);
+		addLink(`/c/${articleId}`, `/index.php?curid=${articleId}`);
 	}
 };
 

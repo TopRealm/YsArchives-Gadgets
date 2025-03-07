@@ -18,6 +18,7 @@ const deprecatedFunctions = (): void => {
 		},
 		'Use mw.loader.addScriptTag() instead'
 	);
+
 	mw.log.deprecate(
 		window,
 		'importStylesheet',
@@ -34,6 +35,7 @@ const deprecatedFunctions = (): void => {
 		},
 		'Use mw.loader.addLinkTag() instead'
 	);
+
 	mw.log.deprecate(
 		window,
 		'importScriptURI',
@@ -42,6 +44,7 @@ const deprecatedFunctions = (): void => {
 		},
 		'Use mw.loader.addScriptTag() or mw.loader.getScript() instead'
 	);
+
 	mw.log.deprecate(
 		window,
 		'importStylesheetURI',
@@ -50,6 +53,7 @@ const deprecatedFunctions = (): void => {
 		},
 		'Use mw.loader.addLinkTag() instead'
 	);
+
 	mw.log.deprecate(
 		window,
 		// @ts-expect-error TS2345
@@ -68,6 +72,7 @@ const deprecatedFunctions = (): void => {
 		},
 		'Use mw.loader.getScript() instead'
 	);
+
 	mw.log.deprecate(
 		window,
 		// @ts-expect-error TS2345

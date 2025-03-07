@@ -1,13 +1,26 @@
 @import (reference) '../../variables.less';
 
+/* 变量 */
+:root {
+	&,
+	&:lang(zh),
+	&:lang(zh-hans) {
+		--fonts-sans: @sans-serif-zh-hans, @emoji-font, sans-serif;
+		--fonts-serif: @serif-zh-hans, @emoji-font, serif;
+		--fonts-monospace: @monospace-zh-hans, @emoji-font, monospace;
+	}
+
+	&:lang(zh-hant) {
+		--fonts-sans: @sans-serif-zh-hant, @emoji-font, sans-serif;
+		--fonts-serif: @serif-zh-hans, @emoji-font, serif;
+		--fonts-monospace: @monospace-zh-hant, @emoji-font, monospace;
+	}
+}
+
 /* 重置<html>默认样式 */
 html {
 	tab-size: 4;
-}
-
-/* 覆盖站点原有b标签样式 */
-b {
-	font-weight: bold;
+	font-family: var(--fonts-sans, sans-serif);
 }
 
 /* 重置<cite>默认样式 */
@@ -59,11 +72,7 @@ hr {
 /* 字体 */
 body,
 input {
-	font-family: @sans-serif-zh-hans, sans-serif, @emoji-font;
-
-	html:lang(zh-hant) & {
-		font-family: @sans-serif-zh-hant, sans-serif, @emoji-font;
-	}
+	font-family: var(--fonts-sans, sans-serif);
 }
 
 .mw-body {
@@ -74,11 +83,7 @@ input {
 	h4,
 	h5,
 	h6 {
-		font-family: @serif-zh-hans, serif, @emoji-font;
-
-		html:lang(zh-hant) & {
-			font-family: @serif-zh-hant, serif, @emoji-font;
-		}
+		font-family: var(--fonts-serif, serif);
 	}
 }
 
@@ -95,9 +100,5 @@ kbd,
 pre,
 samp,
 tt {
-	font-family: @monospace-zh-hans, monospace, @emoji-font;
-
-	html:lang(zh-hant) & {
-		font-family: @monospace-zh-hant, monospace, @emoji-font;
-	}
+	font-family: var(--fonts-monospace, monospace) !important;
 }

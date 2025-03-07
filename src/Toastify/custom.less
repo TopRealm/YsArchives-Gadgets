@@ -47,13 +47,9 @@
 
 	.toast-close {
 		color: inherit;
-		font-family: @sans-serif-zh-hans, sans-serif, @emoji-font;
+		font-family: var(--fonts-serif, serif);
 		font-size: 0.8em;
 		padding: 0 0 0 1em;
-
-		html:lang(zh-hant) & {
-			font-family: @sans-serif-zh-hant, sans-serif, @emoji-font;
-		}
 	}
 
 	&.toastify-left .toast-close {

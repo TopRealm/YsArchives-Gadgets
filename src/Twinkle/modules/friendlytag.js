@@ -36,7 +36,7 @@
 			);
 			// article/draft tagging
 		} else if (
-			([0, 302].includes(mw.config.get('wgNamespaceNumber')) && mw.config.get('wgCurRevisionId')) ||
+			([0, 118].includes(mw.config.get('wgNamespaceNumber')) && mw.config.get('wgCurRevisionId')) ||
 			Morebits.pageNameNorm === Twinkle.getPref('sandboxPage')
 		) {
 			Twinkle.tag.mode = window.wgULS('条目', '條目');
@@ -270,13 +270,13 @@
 				break;
 			}
 			default:
-				mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {
+				void mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {
 					type: 'warn',
 					tag: 'friendlytag',
 				});
 				break;
 		}
-		if (document.querySelectorAll('.patrollink').length) {
+		if (document.querySelector('.patrollink')) {
 			form.append({
 				type: 'checkbox',
 				list: [
@@ -334,22 +334,23 @@
 									.each((_index, element) => {
 										if (element.classList[0].indexOf('box-') === 0) {
 											const boxTag = element.classList[0].slice('box-'.length).replace(/_/g, ' ');
-											Twinkle.tag.alreadyPresentTags.push(boxTag);
+											Twinkle.tag.alreadyPresentTags[Twinkle.tag.alreadyPresentTags.length] =
+												boxTag;
 										}
 									});
 								return true; // continue
 							}
 
 							const tag = e.classList[0].slice('box-'.length).replace(/_/g, ' ');
-							Twinkle.tag.alreadyPresentTags.push(tag);
+							Twinkle.tag.alreadyPresentTags[Twinkle.tag.alreadyPresentTags.length] = tag;
 						}
 					});
 				// {{Uncategorized}} and {{Improve categories}} are usually placed at the end
 				if ($body.find('.box-Uncategorized').length) {
-					Twinkle.tag.alreadyPresentTags.push('Uncategorized');
+					Twinkle.tag.alreadyPresentTags[Twinkle.tag.alreadyPresentTags.length] = 'Uncategorized';
 				}
 				if ($body.find('.box-Improve_categories').length) {
-					Twinkle.tag.alreadyPresentTags.push('Improve categories');
+					Twinkle.tag.alreadyPresentTags[Twinkle.tag.alreadyPresentTags.length] = 'Improve categories';
 				}
 			}
 			// Add status text node after Submit button
@@ -466,7 +467,7 @@
 						},
 					];
 					if (mw.config.get('wgNamespaceNumber') === 0) {
-						checkbox.subgroup.push({
+						checkbox.subgroup[checkbox.subgroup.length] = {
 							name: 'mergeReason',
 							type: 'textarea',
 							label: window.wgULS(
@@ -477,7 +478,7 @@
 								'可选，但强烈推荐。如不需要请留空。仅在只输入了一个条目名时可用。',
 								'可選，但強烈推薦。如不需要請留空。僅在只輸入了一個條目名時可用。'
 							),
-						});
+						};
 					}
 					break;
 				}
@@ -640,7 +641,7 @@
 					}`,
 					checked: !unCheckedTags.includes(tag),
 				};
-				checkboxes.push(checkbox);
+				checkboxes[checkboxes.length] = checkbox;
 			}
 			subdiv.append({
 				type: 'checkbox',
@@ -655,7 +656,7 @@
 				const checkboxes = [];
 				for (const item of subgroup) {
 					if (!Twinkle.tag.alreadyPresentTags.includes(item.tag)) {
-						checkboxes.push(makeCheckbox(item.tag, item.description));
+						checkboxes[checkboxes.length] = makeCheckbox(item.tag, item.description);
 					}
 				}
 				subdiv.append({
@@ -706,7 +707,7 @@
 			const checkboxes = [];
 			for (const tag of Twinkle.tag.article.alphabeticalList) {
 				if (!Twinkle.tag.alreadyPresentTags.includes(tag)) {
-					checkboxes.push(makeCheckbox(tag, Twinkle.tag.article.flatObject[tag].description));
+					checkboxes[checkboxes.length] = makeCheckbox(tag, Twinkle.tag.article.flatObject[tag].description);
 				}
 			}
 			container.append({
@@ -1652,7 +1653,7 @@
 					if (tag_re.test(pageText)) {
 						pageText = pageText.replace(tag_re, '');
 					} else {
-						getRedirectsFor.push(`Template:${tag}`);
+						getRedirectsFor[getRedirectsFor.length] = `Template:${tag}`;
 					}
 				}
 				if (!getRedirectsFor.length) {
@@ -1855,12 +1856,12 @@
 					// condition Twinkle.tag.article.tags[tag] to ensure that its not a custom tag
 					// Custom tags are assumed non-groupable, since we don't know whether MI template supports them
 					if (Twinkle.tag.article.flatObject[tag] && !Twinkle.tag.article.flatObject[tag].excludeMI) {
-						groupableTags.push(tag);
+						groupableTags[groupableTags.length] = tag;
 					} else {
-						tags.push(tag);
+						tags[tags.length] = tag;
 					}
 				} else if (tag === 'Merge from') {
-					tags.push(tag);
+					tags[tags.length] = tag;
 				} else {
 					Morebits.status.warn(
 						window.wgULS('信息', '資訊'),
@@ -1878,7 +1879,7 @@
 			for (const tag of params.tagsToRemain) {
 				// If the tag is unknown to us, we consider it non-groupable
 				if (Twinkle.tag.article.flatObject[tag] && !Twinkle.tag.article.flatObject[tag].excludeMI) {
-					groupableExistingTags.push(tag);
+					groupableExistingTags[groupableExistingTags.length] = tag;
 				}
 			}
 			const miTest =
@@ -1929,7 +1930,7 @@
 						tagText += tag_re.exec(pageText)[1];
 						pageText = pageText.replace(tag_re, '');
 					} else {
-						getRedirectsFor.push(`Template:${tag}`);
+						getRedirectsFor[getRedirectsFor.length] = `Template:${tag}`;
 					}
 				}
 				if (!getRedirectsFor.length) {
@@ -2010,7 +2011,7 @@
 							window.wgULS('}}……跳过', '}}……跳過')
 					);
 				} else {
-					tags.push(params.tags[i]);
+					tags[tags.length] = params.tags[i];
 				}
 			}
 			// used in Array#forEach
@@ -2185,7 +2186,7 @@
 					'}}、{{'
 				)}}}。`;
 				message += extra || '';
-				mw.notify(message, {
+				void mw.notify(message, {
 					type: 'warn',
 					tag: 'friendlytag',
 				});
@@ -2196,7 +2197,7 @@
 		// Maybe just sock this away in each function???
 		const checkParameter = (tag, parameter, description = '理由') => {
 			if (params.tags.includes(tag) && params[parameter].trim() === '') {
-				mw.notify(`${window.wgULS('您必须指定', '您必須指定')}{{${tag}}}的${description}。`, {
+				void mw.notify(`${window.wgULS('您必须指定', '您必須指定')}{{${tag}}}的${description}。`, {
 					type: 'warn',
 					tag: 'friendlytag',
 				});
@@ -2228,7 +2229,7 @@
 						return;
 					}
 					if (!params.mergeTarget) {
-						mw.notify(
+						void mw.notify(
 							window.wgULS(
 								'请指定使用于merge模板中的另一个页面标题。',
 								'請指定使用於merge模板中的另一個頁面標題。'
@@ -2241,7 +2242,7 @@
 						return;
 					}
 					if ((params.mergeTagOther || params.mergeReason) && params.mergeTarget.includes('|')) {
-						mw.notify(
+						void mw.notify(
 							window.wgULS(
 								'当前还不支持在一次合并中标记多个条目，与开启关于多个条目的讨论。请不要勾选“标记其他条目”并清空“理由”框后再提交。',
 								'目前還不支援在一次合併中標記多個條目，與開啟關於多個條目的討論。請不要勾選「標記其他條目」並清空「理由」框後再提交。'
@@ -2286,7 +2287,7 @@
 			case 'redirect':
 				break;
 			default:
-				mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {
+				void mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {
 					type: 'warn',
 					tag: 'friendlytag',
 				});
@@ -2295,7 +2296,7 @@
 		// File/redirect: return if no tags selected
 		// Article: return if no tag is selected and no already present tag is deselected
 		if (params.tags.length === 0 && (Twinkle.tag.modeEn !== 'article' || params.tagsToRemove.length === 0)) {
-			mw.notify(window.wgULS('必须选择至少一个标记！', '必須選擇至少一個標記！'), {
+			void mw.notify(window.wgULS('必须选择至少一个标记！', '必須選擇至少一個標記！'), {
 				type: 'warn',
 				tag: 'friendlytag',
 			});

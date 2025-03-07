@@ -1564,8 +1564,7 @@ const popups = () => {
 			},
 		};
 		// options with default values or backreferences
-		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		(_b = Insta.conf.user).name || (_b.name = 'Qiuwen Baike contributors');
+		Insta.conf.user.name ||= 'YouShou Archives contributors';
 		Insta.conf.user.signature = `[[${Insta.conf.locale.user}:${Insta.conf.user.name}|${Insta.conf.user.name}]]`;
 		// define constants
 		Insta.BLOCK_IMAGE = new RegExp(
@@ -5927,11 +5926,12 @@ const popups = () => {
 			action: 'query',
 			format: 'json',
 			formatversion: '2',
-			maxage: 3600,
 			meta: 'siteinfo',
 			siprop: 'specialpagealiases',
-			// cache for an hour
 			uselang: 'content',
+			// cache for an hour
+			smaxage: 3600,
+			maxage: 3600,
 		};
 		return getMwApi()
 			.get(params)
@@ -6720,6 +6720,8 @@ const popups = () => {
 		const params = {
 			action: 'compare',
 			prop: ['ids', 'title'],
+			smaxage: 600,
+			maxage: 600,
 		};
 		if (article.title) {
 			params.fromtitle = article.title;

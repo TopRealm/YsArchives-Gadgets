@@ -1,11 +1,10 @@
 type GenerateSvgDataUrl = (svg: string) => string;
 
 const generateSvgDataUrl: GenerateSvgDataUrl = (svg) => {
-	/*!
+	/**!
 	 * SPDX-License-Identifier: MIT
 	 *
-	 * @file svg-to-data-uri.js {@link https://github.com/heyallan/svg-to-data-uri/}
-	 *
+	 * @source svg-to-data-uri.js {@link https://github.com/heyallan/svg-to-data-uri/}
 	 * @author Allan Moreno
 	 * @license MIT {@link https://github.com/heyallan/svg-to-data-uri/blob/master/LICENSE}
 	 *

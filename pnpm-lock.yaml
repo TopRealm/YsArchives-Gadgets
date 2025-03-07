@@ -39,6 +39,9 @@ importers:
       '@bhsd/codemirror-mediawiki':
         specifier: ^2.13.0
         version: 2.15.3
+      '@bhsd/common':
+        specifier: ^0.6.7
+        version: 0.6.7
       '@types/toastify-js':
         specifier: ^1.12.3
         version: 1.12.3
@@ -54,6 +57,9 @@ importers:
       jsx-dom:
         specifier: ^8.1.4
         version: 8.1.4
+      monaco-editor:
+        specifier: ^0.52.2
+        version: 0.52.2
       select2:
         specifier: ^4.0.13
         version: 4.0.13
@@ -799,6 +805,10 @@ packages:
   '@bhsd/codemirror-mediawiki@2.15.3':
     resolution: {integrity: sha512-AHWxCntfuZMpc8ZtEfQQZU0WELtfiASF0AU7uhjDoHa8xyGcyKL0N6LbpR/5i2DfGl3B5UJCHs4ARlOrkRDJww==}
     engines: {node: ^20.9.0}
+
+  '@bhsd/common@0.6.7':
+    resolution: {integrity: sha512-dXm7FFauvD9J/h8lMhhcsSTW/lX9gggjDk2fQIdzNLlyQB39lofhht0c8bRpRkZAhFl8EOxLmE8W7j777z8adA==}
+    hasBin: true
 
   '@codemirror/language@6.10.2':
     resolution: {integrity: sha512-kgbTYTo0Au6dCSc/TFy7fK3fpJmgHDv1sG1KNQKJXVi+xBTEeBPY/M30YXiU6mMXeH+YIDLsbrT4ZwNRdtF+SA==}
@@ -3766,6 +3776,9 @@ packages:
   moment@2.30.1:
     resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==}
 
+  monaco-editor@0.52.2:
+    resolution: {integrity: sha512-GEQWEZmfkOGLdd3XK8ryrfWz3AIP8YymVXiPHEdewrUq7mh0qrKrfHLNCXcbB6sTnMLnOZ3ztSiKcciFUkIJwQ==}
+
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
@@ -5762,6 +5775,8 @@ snapshots:
       '@codemirror/view': 6.28.6
       '@lezer/common': 1.2.1
       wikiparser-node: 1.11.1
+
+  '@bhsd/common@0.6.7': {}
 
   '@codemirror/language@6.10.2':
     dependencies:
@@ -8874,6 +8889,8 @@ snapshots:
   minipass@7.1.2: {}
 
   moment@2.30.1: {}
+
+  monaco-editor@0.52.2: {}
 
   ms@2.1.3: {}
 

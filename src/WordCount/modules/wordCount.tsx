@@ -15,7 +15,9 @@ const wordCount = ($body: JQuery<HTMLBodyElement>): void => {
 	$element.appendTo($body);
 
 	setTimeout((): void => {
-		$element.fadeOut('slow');
+		$element.fadeOut('slow', (): void => {
+			$element.remove();
+		});
 	}, 5 * 1000);
 };
 

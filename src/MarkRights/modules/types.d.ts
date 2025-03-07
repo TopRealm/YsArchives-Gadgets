@@ -1,5 +1,6 @@
 type UserRights =
 	// 全站管理型权限
+	| 'webmaster'
 	| 'responsibleoperator'
 	| 'steward'
 	| 'checkuser'

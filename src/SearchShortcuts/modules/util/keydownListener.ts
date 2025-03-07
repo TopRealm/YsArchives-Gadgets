@@ -1,10 +1,10 @@
 const keydownListener = ($searchInput: JQuery<HTMLInputElement>): void => {
 	const inputValue: string | undefined = $searchInput.val()?.trim();
-	if (!inputValue || !/^\{\{[^{}]+}}$/.test(inputValue)) {
+	if (!inputValue || !/^(\[\[|\{\{)[^{}]+(}}|\]\])$/.test(inputValue)) {
 		return;
 	}
 
-	if (inputValue.startsWith('{{#')) {
+	if (inputValue.startsWith('{{')) {
 		if (inputValue.startsWith('{{#invoke:')) {
 			$searchInput.val(
 				inputValue
@@ -12,20 +12,35 @@ const keydownListener = ($searchInput: JQuery<HTMLInputElement>): void => {
 					.replace(/\s*\|.*/, '')
 					.replace('}}', '')
 			);
-		} else {
+		} else if (inputValue.startsWith('{{#:')) {
 			$searchInput.val(
 				inputValue
 					.replace('{{#', 'H:MW#')
 					.replace(/\s*\|.*/, '')
 					.replace('}}', '')
 			);
+		} else if (inputValue.startsWith('{{:')) {
+			$searchInput.val(
+				inputValue
+					.replace('{{:', '')
+					.replace(/\s*\|.*/, '')
+					.replace('}}', '')
+			);
+		} else {
+			$searchInput.val(
+				inputValue
+					.replace('{{', 'Template:')
+					.replace(/\s*\|.*/, '')
+					.replace('}}', '')
+			);
 		}
-	} else {
+	} else if (inputValue.startsWith('[[')) {
 		$searchInput.val(
 			inputValue
-				.replace('{{', 'Template:')
+				.replace(/\[\[:?/, '')
 				.replace(/\s*\|.*/, '')
-				.replace('}}', '')
+				.replace(/\s*#.*/, '')
+				.replace(']]', '')
 		);
 	}
 };

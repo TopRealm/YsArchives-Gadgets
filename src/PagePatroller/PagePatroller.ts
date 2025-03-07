@@ -1,9 +1,19 @@
-import {pagePatroller} from './modules/core';
+import {showPagePatroller} from './modules/showPagePatroller';
 
-if (
-	mw.config.get('wgNamespaceNumber') >= 0 &&
-	mw.config.get('wgPageName') !== '有兽档案馆:首页' &&
-	mw.config.get('wgArticleId') > 0
-) {
-	void pagePatroller();
-}
+const {wgNamespaceNumber, wgArticleId, wgIsMainPage} = mw.config.get();
+
+(function () {
+	if (wgNamespaceNumber < 0) {
+		return;
+	}
+	// !need investigate
+	if (wgIsMainPage) {
+		return;
+	}
+
+	if (!(wgArticleId > 0)) {
+		return;
+	}
+
+	void showPagePatroller();
+})();

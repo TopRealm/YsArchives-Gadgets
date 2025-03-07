@@ -26,7 +26,7 @@ const mwAddWikiText = async (wikitext: string, pageName: string, isPreview: bool
 		}
 
 		try {
-			const data = await api.post(params);
+			const data = await api.get(params);
 			if (!data?.['parse']?.text) {
 				return;
 			}
@@ -104,7 +104,7 @@ const mwAddLuaText = async (
 				params.disableeditsection = true;
 			}
 
-			const data = await api.post(params);
+			const data = await api.get(params);
 			if (!data?.['parse']?.text) {
 				return;
 			}

@@ -4,13 +4,30 @@
  *
  * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/ScrollUpButton-pagestyles}
  * @author 安忆 <i@anyi.in>
+ * @license GPL-3.0-or-later {@link https://youshou.wiki/wiki/H:GPL-3.0}
+ */
+
+/**
+ * Copyright (C)  安忆
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
  * Up Arrow (with blue color and white background)
  *
- * @source {@link https://youshou.wiki/wiki/File:Up_Arrow_(Blue,_White_BG).svg}
+ * @source {@link https://www.qiuwenbaike.cn/wiki/File:Up_Arrow_(Blue,_White_BG).svg}
  * @author WaitSpring
  * @license CC-BY-SA-4.0 {@link https://youshou.wiki/wiki/H:CC-BY-SA-4.0}
- * @license GPL-3.0-or-later {@link https://youshou.wiki/wiki/H:GPL-3.0}
  */

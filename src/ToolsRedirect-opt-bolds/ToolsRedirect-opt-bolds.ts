@@ -1,10 +1,6 @@
-import {api} from './modules/api';
+import {checkDependencies} from 'ext.gadget.Util';
+import {checkRedirect} from './modules/opt-bolds';
 
-if (!mw.user.options.get('gadget-ToolsRedirect')) {
-	void api.postWithEditToken({
-		action: 'options',
-		change: 'gadget-ToolsRedirect=1',
-	} as ApiOptionsParams);
-
-	void mw.loader.using('ext.gadget.ToolsRedirect');
-}
+(function toolsRedirectCourtesyAndArtNames() {
+	void checkDependencies('ToolsRedirect').then(checkRedirect);
+})();

@@ -206,6 +206,7 @@
 			303: 'Draft talk',
 			304: 'SMWData',
 			305: 'SMWData talk',
+			828: 'Module',
 			829: 'Module talk',
 		},
 	};
@@ -1375,7 +1376,7 @@
 							break;
 						}
 						default:
-							mw.notify(`twinkleconfig: 未知类型的属性 ${pref.name}`, {
+							void mw.notify(`twinkleconfig: 未知类型的属性 ${pref.name}`, {
 								type: 'warn',
 								tag: 'twinkleconfig',
 							});
@@ -1676,7 +1677,7 @@
 					current.label = input.value;
 					// exclude totally empty rows
 					if (current.value || current.label) {
-						result.push(current);
+						result[result.length] = current;
 					}
 				}
 			});
@@ -1732,7 +1733,7 @@
 				$(document.querySelector(`#${pref.name}`)).data('value', Twinkle.defaultConfig[pref.name]);
 				break;
 			default:
-				mw.notify(`twinkleconfig: unknown data type for preference ${pref.name}`, {
+				void mw.notify(`twinkleconfig: unknown data type for preference ${pref.name}`, {
 					type: 'warn',
 					tag: 'twinkleconfig',
 				});
@@ -1788,11 +1789,11 @@
 				}
 				a.sort();
 				b.sort();
-				for (let i = 0; a[i]; ++i) {
+				for (const [i, element] of a.entries()) {
 					// comparison of the two properties of custom lists
-					if (typeof a[i] === 'object' && (a[i].label !== b[i].label || a[i].value !== b[i].value)) {
+					if (typeof element === 'object' && (element.label !== b[i].label || element.value !== b[i].value)) {
 						return false;
-					} else if (a[i].toString() !== b[i].toString()) {
+					} else if (element.toString() !== b[i].toString()) {
 						return false;
 					}
 				}
@@ -1840,14 +1841,14 @@
 									// read only those keys specified in the display order
 									for (const item of pref.setDisplayOrder) {
 										if (form[`${pref.name}_${item}`].checked) {
-											userValue.push(item);
+											userValue[userValue.length] = item;
 										}
 									}
 								} else {
 									// read all the keys in the list of values
 									for (const [itemkey] of Object.entries(pref.setValues)) {
 										if (form[`${pref.name}_${itemkey}`].checked) {
-											userValue.push(itemkey);
+											userValue[userValue.length] = itemkey;
 										}
 									}
 								}
@@ -1857,7 +1858,7 @@
 								userValue = $(form[pref.name]).data('value');
 								break;
 							default:
-								mw.notify(`twinkleconfig: 未知数据类型，属性 ${pref.name}`, {
+								void mw.notify(`twinkleconfig: 未知数据类型，属性 ${pref.name}`, {
 									type: 'warn',
 									tag: 'twinkleconfig',
 								});

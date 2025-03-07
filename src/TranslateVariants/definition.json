@@ -4,7 +4,7 @@
 	"section": "sysop",
 	"dependencies": [
 		"ext.gadget.i18n",
-		"ext.gadget.React",
+		"ext.gadget.JSX",
 		"ext.gadget.Util",
 		"mediawiki.api",
 		"mediawiki.diff.styles",

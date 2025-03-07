@@ -1,4 +1,5 @@
 {
 	"mountPointSelector": "#footer-info,.page-info",
-	"version": "2.0"
+	"storageKey": "ext.gadget.WhoIsActive_whoIsActive-",
+	"version": "2.1"
 }

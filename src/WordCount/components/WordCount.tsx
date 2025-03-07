@@ -7,7 +7,7 @@ interface Props {
 }
 
 const WordCount = ({text}: Props) => (
-	<div className={[tip, 'noprint', 'ui-state-highlight', 'ui-corner-all']}>
+	<div className={[tip, 'noprint', 'ui-state-highlight', 'ui-corner-all']} id="gadget-word_count-tip">
 		{getCountByTextLength(text)}
 		{getCJKCountByTextLength(text)}
 		<br />

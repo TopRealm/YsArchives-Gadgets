@@ -29,5 +29,5 @@ void getBody().then(function quickPatrol($body: JQuery<HTMLBodyElement>): void {
 	}
 
 	/* Patrol all pages */
-	$body.find('#mw-content-text ul').append(patrolAllPages($body));
+	$body.find('#mw-content-text .mw-pager-body').append(patrolAllPages($body));
 });

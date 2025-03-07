@@ -288,6 +288,16 @@
 			{
 				category: window.wgULS('不同类型的非建设编辑', '不同類別的非建設編輯'),
 				list: {
+					'uw-addpaid': {
+						level1: {
+							label: window.wgULS('加入付费内容', '加入付費內容'),
+							summary: window.wgULS('注意：加入付费内容', '注意：加入付費內容'),
+						},
+						level2: {
+							label: window.wgULS('多次加入付费内容', '多次加入付費內容'),
+							summary: window.wgULS('警告：多次加入付费内容', '警告：多次加入付費內容'),
+						},
+					},
 					'uw-copyright': {
 						level1: {
 							label: window.wgULS('侵犯著作权', '侵犯版權'),
@@ -912,7 +922,7 @@
 				break;
 			}
 			default:
-				mw.notify(window.wgULS('twinklewarn：未知的警告组', 'twinklewarn：未知的警告組'), {
+				void mw.notify(window.wgULS('twinklewarn：未知的警告组', 'twinklewarn：未知的警告組'), {
 					type: 'warn',
 					tag: 'twinklewarn',
 				});
@@ -1127,7 +1137,7 @@
 				if (statelem) {
 					statelem.error(message);
 				} else {
-					mw.notify(message, {
+					void mw.notify(message, {
 						type: 'warn',
 						tag: 'twinklewarn',
 					});
@@ -1366,7 +1376,7 @@
 		const params = Morebits.quickForm.getInputData(e.target);
 		if (params.article) {
 			if (/https?:\/\//.test(params.article)) {
-				mw.notify(window.wgULS('“页面链接”不能使用网址。', '「頁面連結」不能使用網址。'), {
+				void mw.notify(window.wgULS('“页面链接”不能使用网址。', '「頁面連結」不能使用網址。'), {
 					type: 'warn',
 					tag: 'warn',
 				});
@@ -1398,7 +1408,7 @@
 		const $selectedEl = $(e.target.sub_group).find(`option[value="${$(e.target.sub_group).val()}"]`);
 		params.messageData = $selectedEl.data('messageData');
 		if (params.messageData === undefined) {
-			mw.notify(window.wgULS('请选择警告模板。', '請選擇警告模板。'), {
+			void mw.notify(window.wgULS('请选择警告模板。', '請選擇警告模板。'), {
 				type: 'warn',
 				tag: 'warn',
 			});

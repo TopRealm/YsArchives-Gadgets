@@ -53,7 +53,7 @@ const wikitextPreviewTestcase = async (isPreview: boolean): Promise<void> => {
 			element,
 			lang: codeId?.toLowerCase() ?? '',
 			code: codeElement.textContent?.trim() ?? '',
-		}; // Replace `testcaseDataList.push()` to avoid polyfilling core-js
+		}; // Replace Array#push to avoid core-js polyfilling
 	}
 
 	// 整理页面中的Testcase预览元素，并放置“[载入中]”消息
@@ -105,7 +105,7 @@ const wikitextPreviewTestcase = async (isPreview: boolean): Promise<void> => {
 				params.preview = true;
 			}
 
-			const data = await api.post(params);
+			const data = await api.get(params);
 			if (!data?.['parse']?.text) {
 				return;
 			}

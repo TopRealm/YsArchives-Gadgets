@@ -366,8 +366,12 @@ const catALot = (): void => {
 		}
 
 		private doAPICall(
-			_params: Omit<ApiEditPageParams, 'format'>,
-
+			_params:
+				| Omit<ApiEditPageParams, 'format'>
+				| Omit<ApiOpenSearchParams, 'format'>
+				| Omit<ApiQueryCategoryMembersParams, 'format'>
+				| Omit<ApiQueryRevisionsParams, 'format'>
+				| Omit<ApiQueryTokensParams, 'format'>,
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
 			callback: (data: any) => void
 		) {
@@ -932,7 +936,7 @@ const catALot = (): void => {
 		if (wgNamespaceNumber === -1) {
 			CAL.isSearchMode = true;
 		}
-		/*! Cat-a-lot messages | CC-BY-SA-4.0 <https://ysymh.cc/H:CC-BY-SA-4.0> */
+		/*! Cat-a-lot messages | CC-BY-SA-4.0 <https://qwbk.cc/H:CC-BY-SA-4.0> */
 		setMessages();
 		void getBody().then(($body: JQuery<HTMLBodyElement>): void => {
 			new CAL($body).buildElements();

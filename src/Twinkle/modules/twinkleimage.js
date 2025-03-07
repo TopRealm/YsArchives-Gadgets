@@ -149,8 +149,8 @@
 					),
 					value: 'no fair use rationale',
 					tooltip: window.wgULS(
-						'不适用于有争议但完整的合理使用依据。若非自由著作权文件只有部分条目的使用依据，但同时被使用于未提供合理使用依据的条目，则本方针也不适用。',
-						'不適用於有爭議但完整的合理使用依據。若非自由著作權檔案只有部分條目的使用依據，但同時被使用於未提供合理使用依據的條目，則本方針也不適用。'
+						'不适用于有争议但完整的合理使用依据。若非自由著作权文件只有部分条目的使用依据，但同时被使用于未提供合理使用依据的条目，则本条例也不适用。',
+						'不適用於有爭議但完整的合理使用依據。若非自由著作權檔案只有部分條目的使用依據，但同時被使用於未提供合理使用依據的條目，則本條例也不適用。'
 					),
 				},
 			],
@@ -252,13 +252,10 @@
 						'{{'.concat('subst:', `Uploadvionotice|${Morebits.pageNameNorm}}}--~~`, '~~')
 					)
 				);
-				Morebits.status.info(
-					'提示',
-					window.wgULS(
-						['这些内容应贴进上传者对话页：', document.createElement('br'), noteData],
-						['這些內容應貼進上傳者討論頁：', document.createElement('br'), noteData]
-					)
-				);
+				Morebits.status.info('提示', [
+					window.wgULS('这些内容应贴进上传者对话页：', '這些內容應貼進上傳者討論頁：'),
+					noteData,
+				]);
 			}
 		}
 	};

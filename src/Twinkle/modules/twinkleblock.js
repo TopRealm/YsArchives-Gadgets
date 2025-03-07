@@ -1,12 +1,11 @@
-/* eslint-disable no-jquery/no-map-util */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import {initMwApi} from 'ext.gadget.Util';
+import {api} from './api';
+import {generateArray} from 'ext.gadget.Util';
 
 /*! Twinkle.js - twinkleblock.js */
 (function twinkleblock($) {
 	const $body = $('body');
-	const api = initMwApi('morebits.js; Twinkle/1.1');
 	let relevantUserName;
 	let blockedUserName;
 	const menuFormattedNamespaces = {
@@ -302,7 +301,7 @@ import {initMwApi} from 'ext.gadget.Util';
 			// groupmemberships only relevant for registered users
 			query.usprop = 'groupmemberships';
 		}
-		api.get(query).then(
+		void api.get(query).then(
 			(data) => {
 				Twinkle.block.processUserInfo(data, fn);
 			},
@@ -386,7 +385,7 @@ import {initMwApi} from 'ext.gadget.Util';
 		if (e.target.value === 'unblock') {
 			if (!Twinkle.block.currentBlockInfo) {
 				$unblock.prop('checked', false);
-				mw.notify(window.wgULS('用户没有被封禁', '使用者沒有被封鎖'), {
+				void mw.notify(window.wgULS('用户没有被封禁', '使用者沒有被封鎖'), {
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
@@ -423,7 +422,7 @@ import {initMwApi} from 'ext.gadget.Util';
 					return bg.label === prior.label;
 				})
 			) {
-				blockGroup.push(prior);
+				blockGroup[blockGroup.length] = prior;
 			}
 			// Always ensure proper template exists/is selected when switching modes
 			if (partialBox) {
@@ -618,22 +617,22 @@ import {initMwApi} from 'ext.gadget.Util';
 				},
 			];
 			if (Twinkle.block.isRegistered) {
-				blockoptions.push({
+				blockoptions[blockoptions.length] = {
 					checked: Twinkle.block.field_block_options.autoblock,
 					label: window.wgULS('自动封禁', '自動封鎖'),
 					name: 'autoblock',
 					value: '1',
-				});
+				};
 			} else {
-				blockoptions.push({
+				blockoptions[blockoptions.length] = {
 					checked: Twinkle.block.field_block_options.hardblock,
 					label: window.wgULS('阻止登录用户使用该IP地址编辑', '阻止登入使用者使用該IP位址編輯'),
 					name: 'hardblock',
 					value: '1',
-				});
+				};
 			}
-			blockoptions.push(
-				{
+			blockoptions[blockoptions.length] =
+				({
 					checked: Twinkle.block.field_block_options.watchuser,
 					label: window.wgULS('监视该用户的用户页和讨论页', '監視該使用者的使用者頁面和討論頁'),
 					name: 'watchuser',
@@ -644,8 +643,7 @@ import {initMwApi} from 'ext.gadget.Util';
 					label: window.wgULS('标记当前的破坏中的请求', '標記當前的破壞中的請求'),
 					name: 'closevip',
 					value: '1',
-				}
-			);
+				});
 			field_block_options.append({
 				type: 'checkbox',
 				name: 'blockoptions',
@@ -836,7 +834,7 @@ import {initMwApi} from 'ext.gadget.Util';
 					],
 				});
 			}
-			const $previewlink = $(`<a id="twinkleblock-preview-link">${window.wgULS('预览', '預覽')}</a>`);
+			const $previewlink = $('<a>').attr('id', 'twinkleblock-preview-link').text(window.wgULS('预览', '預覽'));
 			$previewlink.off('click').on('click', () => {
 				Twinkle.block.callback.preview($form[0]);
 			});
@@ -952,13 +950,13 @@ import {initMwApi} from 'ext.gadget.Util';
 		let oldfield;
 		if (field_preset) {
 			[oldfield] = $form.find('fieldset[name="field_preset"]');
-			oldfield.parentNode.replaceChild(field_preset.render(), oldfield);
+			oldfield.replaceWith(field_preset.render());
 		} else {
 			$form.find('fieldset[name="field_preset"]').hide();
 		}
 		if (field_block_options) {
 			[oldfield] = $form.find('fieldset[name="field_block_options"]');
-			oldfield.parentNode.replaceChild(field_block_options.render(), oldfield);
+			oldfield.replaceWith(field_block_options.render());
 			$form.find('fieldset[name="field_64"]').show();
 			$form.find('[name=pagerestrictions]').select2({
 				width: '100%',
@@ -1036,7 +1034,7 @@ import {initMwApi} from 'ext.gadget.Util';
 		}
 		if (field_template_options) {
 			[oldfield] = $form.find('fieldset[name="field_template_options"]');
-			oldfield.parentNode.replaceChild(field_template_options.render(), oldfield);
+			oldfield.replaceWith(field_template_options.render());
 			e.target.form.root.previewer = new Morebits.wiki.preview(
 				$(e.target.form.root).find('#twinkleblock-previewbox').last()[0]
 			);
@@ -1045,13 +1043,13 @@ import {initMwApi} from 'ext.gadget.Util';
 		}
 		if (field_tag_options) {
 			[oldfield] = $form.find('fieldset[name="field_tag_options"]');
-			oldfield.parentNode.replaceChild(field_tag_options.render(), oldfield);
+			oldfield.replaceWith(field_tag_options.render());
 		} else {
 			$form.find('fieldset[name="field_tag_options"]').hide();
 		}
 		if (field_unblock_options) {
 			[oldfield] = $form.find('fieldset[name="field_unblock_options"]');
-			oldfield.parentNode.replaceChild(field_unblock_options.render(), oldfield);
+			oldfield.replaceWith(field_unblock_options.render());
 		} else {
 			$form.find('fieldset[name="field_unblock_options"]').hide();
 		}
@@ -1133,27 +1131,26 @@ import {initMwApi} from 'ext.gadget.Util';
 				)
 			);
 			if (Twinkle.block.currentBlockInfo) {
-				blockloginfo.push(window.wgULS('封禁详情', '封鎖詳情'));
+				blockloginfo[blockloginfo.length] = window.wgULS('封禁详情', '封鎖詳情');
 			} else {
 				const [lastBlockAction] = Twinkle.block.blockLog;
 				const blockAction = lastBlockAction.action === 'unblock' ? Twinkle.block.blockLog[1] : lastBlockAction;
-				blockloginfo.push(
-					`此${
+				blockloginfo[blockloginfo.length] =
+					(`此${
 						Morebits.ip.isRange(relevantUserName)
 							? window.wgULS('IP范围', 'IP範圍')
 							: window.wgULS('用户', '使用者')
 					}曾在`,
-					$(`<b>${new Morebits.date(blockAction.timestamp).calendar('utc')}</b>`)[0],
+					$('<b>').text(new Morebits.date(blockAction.timestamp).calendar('utc'))[0],
 					`被${blockAction.user}${window.wgULS('封禁', '封鎖')}`,
-					$(`<b>${Morebits.string.formatTime(blockAction.params.duration)}</b>`)[0]
-				);
+					$('<b>').text(Morebits.string.formatTime(blockAction.params.duration))[0]);
 				if (lastBlockAction.action === 'unblock') {
-					blockloginfo.push(`，${new Morebits.date(lastBlockAction.timestamp).calendar('utc')}解封`);
+					blockloginfo[blockloginfo.length] =
+						`，${new Morebits.date(lastBlockAction.timestamp).calendar('utc')}解封`;
 				} else {
 					// block or reblock
-					blockloginfo.push(
-						`，${new Morebits.date(blockAction.params.expiry).calendar('utc')}${window.wgULS('过期', '過期')}`
-					);
+					blockloginfo[blockloginfo.length] =
+						`，${new Morebits.date(blockAction.params.expiry).calendar('utc')}${window.wgULS('过期', '過期')}`;
 				}
 			}
 			Morebits.status.init($body.find('div[name="hasblocklog"] span').last()[0]);
@@ -1647,24 +1644,25 @@ import {initMwApi} from 'ext.gadget.Util';
 		},
 	];
 	Twinkle.block.callback.filtered_block_groups = (group, show_template) => {
+		// eslint-disable-next-line no-jquery/no-map-util
 		return $.map(group, (blockGroup) => {
 			// Add custom reason
 			if (blockGroup.custom) {
 				if (show_template) {
-					let templates = $.map(Twinkle.getPref('customBlockReasonList'), (item) => {
+					let templates = Array.prototype.map.call(Twinkle.getPref('customBlockReasonList'), (item) => {
 						if (Twinkle.block.blockPresetsInfo[item.value].custom) {
 							return item.value;
 						}
 					});
 					templates = Morebits.array.uniq(templates);
-					blockGroup.list = $.map(templates, (template) => {
+					blockGroup.list = Array.prototype.map.call(templates, (template) => {
 						return {
 							label: window.wgULS('自定义模板', '自訂模板'),
 							value: template,
 						};
 					});
 				} else {
-					blockGroup.list = $.map(Twinkle.getPref('customBlockReasonList'), (item) => {
+					blockGroup.list = Array.prototype.map.call(Twinkle.getPref('customBlockReasonList'), (item) => {
 						return {
 							label: item.label,
 							value: `${item.value}|${item.label}`,
@@ -1672,6 +1670,7 @@ import {initMwApi} from 'ext.gadget.Util';
 					});
 				}
 			}
+			// eslint-disable-next-line no-jquery/no-map-util
 			const list = $.map(blockGroup.list, (blockPreset) => {
 				if (!show_template && blockPreset.meta) {
 					return;
@@ -1750,7 +1749,7 @@ import {initMwApi} from 'ext.gadget.Util';
 			return el !== this.value;
 		});
 		if (this.checked) {
-			Twinkle.block.seeAlsos.push(this.value);
+			Twinkle.block.seeAlsos[Twinkle.block.seeAlsos.length] = this.value;
 		}
 		const seeAlsoMessage = Twinkle.block.seeAlsos.join('、');
 		if (Twinkle.block.seeAlsos.length) {
@@ -1828,18 +1827,11 @@ import {initMwApi} from 'ext.gadget.Util';
 							$pageSelect.append(newOption);
 						}
 					}
-					$pageSelect
-						.val([...$pageSelect.val(), ...(Array.isArray(pages) ? pages : [pages])])
-						.trigger('change');
+					$pageSelect.val([...$pageSelect.val(), ...generateArray(pages)]).trigger('change');
 				}
 				if (data.restrictions.namespaces) {
 					$namespaceSelect
-						.val([
-							...$namespaceSelect.val(),
-							...(Array.isArray(data.restrictions.namespaces)
-								? data.restrictions.namespaces
-								: [data.restrictions.namespaces]),
-						])
+						.val([...$namespaceSelect.val(), ...generateArray(data.restrictions.namespaces)])
 						.trigger('change');
 				}
 			}
@@ -1967,7 +1959,7 @@ import {initMwApi} from 'ext.gadget.Util';
 					'}}、{{'
 				)}}}。`;
 				message += extra || '';
-				mw.notify(message, {
+				void mw.notify(message, {
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
@@ -1976,7 +1968,7 @@ import {initMwApi} from 'ext.gadget.Util';
 		};
 		if (toTag) {
 			if (params.tag.length === 0) {
-				mw.notify(window.wgULS('请至少选择一个用户页标记！', '請至少選擇一個使用者頁面標記！'), {
+				void mw.notify(window.wgULS('请至少选择一个用户页标记！', '請至少選擇一個使用者頁面標記！'), {
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
@@ -2013,7 +2005,7 @@ import {initMwApi} from 'ext.gadget.Util';
 				return;
 			}
 			if (params.tag.includes('Sockpuppet') && params.sppUsername.trim() === '') {
-				mw.notify(window.wgULS('请提供傀儡账号的主账号用户名！', '請提供傀儡賬號的主賬號使用者名稱！'), {
+				void mw.notify(window.wgULS('请提供傀儡账号的主账号用户名！', '請提供傀儡賬號的主賬號使用者名稱！'), {
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
@@ -2023,7 +2015,7 @@ import {initMwApi} from 'ext.gadget.Util';
 		if (toBlock) {
 			if (blockoptions.partial) {
 				if (blockoptions.disabletalk && !blockoptions.namespacerestrictions.includes('3')) {
-					mw.notify(
+					void mw.notify(
 						window.wgULS(
 							'部分封禁无法阻止编辑自己的讨论页，除非也封禁了User talk命名空间！',
 							'部分封鎖無法阻止編輯自己的討論頁，除非也封鎖了User talk命名空間！'
@@ -2038,7 +2030,7 @@ import {initMwApi} from 'ext.gadget.Util';
 				if (!blockoptions.namespacerestrictions && !blockoptions.pagerestrictions) {
 					if (!blockoptions.noemail && !blockoptions.nocreate) {
 						// Blank entries technically allowed
-						mw.notify(
+						void mw.notify(
 							window.wgULS(
 								'没有选择页面或命名空间，也没有停用电子邮件或禁止创建账号；请选择至少一个选项以应用部分封禁！',
 								'沒有選擇頁面或命名空間，也沒有停用電子郵件或禁止建立賬號；請選擇至少一個選項以應用部分封鎖！'
@@ -2062,20 +2054,20 @@ import {initMwApi} from 'ext.gadget.Util';
 				}
 			}
 			if (!blockoptions.expiry) {
-				mw.notify(window.wgULS('请提供过期时间！', '請提供過期時間！'), {
+				void mw.notify(window.wgULS('请提供过期时间！', '請提供過期時間！'), {
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
 				return;
 			} else if (Morebits.string.isInfinity(blockoptions.expiry) && !Twinkle.block.isRegistered) {
-				mw.notify(window.wgULS('禁止无限期封禁IP地址！', '禁止無限期封鎖IP位址！'), {
+				void mw.notify(window.wgULS('禁止无限期封禁IP地址！', '禁止無限期封鎖IP位址！'), {
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
 				return;
 			}
 			if (!blockoptions.reason) {
-				mw.notify(window.wgULS('请提供封禁理由！', '請提供封鎖理由！'), {
+				void mw.notify(window.wgULS('请提供封禁理由！', '請提供封鎖理由！'), {
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
@@ -2132,7 +2124,7 @@ import {initMwApi} from 'ext.gadget.Util';
 				query.meta = 'tokens';
 				query.type = 'userrights';
 			}
-			api.get(query).then((data) => {
+			void api.get(query).then((data) => {
 				let [block] = data.query.blocks;
 				// As with the initial data fetch, if an IP is blocked
 				// *and* rangeblocked, this would only grab whichever
@@ -2261,7 +2253,7 @@ import {initMwApi} from 'ext.gadget.Util';
 		}
 		if (toUnblock) {
 			if (!unblockoptions.reason) {
-				mw.notify(window.wgULS('请提供解除封禁理由！', '請提供解除封鎖理由！'), {
+				void mw.notify(window.wgULS('请提供解除封禁理由！', '請提供解除封鎖理由！'), {
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
@@ -2285,7 +2277,7 @@ import {initMwApi} from 'ext.gadget.Util';
 			unblockMbApi.post();
 		}
 		if (!toBlock && !toWarn && !toTag && !toProtect && !toUnblock) {
-			mw.notify(window.wgULS('请给Twinkle点事做！', '請給Twinkle點事做！'), {
+			void mw.notify(window.wgULS('请给Twinkle点事做！', '請給Twinkle點事做！'), {
 				type: 'warn',
 				tag: 'twinkleblock',
 			});
@@ -2320,14 +2312,14 @@ import {initMwApi} from 'ext.gadget.Util';
 						tagtext += '\n';
 						break;
 					default:
-						mw.notify(window.wgULS('未知的用户页模板！', '未知的使用者頁面模板！'), {
+						void mw.notify(window.wgULS('未知的用户页模板！', '未知的使用者頁面模板！'), {
 							type: 'warn',
 							tag: 'twinkleblock',
 						});
 						continue;
 				}
 				tagtext += '}}';
-				tags.push(tagtext);
+				tags[tags.length] = tagtext;
 			}
 			const text = tags.join('\n');
 			pageobj.setPageText(text);
@@ -2406,18 +2398,18 @@ import {initMwApi} from 'ext.gadget.Util';
 			)}\\s*(\\|\\s*hidename\\s*=[^|]+)?}}`,
 			'm'
 		);
-		for (let i = 1; i < requestList.length; i++) {
-			if (vipRe.exec(requestList[i])) {
-				hidename = /\|\s*hidename\s*=[^|]+/.test(requestList[i]);
-				requestList[i] = requestList[i].trimEnd();
-				let newText = requestList[i].replace(
+		for (let request of requestList) {
+			if (vipRe.exec(request)) {
+				hidename = /\|\s*hidename\s*=[^|]+/.test(request);
+				request = request.trimEnd();
+				let newText = request.replace(
 					/^(\*\s*处理：)[ \t]*(<!-- 非管理員僅可標記已執行的封禁，針對提報的意見請放在下一行 -->)?[ \t]*$/m,
 					`$1${comment}--~~`.concat('~~')
 				);
-				if (requestList[i] === newText) {
-					newText = `${requestList[i]}\n* 处理：${comment}--~~`.concat('~~');
+				if (request === newText) {
+					newText = `${request}\n* 处理：${comment}--~~`.concat('~~');
 				}
-				requestList[i] = `${newText}\n`;
+				request = `${newText}\n`;
 				found = true;
 				break;
 			}

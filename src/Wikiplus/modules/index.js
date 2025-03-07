@@ -140,13 +140,16 @@ $(async () => {
 
 	const handleSimpleRedirectButtonClicked = async () => {
 		UI.showSimpleRedirectPanel({
-			onEdit: async ({title, forceOverwrite = false}) => {
+			onEdit: async ({title, summary, forceOverwrite = false}) => {
 				const page = await getPage({title});
 				const currentPageName = Constants.currentPageName;
+				if (summary == '') {
+					summary = i18n.translate('redirect_from_summary', [title, currentPageName]);
+				}
 				const payload = {
 					content: `#REDIRECT [[${currentPageName}]]`,
 					config: {
-						summary: i18n.translate('redirect_from_summary', [title, currentPageName]),
+						summary,
 					},
 				};
 				if (!forceOverwrite) {

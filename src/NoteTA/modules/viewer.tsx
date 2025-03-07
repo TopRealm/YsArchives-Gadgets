@@ -155,12 +155,7 @@ const getViewer = ($body: JQuery<HTMLBodyElement>, hash: string): typeof viewer 
 							const titleConverted: string | null | undefined = variantText[wgUserVariant as string];
 
 							const multiTitle: string[] = [];
-							for (const key in variantText) {
-								if (!Object.hasOwn(variantText, key)) {
-									continue;
-								}
-
-								const text: string | null | undefined = variantText[key];
+							for (const text of Object.values(variantText)) {
 								if (text === null || text === undefined) {
 									continue;
 								}

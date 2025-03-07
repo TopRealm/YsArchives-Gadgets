@@ -337,7 +337,7 @@
 	};
 	Twinkle.fluff.revert = (type, vandal, rev, page) => {
 		if (mw.util.isIPv6Address(vandal)) {
-			vandal = Morebits.sanitizeIPv6(vandal);
+			vandal = Morebits.ip.sanitizeIPv6(vandal);
 		}
 		const pagename = page || mw.config.get('wgPageName');
 		const revid = rev || mw.config.get('wgCurRevisionId');
@@ -347,7 +347,7 @@
 		}
 		if (Twinkle.fluff.rollbackInPlace) {
 			const notifyStatus = document.createElement('span');
-			mw.notify(notifyStatus, {
+			void mw.notify(notifyStatus, {
 				autoHide: false,
 				title: `回退${page}`,
 				tag: `twinklefluff_${rev}`, // Shouldn't be necessary given disableLink

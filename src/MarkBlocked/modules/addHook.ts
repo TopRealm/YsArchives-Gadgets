@@ -1,5 +1,6 @@
-import {WG_ACTION, WG_NAMESPACE_NUMBER} from './constant';
 import {markBlockedUser} from './markBlockedUser';
+
+const {wgAction, wgNamespaceNumber} = mw.config.get();
 
 const addHook = (): void => {
 	let isInit: boolean = false;
@@ -12,7 +13,7 @@ const addHook = (): void => {
 
 		// On the first call after initial page load, container is mw.util.$content
 		// Used to limit mainspace activity to just the diff definitions
-		if (WG_ACTION === 'view' && WG_NAMESPACE_NUMBER === 0) {
+		if (wgAction === 'view' && wgNamespaceNumber === 0) {
 			$content = $content.find('.diff-title');
 		}
 		// On page load, also update the namespace tab

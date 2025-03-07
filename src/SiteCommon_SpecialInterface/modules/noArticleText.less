@@ -1,0 +1,85 @@
+@import (reference) '../variables.less';
+
+/**
+ * [[MediaWiki:Noarticletext]]样式
+ *
+ * @author WaitSpring
+ */
+.mw-noarticletext {
+	&-core {
+		display: flex;
+		flex-flow: row wrap;
+		align-items: flex-start;
+		padding: 1em 1em 1.5em;
+		border: 1px solid @background-color-primary;
+		border-radius: @border-radius--small;
+		background: @background-color-primary--lightest;
+		box-shadow:
+			0 1px 2px @background-color-primary,
+			0 -1px 2px @background-color-primary;
+		gap: 1em;
+		word-break: break-all;
+
+		.client-darkmode & {
+			background: @background-color-primary--light;
+			box-shadow:
+				0 1px 2px @background-color-primary--darker,
+				0 -1px 2px @background-color-primary--darker;
+		}
+	}
+
+	&-title,
+	&-subtitle {
+		display: block !important;
+		flex: 1 1 100%;
+		margin: 0.5em auto;
+		color: #2a4b8d;
+		text-align: center;
+	}
+
+	&-part1 {
+		text-align: center;
+		margin: auto;
+	}
+
+	&-help,
+	&-search {
+		flex: 1 1 100%;
+		margin: 0 auto;
+		text-align: center;
+	}
+
+	&-search .mw-inputbox-centered {
+		margin: 1.5em 0 0;
+	}
+
+	&-module {
+		display: flex;
+		flex: 1 1 18.5em;
+		flex-direction: column;
+		align-items: center;
+	}
+}
+
+.pagetitlecorrection,
+.draftat,
+.nopermissionnotice {
+	padding: 0.5em 0;
+	margin-bottom: 0.25em;
+	text-align: center;
+}
+
+.pagetitlecorrection,
+.draftat {
+	border: 1px solid #fc3;
+	background: #fef6e7;
+}
+
+.nopermissionnotice {
+	border: 1px solid #bb7070;
+	background: #ffdbdb;
+}
+
+.dymlink {
+	text-decoration: underline;
+}

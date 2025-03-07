@@ -1,5 +1,7 @@
 {
 	"contributionsPageAlias": "Special:Contributions",
 	"userNamespaceNumbers": [2, 3],
+	"storageKeyLocked": "ext.gadget.MarkBlocked_isLocked-",
+	"storageKeyBlocked": "ext.gadget.MarkBlocked_isBlocked-",
 	"version": "2.0"
 }

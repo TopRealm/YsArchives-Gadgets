@@ -3,6 +3,7 @@
 	"description": "<span id=\"Gadget-morebits\"></span> morebits.js",
 	"section": "compatibility",
 	"dependencies": [
+		"ext.gadget.i18n",
 		"ext.gadget.select2",
 		"ext.gadget.Util",
 		"jquery.ui",

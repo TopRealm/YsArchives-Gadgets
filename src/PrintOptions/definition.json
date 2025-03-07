@@ -2,5 +2,5 @@
 	"enable": true,
 	"description": "<span id=\"Gadget-PrintOptions\"></span> 打印选项 <small>控制页面的打印方式</small>",
 	"section": "compatibility",
-	"dependencies": ["ext.gadget.i18n", "mediawiki.util", "oojs-ui-core", "oojs-ui-widgets", "oojs-ui-windows"]
+	"dependencies": ["ext.gadget.i18n", "ext.gadget.Util", "oojs-ui-core", "oojs-ui-widgets", "oojs-ui-windows"]
 }

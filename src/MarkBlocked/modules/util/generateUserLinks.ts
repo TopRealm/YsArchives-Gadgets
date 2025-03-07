@@ -1,5 +1,5 @@
 import * as OPTIONS from '../../options.json';
-import {CLASS_NAME_USERLINK, WG_ARTICLE_PATH, WG_SCRIPT} from '../constant';
+import {MwUri} from 'ext.gadget.Util';
 import {generateUserNamespaceTitles} from './generateUserNamespaceTitles';
 
 // Get all aliases for user: & user_talk:
@@ -12,8 +12,9 @@ const userTitleRegex: RegExp = new RegExp(
 
 // RegExp for links
 // articleRegex also matches external links in order to support the noping template
-const articleRegex: RegExp = new RegExp(`${WG_ARTICLE_PATH.replace('$1', '')}([^#]+)`);
-const scriptRegex: RegExp = new RegExp(`^${WG_SCRIPT}\\?title=([^#&]+)`);
+const {wgArticlePath, wgScript} = mw.config.get();
+const articleRegex: RegExp = new RegExp(`${wgArticlePath.replace('$1', '')}([^#]+)`);
+const scriptRegex: RegExp = new RegExp(`^${wgScript}\\?title=([^#&]+)`);
 
 const generateUserLinks = ($content: JQuery): Record<string, JQuery[]> => {
 	// Find all "user" links and save them in userLinks : { 'users': [<link1>, <link2>, ...], 'user2': [<link3>, <link3>, ...], ... }
@@ -23,6 +24,7 @@ const generateUserLinks = ($content: JQuery): Record<string, JQuery[]> => {
 		const $element: JQuery<HTMLAnchorElement> = $(element);
 		if (
 			$element.hasClass('mw-changeslist-date') ||
+			$element.hasClass('ext-discussiontools-init-timestamplink') ||
 			$element.parent('span').hasClass('mw-history-undo') ||
 			$element.parent('span').hasClass('mw-rollback-link')
 		) {
@@ -37,12 +39,14 @@ const generateUserLinks = ($content: JQuery): Record<string, JQuery[]> => {
 			continue;
 		}
 		try {
-			if (new mw.Uri(href).host !== location.host) {
+			// Maybe absolute URL
+			if (new MwUri(href).host !== location.host) {
 				continue;
 			}
 		} catch {
 			try {
-				if (new mw.Uri(location.href + href).host !== location.host) {
+				// Maybe relative URL
+				if (new MwUri(location.href + href).host !== location.host) {
 					continue;
 				}
 			} catch {
@@ -73,16 +77,11 @@ const generateUserLinks = ($content: JQuery): Record<string, JQuery[]> => {
 			user = user.toUpperCase();
 		}
 
-		// The following classes are used here:
-		// * see constant.ts
-		// * for more information
-		$element.addClass(CLASS_NAME_USERLINK);
-
 		userLinks[user] ??= [];
 
 		(userLinks[user] as (typeof userLinks)[keyof typeof userLinks])[
 			(userLinks[user] as (typeof userLinks)[keyof typeof userLinks]).length
-		] = $element; // Replace `[].push()` to avoid polyfilling core-js
+		] = $element; // Replace Array#push to avoid core-js polyfilling
 	}
 
 	return userLinks;

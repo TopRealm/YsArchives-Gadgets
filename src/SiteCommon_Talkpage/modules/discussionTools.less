@@ -1,0 +1,58 @@
+/* 用户讨论页 */
+.ext-discussiontools-emptystate-logo {
+	display: none;
+}
+
+/* 修复DiscussionTools以链接开头下划线位置错误 */
+span[data-mw-comment-start] {
+	top: 0 !important;
+}
+
+/* 修复DiscussionTools溢出的问题，让该界面成为浮窗 */
+.ext-discussiontools-ui-replyWidget {
+	body & {
+		border: 1px solid @const-color-gray;
+		border-radius: @border-radius--medium;
+		margin: 0 1em;
+		padding: 1em;
+		z-index: 1;
+		background-color: #fff;
+		max-width: 92.5%;
+		max-width: calc(100% - 2em);
+		overflow-y: auto;
+
+		@media screen and (min-width: 800px) {
+			max-width: 800px;
+			margin: 0 auto;
+		}
+	}
+
+	.ext-discussiontools-ui-newTopic & {
+		position: relative;
+		border: 0;
+		max-width: 100%;
+		padding: 0;
+		inset: unset;
+		margin: 0;
+	}
+}
+
+.discussiontools-ui-replyWidget-margin-left(@i, @j) when (@i > 0) {
+	.ext-discussiontools-ui-replyWidget {
+		margin-left: (-10em + @i);
+	}
+
+	@{j} {
+		.discussiontools-ui-replyWidget-margin-left(@i - 1, @j);
+	}
+}
+
+body .mw-parser-output {
+	& > dl {
+		.discussiontools-ui-replyWidget-margin-left(10, dl);
+	}
+
+	& > ul {
+		.discussiontools-ui-replyWidget-margin-left(10, ul);
+	}
+}

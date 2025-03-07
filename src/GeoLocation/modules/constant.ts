@@ -7,6 +7,6 @@ const SYSTEM_SCRIPT_LIST: string[] = [
 	'MediaWiki message delivery',
 	'New user page',
 ];
-const WEBMASTER_LIST: string[] = ['QiuWen', 'QiuWen for Accounts', 'QiuwenSocialMedia'];
+const WEBMASTER_LIST: string[] = ['WebMaster', 'Qiuwen'];
 
 export {SYSTEM_SCRIPT_LIST, WEBMASTER_LIST};

@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import {initMwApi} from 'ext.gadget.Util';
+import {api} from './api';
 
 /*! Twinkle.js - twinkleprotect.js */
 (function twinkleprotect($) {
@@ -111,21 +111,19 @@ import {initMwApi} from 'ext.gadget.Util';
 	// { edit: { level: "sysop", expiry: <some date>, cascade: true }, ... }
 	Twinkle.protect.currentProtectionLevels = {};
 	Twinkle.protect.previousProtectionLevels = {};
-	Twinkle.protect.fetchProtectionLevel = async () => {
-		const api = initMwApi('morebits.js; Twinkle/1.1');
-		try {
-			const params = {
-				format: 'json',
-				indexpageids: true,
-				action: 'query',
-				list: 'logevents',
-				letype: 'protect',
-				letitle: mw.config.get('wgPageName'),
-				prop: 'info',
-				inprop: 'protection|watched',
-				titles: mw.config.get('wgPageName'),
-			};
-			const protectData = await api.get(params);
+	Twinkle.protect.fetchProtectionLevel = () => {
+		const params = {
+			format: 'json',
+			indexpageids: true,
+			action: 'query',
+			list: 'logevents',
+			letype: 'protect',
+			letitle: mw.config.get('wgPageName'),
+			prop: 'info',
+			inprop: 'protection|watched',
+			titles: mw.config.get('wgPageName'),
+		};
+		void api.get(params).then((protectData) => {
 			const [pageid] = protectData.query.pageids;
 			const page = protectData.query.pages[pageid];
 			const current = {};
@@ -163,7 +161,7 @@ import {initMwApi} from 'ext.gadget.Util';
 			Twinkle.protect.currentProtectionLevels = current;
 			Twinkle.protect.previousProtectionLevels = previous;
 			Twinkle.protect.callback.showLogAndCurrentProtectInfo();
-		} catch {}
+		});
 	};
 	Twinkle.protect.callback.showLogAndCurrentProtectInfo = () => {
 		const currentlyProtected = Object.keys(Twinkle.protect.currentProtectionLevels).length !== 0;
@@ -484,7 +482,7 @@ import {initMwApi} from 'ext.gadget.Util';
 				});
 				break;
 			default:
-				mw.notify(window.wgULS('这玩意儿被海豚吃掉了！', '這玩意兒被海豚吃掉了！'), {
+				void mw.notify(window.wgULS('这玩意儿被海豚吃掉了！', '這玩意兒被海豚吃掉了！'), {
 					type: 'warn',
 					tag: 'twinkleprotect',
 				});
@@ -493,19 +491,19 @@ import {initMwApi} from 'ext.gadget.Util';
 		let oldfield;
 		if (field_preset) {
 			[oldfield] = $(e.target.form).find('fieldset[name="field_preset"]');
-			oldfield.parentNode.replaceChild(field_preset.render(), oldfield);
+			oldfield.replaceWith(field_preset.render());
 		} else {
 			$(e.target.form).find('fieldset[name="field_preset"]').css('display', 'none');
 		}
 		if (field1) {
 			[oldfield] = $(e.target.form).find('fieldset[name="field1"]');
-			oldfield.parentNode.replaceChild(field1.render(), oldfield);
+			oldfield.replaceWith(field1.render());
 		} else {
 			$(e.target.form).find('fieldset[name="field1"]').css('display', 'none');
 		}
 		if (field2) {
 			[oldfield] = $(e.target.form).find('fieldset[name="field2"]');
-			oldfield.parentNode.replaceChild(field2.render(), oldfield);
+			oldfield.replaceWith(field2.render());
 		} else {
 			$(e.target.form).find('fieldset[name="field2"]').css('display', 'none');
 		}
@@ -1139,7 +1137,7 @@ import {initMwApi} from 'ext.gadget.Util';
 							if (input.movelevel) {
 								thispage.setMoveProtection(input.movelevel, input.moveexpiry);
 							} else {
-								mw.notify(window.wgULS('您需要选择保护层级！', '您需要選擇保護層級！'), {
+								void mw.notify(window.wgULS('您需要选择保护层级！', '您需要選擇保護層級！'), {
 									type: 'warn',
 									tag: 'twinkleprotect',
 								});
@@ -1155,7 +1153,7 @@ import {initMwApi} from 'ext.gadget.Util';
 						thispage.setEditSummary(input.protectReason);
 						thispage.setChangeTags(Twinkle.changeTags);
 					} else {
-						mw.notify(
+						void mw.notify(
 							window.wgULS(
 								'您必须输入保护理由，这将被记录在保护日志中。',
 								'您必須輸入保護理由，這將被記錄在保護日誌中。'
@@ -1178,7 +1176,7 @@ import {initMwApi} from 'ext.gadget.Util';
 				if (input.editmodify || input.movemodify || !mw.config.get('wgArticleId')) {
 					protectIt(allDone);
 				} else {
-					mw.notify(
+					void mw.notify(
 						window.wgULS(
 							'请告诉Twinkle要做什么！\n若您只是想标记该页，请选择上面的“用保护模板标记此页”选项。',
 							'請告訴Twinkle要做什麼！\n若您只是想標記該頁，請選擇上面的「用保護模板標記此頁」選項。'
@@ -1318,7 +1316,7 @@ import {initMwApi} from 'ext.gadget.Util';
 				break;
 			}
 			default:
-				mw.notify('twinkleprotect: 未知操作类型', {
+				void mw.notify('twinkleprotect: 未知操作类型', {
 					type: 'warn',
 					tag: 'twinkleprotect',
 				});
@@ -1565,13 +1563,13 @@ import {initMwApi} from 'ext.gadget.Util';
 				`===\\s*(\\[\\[)?\\s*:?\\s*${Morebits.pageNameRegex(Morebits.pageNameNorm)}\\s*(\\]\\])?\\s*===`,
 				'm'
 			);
-			for (let i = 1; i < requestList.length; i++) {
-				if (rppRe.exec(requestList[i])) {
-					requestList[i] = requestList[i].trimEnd();
+			for (let request of requestList) {
+				if (rppRe.exec(request)) {
+					request = request.trimEnd();
 					if (params.type === 'unprotect') {
-						requestList[i] += '\n: {{RFPP|isun}}。--~~'.concat('~~\n');
+						request += '\n: {{RFPP|isun}}。--~~'.concat('~~\n');
 					} else {
-						requestList[i] += `\n: {{RFPP|${params.type}|${
+						request += `\n: {{RFPP|${params.type}|${
 							Morebits.string.isInfinity(params.expiry) ? 'infinity' : expiryText
 						}}}。--~~`.concat('~~\n');
 					}
@@ -1640,7 +1638,7 @@ import {initMwApi} from 'ext.gadget.Util';
 	Twinkle.protect.formatProtectionDescription = (protectionLevels) => {
 		const protectionNode = [];
 		if (Object.keys(protectionLevels).length === 0) {
-			protectionNode.push($(`<b>${window.wgULS('无保护', '無保護')}</b>`)[0]);
+			[protectionNode[protectionNode.length]] = $('<b>').text(window.wgULS('无保护', '無保護'));
 		} else {
 			for (const [type, settings] of Object.entries(protectionLevels)) {
 				let label;
@@ -1679,16 +1677,15 @@ import {initMwApi} from 'ext.gadget.Util';
 						({level} = settings);
 						break;
 				}
-				protectionNode.push($(`<b>${label}：${level}</b>`)[0]);
+				[protectionNode[protectionNode.length]] = $('<b>').text(`${label}：${level}`);
 				if (Morebits.string.isInfinity(settings.expiry)) {
-					protectionNode.push(window.wgULS('（无限期）', '（無限期）'));
+					protectionNode[protectionNode.length] = window.wgULS('（无限期）', '（無限期）');
 				} else {
-					protectionNode.push(
-						`${window.wgULS('（过期：', '（過期：') + new Morebits.date(settings.expiry).calendar('utc')}）`
-					);
+					protectionNode[protectionNode.length] =
+						`${window.wgULS('（过期：', '（過期：') + new Morebits.date(settings.expiry).calendar('utc')}）`;
 				}
 				if (settings.cascade) {
-					protectionNode.push(window.wgULS('（连锁）', '（連鎖）'));
+					protectionNode[protectionNode.length] = window.wgULS('（连锁）', '（連鎖）');
 				}
 			}
 		}

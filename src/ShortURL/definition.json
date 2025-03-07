@@ -1,20 +1,19 @@
 {
 	"enable": true,
-	"description": "<sup><abbr title=\"默认为所有注册用户启用\">U</abbr></sup><span id=\"Gadget-ShortURL\"></span> 提供当前界面的短链接，便于聊天群共享（站外共享，建议使用完整地址）",
+	"description": "<span id=\"Gadget-ShortURL\"></span> 提供当前界面的短链接，便于聊天群共享 <small>站外共享，建议使用完整地址</small>",
 	"section": "browser",
-	"excludeSites": ["testwiki"],
-	"default": true,
 	"dependencies": [
 		"ext.gadget.Clipboard",
 		"ext.gadget.i18n",
-		"ext.gadget.React",
+		"ext.gadget.JSX",
 		"ext.gadget.Tippy",
 		"ext.gadget.Toastify",
 		"ext.gadget.Util",
 		"mediawiki.api",
 		"mediawiki.util",
 		"mediawiki.widgets",
-		"oojs-ui-windows"
+		"oojs-ui-windows",
+		"oojs-ui.styles.icons-editing-core"
 	],
 	"peers": ["ShortURL-pagestyles"]
 }

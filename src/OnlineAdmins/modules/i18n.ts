@@ -8,12 +8,6 @@ const getI18nMessages = () => {
 			'zh-hans': '（$1个在线）：',
 			'zh-hant': '（$1個在線）：',
 		}),
-		Admins: localize({
-			en: 'Admins',
-			ja: '管理者',
-			'zh-hans': '管理员',
-			'zh-hant': '管理員',
-		}),
 		Patrollers: localize({
 			en: 'Patrollers',
 			ja: '巡回者',
@@ -49,6 +43,12 @@ const getI18nMessages = () => {
 			ja: '30分以内にオンラインで高権限利用者：',
 			'zh-hans': '下面是最近30分钟内在线的站务人员：',
 			'zh-hant': '下面是最近30分鐘內的線上站務人員：',
+		}),
+		SysOps: localize({
+			en: 'Admins',
+			ja: '管理者',
+			'zh-hans': '管理员',
+			'zh-hant': '管理員',
 		}),
 	};
 };

@@ -99,7 +99,7 @@ import {generateArray} from 'ext.gadget.Util';
 		const {dialog} = Twinkle.speedy;
 		dialog.setTitle(window.wgULS('选择快速删除理由', '選擇快速刪除理由'));
 		dialog.setScriptName('Twinkle');
-		dialog.addFooterLink(window.wgULS('快速删除方针', '快速刪除方針'), 'LIB:CSD');
+		dialog.addFooterLink(window.wgULS('快速删除条例', '快速刪除條例'), 'LIB:CSD');
 		dialog.addFooterLink(window.wgULS('速删设置', '速刪設定'), 'H:TW/PREF#speedy');
 		dialog.addFooterLink(window.wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#speedy');
 		const form = new Morebits.quickForm(
@@ -701,7 +701,7 @@ import {generateArray} from 'ext.gadget.Util';
 	];
 	Twinkle.speedy.fileList = [
 		{
-			label: 'F1：明显不符合本站著作权方针的文件',
+			label: 'F1：明显不符合本站著作权条例的文件',
 			value: 'f1',
 			tooltip:
 				'包括以下情况：1.上传后3天内仍然来源不明、著作权不明的文件。2.上传者宣称拥有，而在其他来源找到的文件。3.文件宣称由某作者依据某自由著作权协议发布，但找不到该自由协议的声明。4.其他明显侵权的文件，可附加侵权理由。',
@@ -1370,7 +1370,7 @@ import {generateArray} from 'ext.gadget.Util';
 				if (mw.config.get('wgNamespaceNumber') === 6) {
 					// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
 					text = text.replace(
-						/\{\{(mtc|(copy |move )?to ?(share|commons)|move to (ysarchives share|wikimedia commons)|copy to (ysarchives share|wikimedia commons))[^}]*\}\}/gi,
+						/\{\{(mtc|(copy |move )?to ?(share|commons)|move to (ysarchives share|wikimedia commons)|copy to (ysarchives share|ysarchives commons))[^}]*\}\}/gi,
 						''
 					);
 				}

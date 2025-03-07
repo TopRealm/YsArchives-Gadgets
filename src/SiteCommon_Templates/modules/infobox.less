@@ -1,0 +1,191 @@
+@import (reference) '../variables.less';
+
+/**
+ * Infobox template style
+ * Including Vertical Navbox
+ */
+
+.infobox,
+.vertical-navbox {
+	position: relative;
+	display: table;
+	width: 100% !important;
+	max-width: 100% !important;
+	box-sizing: border-box;
+	padding: 0.2em;
+	border: 1px solid #a2a9b1;
+	margin: 0.5em 0;
+	background-color: #f8f9fa;
+	border-spacing: 0.25em;
+	color: @const-color-black;
+	float: none !important;
+	font-size: 90%;
+
+	@media (min-width: 768px) {
+		width: auto;
+		max-width: 320px !important;
+		margin: 0.5em 0 0.5em 1em !important;
+		clear: right !important;
+		float: right !important;
+	}
+
+	td,
+	th {
+		padding: 0.4em 0.6em;
+		border: 0;
+		vertical-align: top;
+	}
+
+	caption {
+		padding: 10px 10px 0;
+		font-size: larger;
+		text-align: center !important;
+	}
+
+	tbody > tr {
+		> td,
+		> th {
+			img {
+				max-width: 100% !important;
+				height: auto;
+			}
+		}
+	}
+
+	td:only-child,
+	th:only-child {
+		width: 100%;
+		text-align: center;
+	}
+
+	tr:last-child {
+		th,
+		td {
+			border: 0;
+		}
+	}
+
+	> tbody > tr {
+		min-width: 100%;
+	}
+
+	.mw-content-ltr & {
+		text-align: left;
+	}
+
+	.mw-content-rtl & {
+		text-align: right;
+	}
+
+	.plainlist li {
+		margin-bottom: 0;
+	}
+}
+
+.infobox {
+	&.bordered {
+		/* For bordered Infobox */
+		border-collapse: collapse;
+
+		td,
+		th {
+			border: 1px solid #a2a9b1;
+		}
+
+		.borderless {
+			td,
+			th {
+				border: 0;
+			}
+		}
+
+		tr:last-child {
+			td,
+			th {
+				border: 1px solid #a2a9b1;
+			}
+		}
+
+		/* styles for bordered infobox with merged rows */
+		.mergedtoprow {
+			td,
+			th {
+				border: 0;
+				border-top: 1px solid #a2a9b1;
+				border-right: 1px solid #a2a9b1;
+			}
+		}
+
+		.mergedrow {
+			td,
+			th {
+				border: 0;
+				border-right: 1px solid #a2a9b1;
+			}
+		}
+	}
+
+	&.sisterproject {
+		width: 20em;
+		font-size: 90%;
+	}
+
+	&.geography {
+		/* styles for geography infoboxes, e.g. countries, country subdivisions, cities, etc. */
+		border-collapse: collapse;
+		font-size: 90%;
+		line-height: 1.2em;
+		text-align: left;
+
+		td,
+		th {
+			padding: 0.4em 0.6em;
+		}
+
+		.mergedtoprow {
+			td,
+			th {
+				padding: 0.4em 0.6em 0.2em;
+			}
+		}
+
+		.mergedrow {
+			td,
+			th {
+				padding: 0 0.6em 0.2em;
+				border: 0;
+			}
+		}
+
+		.maptable {
+			td,
+			th {
+				padding: 0;
+				border: 0;
+			}
+		}
+	}
+
+	&-data-without-label {
+		text-align: center;
+	}
+
+	&-subbox {
+		width: auto;
+		min-width: 100%;
+		padding: 0;
+		border: 0;
+		margin: -0.25em !important;
+		background: transparent;
+		clear: none;
+		float: none;
+	}
+
+	&-header-row {
+		text-align: center;
+	}
+
+	&:not(.infobox-subbox) {
+		line-height: 1.5em;
+	}
+}

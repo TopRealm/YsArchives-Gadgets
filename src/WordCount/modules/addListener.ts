@@ -1,16 +1,15 @@
 import {wordCount} from './wordCount';
 
 const addListener = ($body: JQuery<HTMLBodyElement>): void => {
-	let events: string;
 	if ('ontouchstart' in document) {
-		events = 'touchstart touchend';
+		$body.on('touchstart touchend', {passive: true}, (): void => {
+			wordCount($body);
+		});
 	} else {
-		events = 'mouseup keyup';
+		$body.on('mouseup keyup', (): void => {
+			wordCount($body);
+		});
 	}
-
-	$body.on(events, (): void => {
-		wordCount($body);
-	});
 };
 
 export {addListener};

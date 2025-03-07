@@ -1,9 +1,7 @@
 import {section, sectionList, talkPageLink} from './OnlineAdmins.module.less';
 import React from 'ext.gadget.JSX';
 import {getMessage} from '../i18n';
-
-const sanitize = (string: string) =>
-	string.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&lt;').replace(/"/g, '&quot;');
+import {sanitize} from '../util/sanitize';
 
 interface UserLinkProps {
 	userName: string;
@@ -12,6 +10,12 @@ interface UserLinkProps {
 interface GroupListProps {
 	groupName: string;
 	userNames: string[];
+}
+
+interface OnlineAdminsListProps {
+	stewards: string[];
+	sysops: string[];
+	patrollers: string[];
 }
 
 const UserLink = ({userName}: UserLinkProps) => (
@@ -32,22 +36,34 @@ const UserLink = ({userName}: UserLinkProps) => (
 
 const onlineCountText: string = getMessage(' ($1 online):');
 
-const GroupList = ({groupName, userNames}: GroupListProps) => (
-	<div className={section}>
-		<span>{groupName}</span>
-		<span>{onlineCountText.replace('$1', String(userNames.length))}</span>
-		<ul className={sectionList}>
-			{userNames.map((user) => (
-				<UserLink key={user} userName={user} />
-			))}
-		</ul>
+const GroupList = ({groupName, userNames}: GroupListProps) =>
+	groupName && userNames.length ? (
+		<div className={section}>
+			<span>{groupName}</span>
+			<span>{onlineCountText.replace('$1', String(userNames.length))}</span>
+			<ul className={sectionList}>
+				{userNames.map((user) => (
+					<UserLink key={user} userName={user} />
+				))}
+			</ul>
+		</div>
+	) : (
+		<></>
+	);
+
+const ListTitle = () => <p>{getMessage('OnlineWithin30Minutes')}</p>;
+
+const OnlineAdminsList = ({stewards, sysops, patrollers}: OnlineAdminsListProps) => (
+	<div>
+		<ListTitle />
+		{stewards.length ? <GroupList groupName={getMessage('Stewards')} userNames={stewards} /> : <></>}
+		{sysops.length ? <GroupList groupName={getMessage('SysOps')} userNames={sysops} /> : <></>}
+		{patrollers.length ? <GroupList groupName={getMessage('Patrollers')} userNames={patrollers} /> : <></>}
 	</div>
 );
 
-const groupListElement = (groupName: string, userNames: string[]) => (
-	<GroupList groupName={groupName} userNames={userNames} />
+const getOnlineAdminsList = ({stewards, sysops, patrollers}: OnlineAdminsListProps) => (
+	<OnlineAdminsList stewards={stewards} sysops={sysops} patrollers={patrollers} />
 );
 
-const listTitle = () => <p>{getMessage('OnlineWithin30Minutes')}</p>;
-
-export {groupListElement, listTitle};
+export {getOnlineAdminsList};

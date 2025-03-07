@@ -2,6 +2,6 @@
 	"enable": true,
 	"description": "<span id=\"Gadget-Util\"></span> 工具函数库",
 	"section": "compatibility",
-	"dependencies": ["ext.gadget.React", "jquery.textSelection"],
+	"dependencies": ["ext.gadget.JSX", "jquery.textSelection", "mediawiki.storage"],
 	"hidden": true
 }

@@ -4,6 +4,7 @@ import {padWithZeroes} from './util/padWithZeroes';
 const showTime = ($element: JQuery): void => {
 	const {UTCLiveClockTimeZone: windowUTCLiveClockTimeZone} = window;
 	let timezone: string =
+		// eslint-disable-next-line @typescript-eslint/no-base-to-string
 		(windowUTCLiveClockTimeZone ? String(windowUTCLiveClockTimeZone) : '') || OPTIONS.defaultTimeZone;
 
 	// Set the time.

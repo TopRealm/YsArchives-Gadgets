@@ -1,3 +1,5 @@
 {
-	"version": 2.0
+	"storageKeyGlobal": "ext.gadget.MarkRights_global-",
+	"storageKeyLocal": "ext.gadget.MarkRights_local-",
+	"version": 2.1
 }

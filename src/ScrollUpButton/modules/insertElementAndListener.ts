@@ -1,33 +1,33 @@
-import {scrollDownButton, scrollUpButton} from '../components/scrollButton';
+import {ScrollDownButton, ScrollUpButton} from '../components/scrollButton';
 import {changeOpacityWhenMouseEnterOrLeave} from 'ext.gadget.Util';
 import {tippy} from 'ext.gadget.Tippy';
 
-const insertElementandListener = (): void => {
-	const $body = $('body');
-	const onMouseEnterMouseLeave = (event: JQuery.TriggeredEvent): void => {
+const insertElementandListener = ($body: JQuery<HTMLBodyElement>): void => {
+	const onMouseEnterMouseLeave = (event: MouseEvent): void => {
 		changeOpacityWhenMouseEnterOrLeave(event);
 	};
 
-	for (const element of [scrollDownButton, scrollUpButton]) {
-		const $element = $(element);
-		$element.on('mouseenter mouseleave', onMouseEnterMouseLeave);
-		$body.append($element);
+	const scrollDownButton = ScrollDownButton(onMouseEnterMouseLeave);
+	const scrollUpButton = ScrollUpButton(onMouseEnterMouseLeave);
 
-		tippy($element.get(0) as HTMLImageElement, {
+	for (const element of [scrollDownButton, scrollUpButton]) {
+		$body.append(element);
+
+		tippy(element, {
 			arrow: true,
-			content: $element.attr('alt') as string,
+			content: element.getAttribute('alt') as string,
 			placement: 'left',
 		});
 	}
 
 	const scrollListener = (): void => {
-		const $scrollDownButton = $(scrollDownButton);
-		const $scrollUpButton = $(scrollUpButton);
-		let downButtonButtom, upButtonButtom;
+		let downButtonButtom: string;
+		let upButtonButtom: string;
+
 		if (
 			document.querySelector('#proveit') ||
 			document.querySelector('.gadget-cat_a_lot-container') ||
-			document.querySelector('.wordcount')
+			document.querySelector('#gadget-word_count-tip')
 		) {
 			downButtonButtom = '85px';
 			upButtonButtom = '127px';
@@ -35,10 +35,12 @@ const insertElementandListener = (): void => {
 			downButtonButtom = '45px';
 			upButtonButtom = '85px';
 		}
-		$scrollDownButton.css('bottom', downButtonButtom);
-		$scrollUpButton.css('bottom', upButtonButtom);
+
+		scrollDownButton.style.bottom = downButtonButtom;
+		scrollUpButton.style.bottom = upButtonButtom;
 	};
 	const scrollListenerWithThrottle: typeof scrollListener = mw.util.throttle(scrollListener, 200);
+
 	$(window).on('scroll selectionchange', scrollListenerWithThrottle);
 };
 

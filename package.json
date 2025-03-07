@@ -48,11 +48,13 @@
 	],
 	"dependencies": {
 		"@bhsd/codemirror-mediawiki": "^2.13.0",
+		"@bhsd/common": "^0.6.7",
 		"@types/toastify-js": "^1.12.3",
 		"chinese-days": "^1.5.0",
 		"clipboard": "^2.0.11",
 		"filter-altered-clicks": "^2.0.1",
 		"jsx-dom": "^8.1.4",
+		"monaco-editor": "^0.52.2",
 		"select2": "^4.0.13",
 		"svgo": "^3.3.2",
 		"tippy.js": "^6.3.7",

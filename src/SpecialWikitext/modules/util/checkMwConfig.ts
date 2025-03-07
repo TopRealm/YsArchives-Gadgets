@@ -1,6 +1,6 @@
 import {generateArray} from 'ext.gadget.Util';
 
-const allMwConfig: MediaWikiConfigMap = mw.config.get();
+const allMwConfig: ReturnType<typeof mw.config.get> = mw.config.get();
 
 // 检查MediaWiki的设置
 const checkMwConfig = (configKey: string, expectConfig: string | string[]): boolean => {
@@ -9,6 +9,7 @@ const checkMwConfig = (configKey: string, expectConfig: string | string[]): bool
 		return false;
 	}
 
+	// eslint-disable-next-line @typescript-eslint/no-base-to-string
 	mwConfig = String(mwConfig).toLowerCase().trim();
 	if (!mwConfig) {
 		return false;

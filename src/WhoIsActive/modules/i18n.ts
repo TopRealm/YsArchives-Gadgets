@@ -1,4 +1,4 @@
-import type {TimeSpan} from './getLastActiveMarker';
+import type {TimeSpan} from './util/getLastActiveMarker';
 import {localize} from 'ext.gadget.i18n';
 
 const getI18nMessages = () => {
