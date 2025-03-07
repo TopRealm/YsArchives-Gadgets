@@ -69,7 +69,7 @@ import {mwApi} from './api';
 			(self.wpTextbox1 as HTMLTextAreaElement).value = newVal;
 		};
 		const writeStorage = (val: string) => {
-			mw.storage.set(storageItemName, val, 6048e2); // 7 days
+			mw.storage.set(storageItemName, val, 60 * 60 * 24 * 7); // 7 days
 		};
 		dlgButtons['Yes, Remove'] = function () {
 			doRemove();
@@ -92,12 +92,13 @@ import {mwApi} from './api';
 			const $el: JQuery<HTMLElement> = $(this);
 			$el.off('click').text('Please wait.');
 			$permaSaveHint.addClass('ui-state-disabled');
-			const params = {
+			const params: ApiEditPageParams = {
 				action: 'edit',
+				format: 'json',
 				title: `User:${mw.config.get('wgUserName')}/common.js`,
 				summary: `${selfName}Saving HotCat configuration.`,
 				appendtext: $el.data('addText') as string,
-			} as const;
+			};
 			const editDone = (editStat?: {error?: {code?: string; info?: string}}) => {
 				if (!editStat) {
 					return;
@@ -238,13 +239,14 @@ import {mwApi} from './api';
 				$el.text('Template not found!');
 				return;
 			}
-			const params = {
+			const params: ApiEditPageParams = {
+				text,
 				action: 'edit',
+				format: 'json',
 				title: mw.config.get('wgPageName'),
 				summary: `${selfName}Categories are checked and OK. You can help [[Category:Media needing category review|reviewing]]!`,
 				nocreate: true,
-				text,
-			} as const;
+			};
 			const editDone = (editStat?: {error?: {code?: string; info?: string}}) => {
 				if (!editStat) {
 					return;

@@ -1,0 +1,7 @@
+{
+	"enable": true,
+	"description": "<sup><abbr title=\"默认为所有用户启用\">D</abbr></sup><span id=\"Gadget-LinkSpacing\"></span> 为条目内连续的链接插入间隔",
+	"section": "browser",
+	"default": true,
+	"dependencies": ["ext.gadget.JSX"]
+}

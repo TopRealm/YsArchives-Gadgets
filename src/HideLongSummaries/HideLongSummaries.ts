@@ -14,12 +14,10 @@ void getBody().then(function hideLongSummaries($body: JQuery<HTMLBodyElement>): 
 
 		$(element).addClass(CLASS_NAME_LONG).hide();
 
-		$switches.push(
-			$('<a>')
-				.addClass(CLASS_NAME_SWITCH)
-				.text(`[${getMessage('Expand')}]`)
-				.insertAfter(element)
-		);
+		$switches[$switches.length] = $('<a>')
+			.addClass(CLASS_NAME_SWITCH)
+			.text(`[${getMessage('Expand')}]`)
+			.insertAfter(element); // Replace Array#push to avoid core-js polyfilling
 
 		$('<span>')
 			.addClass(`comment comment--without-parentheses ${CLASS_NAME_SHORT}`)

@@ -1,15 +1,15 @@
 import * as OPTIONS from '~/AjaxLogin/options.json';
-import {IS_WG_EDIT_OR_SUBMIT_ACTION, WG_PAGE_NAME, WG_SKIN} from './constant';
 import {generateMessageDialogProperty} from './util/generateMessageDialogProperty';
 import {getMessage} from './i18n';
 import {initWindowManager} from './initWindowManager';
 
-const isCitizen: boolean = WG_SKIN === 'citizen';
+const {skin, wgAction, wgPageName} = mw.config.get();
+const isCitizen: boolean = skin === 'citizen';
 const loginURL: string = mw.util.getUrl('Special:UserLogin', {
-	returnto: WG_PAGE_NAME,
+	returnto: wgPageName,
 });
 const registerURL: string = mw.util.getUrl('Special:CreateAccount', {
-	returnto: WG_PAGE_NAME,
+	returnto: wgPageName,
 });
 
 let messageDialog: OO.ui.MessageDialog;
@@ -65,7 +65,7 @@ const initDialog = ($body: JQuery<HTMLBodyElement>): void => {
 			});
 	}
 
-	if (IS_WG_EDIT_OR_SUBMIT_ACTION) {
+	if (['edit', 'submit'].includes(wgAction)) {
 		openDialog();
 	}
 };

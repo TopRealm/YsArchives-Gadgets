@@ -1,6 +1,6 @@
 {
 	"enable": true,
-	"description": "<sup><abbr title=\"默认为所有注册用户启用\">U</abbr></sup><span id=\"Gadget-HotCat\"></span> [[Help:HotCat|HotCat]] <small>帮助用户增加、移除及修改分类</small>",
+	"description": "<sup><abbr title=\"默认为所有确认用户启用\">C</abbr></sup><span id=\"Gadget-HotCat\"></span> [[Help:HotCat|HotCat]] <small>帮助用户增加、移除及修改分类</small>",
 	"section": "edit",
 	"default": true,
 	"dependencies": [

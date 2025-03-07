@@ -1,6 +1,6 @@
 import * as OPTIONS from '../../options.json';
+import {isValidKey, uniqueArray} from 'ext.gadget.Util';
 import {generateLanguageCodeSplitArray} from './generateLanguageCodeSplitArray';
-import {isValidKey} from 'ext.gadget.Util';
 
 const generateDefaultFallbackList = (): string[] => {
 	const documentLanguageSplitArray: string[] = generateLanguageCodeSplitArray(document.documentElement.lang);
@@ -24,7 +24,7 @@ const generateDefaultFallbackList = (): string[] => {
 		}
 	}
 
-	return [...new Set([languageCode, OPTIONS.defaultLanguageCode])];
+	return uniqueArray([languageCode, OPTIONS.defaultLanguageCode]); // Replace Set with uniqueArray, avoiding core-js polyfilling
 };
 
 export {generateDefaultFallbackList};

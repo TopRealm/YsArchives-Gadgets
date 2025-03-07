@@ -1,19 +1,20 @@
-import {WG_NAMESPACE_NUMBER, WG_PAGE_NAME} from './modules/constant';
 import {getBody} from 'ext.gadget.Util';
 import {getMessage} from './modules/i18n';
 
 void getBody().then(function HRTProtectLink($body: JQuery<HTMLBodyElement>): void {
-	if (![10, 828].includes(WG_NAMESPACE_NUMBER)) {
+	const {wgNamespaceNumber} = mw.config.get();
+	if (![10, 828].includes(wgNamespaceNumber)) {
 		return;
 	}
 
-	const semiProtectURL: string = mw.util.getUrl(WG_PAGE_NAME, {
+	const {wgPageName} = mw.config.get();
+	const semiProtectURL: string = mw.util.getUrl(wgPageName, {
 		action: 'protect',
 		'mwProtect-level-edit': 'autoconfirmed',
 		'mwProtect-level-move': 'autoconfirmed',
 		'mwProtect-reason': getMessage('HRT'),
 	});
-	const fullProtectURL: string = mw.util.getUrl(WG_PAGE_NAME, {
+	const fullProtectURL: string = mw.util.getUrl(wgPageName, {
 		action: 'protect',
 		'mwProtect-level-edit': 'sysop',
 		'mwProtect-level-move': 'sysop',

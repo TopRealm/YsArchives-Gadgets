@@ -1,8 +1,7 @@
 import * as OPTIONS from '../options.json';
-import {WG_CONTENT_LANGUAGE, WG_USER_LANGUAGE, WG_USER_VARIANT} from './constant';
+import {isValidKey, uniqueArray} from 'ext.gadget.Util';
 import type {I18nCandidates} from './types';
 import {generateDefaultFallbackList} from './util/generateDefaultFallbackList';
-import {isValidKey} from 'ext.gadget.Util';
 
 const initI18nMethods = (): typeof i18nMethods => {
 	const defaultFallbackList: string[] = generateDefaultFallbackList();
@@ -16,7 +15,8 @@ const initI18nMethods = (): typeof i18nMethods => {
 			}
 		}
 
-		for (const key of new Set([locale, ...fallbackList, ...defaultFallbackList])) {
+		// Replace Set with uniqueArray, avoiding core-js polyfilling
+		for (const key of uniqueArray([locale, ...fallbackList, ...defaultFallbackList])) {
 			if (isValidKey(candidates, key)) {
 				return candidates[key];
 			}
@@ -25,15 +25,17 @@ const initI18nMethods = (): typeof i18nMethods => {
 		return '';
 	};
 
+	const {wgContentLanguage, wgUserLanguage, wgUserVariant} = mw.config.get();
+
 	const i18nMethods: typeof import('ext.gadget.i18n') = {
 		content: (candidates) => {
-			return elect(candidates, WG_CONTENT_LANGUAGE);
+			return elect(candidates, wgContentLanguage);
 		},
 		localize: (candidates) => {
-			return elect(candidates, WG_USER_LANGUAGE);
+			return elect(candidates, wgUserLanguage);
 		},
 		vary: (candidates) => {
-			return elect(candidates, WG_USER_VARIANT ?? WG_CONTENT_LANGUAGE);
+			return elect(candidates, wgUserVariant ?? wgContentLanguage);
 		},
 	};
 

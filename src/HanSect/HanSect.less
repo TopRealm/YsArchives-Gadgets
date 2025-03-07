@@ -1,46 +1,22 @@
-@selector: ~'.ext-discussiontools-replytool-enabled, .ext-discussiontools-newtopictool-enabled';
+@import (reference) './modules/textIndent.less';
 
-body.ns-subject:not(@{selector}) .mw-parser-output,
-body.skin-citizen.ns-subject:not(@{selector}) .mw-parser-output > section,
-.hansect {
-	& > p {
-		text-indent: 2em; /* 缩进两个字 */
-		& > * {
-			text-indent: 0; /* 段落内若有其他元素，则不再缩进 */
-		}
-	}
+@body_not_selector: ~'.ext-discussiontools-replytool-enabled, .ext-discussiontools-newtopictool-enabled';
+@hansect_selector: ~'.hansect';
 
-	& > ul,
-	& > ol {
-		margin-left: 3em;
+body.ns-subject:not(@{body_not_selector}) .ve-ui-surface-source .mw-parser-output > p,
+body.skin-citizen.ns-subject:not(@{body_not_selector}) .ve-ui-surface-source .mw-parser-output > section > p {
+	text-indent: unset !important;
+	line-height: unset !important;
+}
 
-		& > *:not(ul, ol, li) {
-			margin-left: 0;
-		}
-	}
-
-	ul,
-	ol {
-		> li {
-			> ul,
-			> ol {
-				margin-left: 1em;
-			}
-		}
-	}
-
-	& > p,
-	& > ul,
-	& > ol {
-		line-height: 1.75; /* 行距设置 */
-	}
+body.ns-subject:not(@{body_not_selector}) .mw-parser-output,
+body.skin-citizen.ns-subject:not(@{body_not_selector}) .mw-parser-output > section,
+@{hansect_selector} {
+	.p_textIndent_2em();
+	.ul_ol_marginLeft();
 }
 
 /* TemplateData */
 .mw-templatedata-doc-wrap p.mw-templatedata-doc-desc {
-	text-indent: 2em;
-
-	& > * {
-		text-indent: 0;
-	}
+	.p_textIndent_2em();
 }
