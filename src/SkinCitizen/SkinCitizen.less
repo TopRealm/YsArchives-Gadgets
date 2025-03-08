@@ -47,11 +47,6 @@ body {
 	background-color: initial !important;
 }
 
-/* 滚动条显示主题色 */
-* {
-	scrollbar-color: var(--color-primary) transparent;
-	caret-color: var(--color-primary);
-}
 
 /* 字体 */
 :root {
@@ -59,6 +54,27 @@ body {
 	--font-family-serif: var(--fonts-serif, serif);
 	--font-family-monospace: var(--fonts-monospace, monospace);
 }
+
+/* 修正基色对应css属性 */
+:root {
+    --color-base: oklch(var(--color-base-oklch__l) var(--color-base-oklch__c) var(--color-base-oklch__h));
+}
+
+/* 定制主题色并调整背景 */
+:root{
+	--color-base-oklch__l: 57.;
+    --color-base-oklch__c: 0.1097;
+    --color-base-oklch__h: 158.54;
+	--color-surface-1: color-mix(in srgb, oklch(var(--color-surface-1-oklch__l) var(--color-surface-1-oklch__c) var(--color-progressive-oklch__h)) 20%, #fff) ;
+	--color-surface-2: color-mix(in srgb, oklch(var(--color-surface-1-oklch__l) var(--color-surface-1-oklch__c) var(--color-progressive-oklch__h))10%, #fff) ;
+}
+
+/* 滚动条显示主题色 */
+* {
+	scrollbar-color: var(--color-progressive) transparent;
+	caret-color: var(--color-progressive);
+}
+
 
 /* 页面内容宽度 */
 @not_figure_selector: ~'figure, .mbox, .mw-halign-left, .mw-halign-none, .mw-halign-center';
@@ -638,4 +654,9 @@ header.mw-body-header {
 	background-color: rgba(240, 248, 255, 0.65);
 	padding: 1rem;
 	border-radius: 0.5rem;
+}
+
+/* 修复图片显示*/
+figure[typeof~='mw:File'] > a:first-child img, figure[typeof~='mw:File/Frameless'] > a:first-child img, figure[typeof~='mw:File/Thumb'] > a:first-child img, figure[typeof~='mw:File/Frame'] > a:first-child img, figure[typeof~='mw:File'] > a:first-child source, figure[typeof~='mw:File/Frameless'] > a:first-child source, figure[typeof~='mw:File/Thumb'] > a:first-child source, figure[typeof~='mw:File/Frame'] > a:first-child source {
+    contain: inherit;
 }
