@@ -8,6 +8,6 @@ if (username) {
 	imgsrc = `${mw.config.get('wgServer')}/images/avatars/default/default.gif`;
 }
 const $body: JQuery<HTMLBodyElement> = $('body');
-$body.find('#citizen-userMenu__buttonCheckbox .mw-ui-icon-wikimedia-userAvatar').css({
-	'background-image': `url(${imgsrc})`,
+$body.find('.citizen-ui-icon.mw-ui-icon-userAvatar.mw-ui-icon-wikimedia-userAvatar').css({
+	'background-image': `url(${imgsrc}) center / 100%`,
 });
