@@ -25,7 +25,7 @@
 * AddSectionPlus[ResourceLoader|dependencies=ext.gadget.Util|rights=edit|requiresES6]|AddSectionPlus.js|AddSectionPlus.css
 * AjaxLogin[ResourceLoader|default|dependencies=ext.gadget.FilterAlteredClicks,ext.gadget.i18n,ext.gadget.JSX,ext.gadget.Toastify,ext.gadget.Util,mediawiki.api,mediawiki.util,oojs-ui-core,oojs-ui-windows,oojs-ui.styles.icons-interactions,oojs-ui.styles.icons-user|hidden|requiresES6]|AjaxLogin.js
 * AutoLink[ResourceLoader|dependencies=ext.gadget.Util,mediawiki.util|requiresES6]|AutoLink.js
-* ButtonFlair[ResourceLoader|default|hidden|requiresES6]|ButtonFlair.js
+* ButtonFlair[ResourceLoader|default|hidden|requiresES6]|ButtonFlair.js|ButtonFlair.css
 * CodeLinks[ResourceLoader|default|dependencies=ext.gadget.JSX,ext.gadget.Util,mediawiki.util|rights=edit|requiresES6]|CodeLinks.js
 * ConsolePrintWordartLogo[ResourceLoader|default|hidden|requiresES6]|ConsolePrintWordartLogo.js
 * CopyCodeBlock[ResourceLoader|actions=view|default|dependencies=ext.gadget.Clipboard,ext.gadget.i18n,ext.gadget.Tippy,ext.gadget.Toastify,mediawiki.util,oojs-ui-core,oojs-ui.styles.icons-editing-advanced|requiresES6]|CopyCodeBlock.js|CopyCodeBlock.css
@@ -115,7 +115,8 @@
 * Wikiplus-highlight[ResourceLoader|actions=view|dependencies=ext.gadget.Util,ext.gadget.Wikiplus,user.options|rights=skipcaptcha|requiresES6]|Wikiplus-highlight.js
 
 == skin ==
-* Mainpage[ResourceLoader|default|hidden|skins=citizen|requiresES6]|Mainpage.js|Mainpage.css
+* Mainpage_CSS[ResourceLoader|default|hidden|skins=citizen|requiresES6]|Mainpage_CSS-Mainpage.css
+* Mainpage_JS[ResourceLoader|default|hidden|skins=citizen|requiresES6]|Mainpage_JS-Mainpage.js
 * SkinCitizen[ResourceLoader|default|hidden|skins=citizen|requiresES6]|SkinCitizen.css
 * SkinGongbi[ResourceLoader|default|hidden|skins=gongbi|requiresES6]|SkinGongbi.css
 * SkinVector[ResourceLoader|default|hidden|skins=vector,vector-2022|requiresES6]|SkinVector.css
