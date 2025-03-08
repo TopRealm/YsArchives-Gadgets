@@ -1,4 +1,4 @@
-import animateNumber from '../util/animateNumber';
+import animateNumber from './util/animateNumber';
 const libHeader = () => {
 	const elements = document.querySelectorAll('.value');
 

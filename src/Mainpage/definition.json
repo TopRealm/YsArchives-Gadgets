@@ -1,8 +1,0 @@
-{
-	"enable": true,
-	"description": "<sup><abbr title=\"默认为所有用户启用\">D</abbr></sup><span id=\"Gadget-Mainpage\"></span> 档案馆2025新版首页样式表与ts脚本",
-	"section": "skin",
-	"default": true,
-	"hidden": true,
-	"skins": ["citizen"]
-}

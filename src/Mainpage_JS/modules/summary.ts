@@ -3,7 +3,7 @@
  * @Author: AwAjie
  * @Date: 2025-03-01 01:13:11
  */
-import {getMonthFromWeek, getPreviousOddWeek} from '../util/dateLookup';
+import {getMonthFromWeek, getPreviousOddWeek} from './util/dateLookup';
 
 interface Res {
 	query: {
