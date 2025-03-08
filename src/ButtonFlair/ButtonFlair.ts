@@ -1,3 +1,5 @@
+import './ButtonFlair.less';
+
 const navigationItems = document.querySelectorAll('.button-flair');
 const navigationItemsbg = document.querySelectorAll('.button-flair-bg');
 for (const [index, item] of navigationItems.entries()) {
