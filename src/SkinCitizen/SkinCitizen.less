@@ -55,16 +55,6 @@ body {
 	--font-family-serif: var(--fonts-serif, serif);
 	--font-family-monospace: var(--fonts-monospace, monospace);
 
-	--color-base: oklch(var(--color-base-oklch__l) var(--color-base-oklch__c) var(--color-base-oklch__h));
-
-	--color-base-oklch__l: 57.45%;
-	--color-base-oklch__c: 0.1097;
-	--color-base-oklch__h: 158.54;
-
-	--color-progressive-oklch__l: 57.45%;
-	--color-progressive-oklch__c: 0.1097;
-	--color-progressive-oklch__h: 158.54;
-
 	--color-surface-1: color-mix(in srgb, oklch(var(--color-surface-1-oklch__l) var(--color-surface-1-oklch__c) var(--color-progressive-oklch__h)) 20%, #fff);
 	--color-surface-2: color-mix(in srgb, oklch(var(--color-surface-1-oklch__l) var(--color-surface-1-oklch__c) var(--color-progressive-oklch__h)) 10%, #fff);
 }
@@ -665,8 +655,4 @@ figure[typeof~='mw:File/Frameless'] > a:first-child source,
 figure[typeof~='mw:File/Thumb'] > a:first-child source,
 figure[typeof~='mw:File/Frame'] > a:first-child source {
 	contain: inherit;
-}
-
-.mw-parser-output {
-	color: #000;
 }
