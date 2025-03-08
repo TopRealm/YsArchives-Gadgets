@@ -9,5 +9,5 @@ if (username) {
 }
 const $body: JQuery<HTMLBodyElement> = $('body');
 $body.find('.citizen-ui-icon.mw-ui-icon-userAvatar.mw-ui-icon-wikimedia-userAvatar').css({
-	'background-image': `url(${imgsrc}) center / 100%`,
+	background: `url(${imgsrc}) center / 100%`,
 });
