@@ -4,6 +4,5 @@
 	"section": "skin",
 	"default": true,
 	"hidden": true,
-	"namespaces": [0],
 	"skins": ["citizen"]
 }
