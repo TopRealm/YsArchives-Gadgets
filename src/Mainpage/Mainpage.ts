@@ -5,4 +5,4 @@ import libSummary from './modules/typescript/summary';
 
 libHeader();
 searchInjection();
-await libSummary();
+libSummary();
