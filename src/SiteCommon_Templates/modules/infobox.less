@@ -16,10 +16,12 @@
 	border: 1px solid #a2a9b1;
 	margin: 0.5em 0;
 	background-color: #f8f9fa;
-	border-spacing: 0.25em;
 	color: @const-color-black;
 	float: none !important;
 	font-size: 90%;
+	// 修复溢出
+	table-layout: fixed;
+	border-spacing: 0;
 
 	@media (min-width: 768px) {
 		width: auto;

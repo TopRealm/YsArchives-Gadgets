@@ -1,0 +1,14 @@
+// fanmadeshow
+.home-link {
+	text-align: center;
+	margin: auto 0;
+}
+
+// 修复1.43导致的同人展示不显示
+#home-card-officallinks {
+	.home-link {
+		figure[typeof~='mw:File'] > a:first-child img {
+			contain: none;
+		}
+	}
+}
