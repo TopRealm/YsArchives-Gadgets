@@ -84,7 +84,6 @@ const showNotices = ($mountPoint: JQuery, index: number, remoteNotices?: RemoteN
 	const noticeStyleId: number = $notice.data('asn-style-id') as number;
 	const currentNoticeHtml: string = $currentNotice.html();
 	if (currentNoticeHtml && currentNoticeHtml !== noticeHtml) {
-		// eslint-disable-next-line no-jquery/no-animate
 		$currentNotice.stop().fadeOut((): void => {
 			for (const style of noticeStyles) {
 				style.disabled = true;

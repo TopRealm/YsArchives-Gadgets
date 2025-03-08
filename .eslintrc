@@ -136,6 +136,7 @@
 		"no-inline-comments": "off",
 		"no-invalid-this": "off",
 		"no-iterator": "error",
+		"no-jquery/no-done-fail": "off",
 		"no-labels": "error",
 		"no-lone-blocks": "error",
 		"no-lonely-if": "error",
