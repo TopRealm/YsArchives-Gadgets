@@ -21,7 +21,7 @@ const libSummary = async () => {
 	const k = getPreviousOddWeek();
 	const d = new Date().getFullYear();
 	const titleStr = `有兽档案馆:档案馆双周报/${d}年${getMonthFromWeek(d, k + 1)}月/第${k}-${k + 1}周`;
-	const url = `/api/api.php?action=query&prop=extracts&exsectionformat=plain&exchars=175&format=json&titles=${titleStr}/summary`;
+	const url = `/api.php?action=query&prop=extracts&exsectionformat=plain&exchars=175&format=json&titles=${titleStr}/summary`;
 	try {
 		const a = await fetch(url);
 		const res = (await a.json()) as Res;
