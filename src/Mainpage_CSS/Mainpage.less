@@ -61,6 +61,27 @@ html.client-darkmode .home-card {
 	margin-right: 0.3rem;
 }
 
+html.client-darkmode .mw-parser-output::after {
+	background: linear-gradient(90deg, transparent, #1e1e1e, transparent);
+}
+
+// 主页主体图片不反色
+html.client-darkmode .mw-parser-output img {
+	filter: none;
+}
+
+// 主页主体部分在darkmode下不反色
+html.client-darkmode .mw-parser-output {
+	filter: invert(1) hue-rotate(180deg);
+	color: #fff;
+	background-color: rgba(30, 30, 30, 0.9);
+}
+
+// 主页主体部分图片不反色
+html.client-darkmode .mw-parser-output .filter {
+	filter: invert(1) hue-rotate(180deg);
+}
+
 /* index body */
 .page-有兽档案馆_首页.action-view,
 .page-Template_首页 {
@@ -88,23 +109,6 @@ html.client-darkmode .home-card {
 		position: relative;
 	}
 
-	// 主页主体部分在darkmode下不反色
-	html.client-darkmode .mw-parser-output {
-		filter: invert(1) hue-rotate(180deg);
-		color: #fff;
-		background-color: rgba(30, 30, 30, 0.9);
-	}
-
-	// 主页主体图片不反色
-	html.client-darkmode .mw-parser-output img {
-		filter: none;
-	}
-
-	// 主页主体部分图片不反色
-	html.client-darkmode .mw-parser-output .filter {
-		filter: invert(1) hue-rotate(180deg);
-	}
-
 	// 主页主体部分背景渐变
 	.mw-parser-output::after {
 		content: '';
@@ -112,10 +116,6 @@ html.client-darkmode .home-card {
 		inset: 0;
 		z-index: -1;
 		background: linear-gradient(90deg, transparent, #fff, transparent);
-	}
-
-	html.client-darkmode .mw-parser-output::after {
-		background: linear-gradient(90deg, transparent, #1e1e1e, transparent);
 	}
 
 	// 内容区域

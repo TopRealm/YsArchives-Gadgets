@@ -19,13 +19,13 @@
 }
 
 // 修复logo图片宽度
-.list-header .list-header-logo-file img {
-	width: 100%;
+.list-header .list-header-logo-file[typeof~='mw:File'] img {
+	width: 150px;
 	height: auto;
 }
 
-.list-header-logo-img {
-	width: 150px;
+html.client-darkmode .list-header .list-header-logo-file[typeof~='mw:File'] img {
+	filter: none;
 }
 
 .list-header-logo div:first-child {
