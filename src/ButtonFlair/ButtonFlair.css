@@ -1,3 +1,4 @@
+/* 按钮区域 */
 .button-flair {
 	position: relative;
 	overflow: hidden;
@@ -7,6 +8,7 @@
 	border-radius: 50px;
 }
 
+/* 按钮扩散背景部分包含块 */
 .button-flair-bg {
 	position: absolute;
 	left: 0;
@@ -17,6 +19,7 @@
 	z-index: 0;
 }
 
+/* 按钮扩散背景部分 */
 .button-flair-bg i {
 	display: block;
 	width: 100%;
@@ -27,22 +30,27 @@
 	transition: transform 0.5s;
 }
 
+/* 鼠标移入时样式 */
 .button-flair-bg.scale1 i {
 	transform: scale(1);
 }
 
+/* light时保持颜色为黑色 */
 .button-flair a {
 	color: #000 !important;
 }
 
+/* dark时保持颜色为白色 */
 html.client-darkmode .button-flair a {
 	color: #fff !important;
 }
 
+/* 在鼠标移入时btn字体颜色为白色 */
 .button-flair:hover .button-flair-text {
 	color: #fff;
 }
 
+/* 按钮内文字样式 */
 .button-flair-text {
 	font-weight: bold;
 	position: relative;
