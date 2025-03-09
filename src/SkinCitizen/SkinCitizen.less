@@ -656,3 +656,25 @@ figure[typeof~='mw:File/Thumb'] > a:first-child source,
 figure[typeof~='mw:File/Frame'] > a:first-child source {
 	contain: inherit;
 }
+
+/* 移除可视化编辑按钮与普通编辑按钮间的圆角 */
+#ca-ve-edit {
+	border-bottom-right-radius: 0;
+	border-top-right-radius: 0;
+}
+
+/* 增大标题字号 */
+.mw-page-title-main {
+	font-size: x-large;
+}
+
+/* 调整页脚版权信息排版 */
+#footer-info-copyright {
+	font-size: large;
+	margin-top: 1em;
+	margin-bottom: -0.5em;
+}
+
+section#footer-info-disclaimer-info {
+	margin-top: -1em;
+}
