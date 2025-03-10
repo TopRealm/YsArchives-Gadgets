@@ -61,28 +61,28 @@ html.client-darkmode .home-card {
 	margin-right: 0.3rem;
 }
 
-html.client-darkmode .mw-parser-output.mw-content-ltr::after {
-	background: linear-gradient(90deg, transparent, #1e1e1e, transparent);
-}
-
-// 主页主体图片不反色
-html.client-darkmode .mw-parser-output.mw-content-ltr img {
-	filter: none;
-	-webkit-filter: none;
-}
-
-// 主页主体部分在darkmode下不反色
-html.client-darkmode .mw-parser-output.mw-content-ltr {
-	filter: invert(1) hue-rotate(180deg);
-	-webkit-filter: invert(1) hue-rotate(180deg);
-	color: #fff;
-	background-color: rgba(30, 30, 30, 0.9);
-}
-
-// 主页主体部分图片不反色
-html.client-darkmode .mw-parser-output.mw-content-ltr .filter {
-	filter: invert(1) hue-rotate(180deg);
-	-webkit-filter: invert(1) hue-rotate(180deg);
+// 首页暗模式
+html.client-darkmode {
+	.page-有兽档案馆_首页,
+	.page-Template_首页 {
+		.mw-parser-output.mw-content-ltr::after {
+			background: linear-gradient(90deg, transparent, #1e1e1e, transparent);
+		}
+		.mw-parser-output.mw-content-ltr img {
+			filter: none;
+			-webkit-filter: none;
+		}
+		.mw-parser-output.mw-content-ltr {
+			filter: invert(1) hue-rotate(180deg);
+			-webkit-filter: invert(1) hue-rotate(180deg);
+			color: #fff;
+			background-color: rgba(30, 30, 30, 0.9);
+		}
+		.mw-parser-output.mw-content-ltr .filter {
+			filter: invert(1) hue-rotate(180deg);
+			-webkit-filter: invert(1) hue-rotate(180deg);
+		}
+	}
 }
 
 /* index body */
