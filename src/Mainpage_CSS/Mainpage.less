@@ -149,6 +149,11 @@ html.client-darkmode .mw-parser-output.mw-content-ltr .filter {
 		grid-template-columns: 1fr 1fr;
 	}
 
+	// 特殊样式用于要有些要显示在移动端contentbody下部的内容
+	.mw-parser-output-content .content-footer {
+		display: none;
+	}
+
 	.list.grid-2 {
 		display: none;
 	}
@@ -182,9 +187,17 @@ html.client-darkmode .mw-parser-output.mw-content-ltr .filter {
 			border-radius: 0;
 			padding: 1rem;
 		}
+
+		// 特殊样式用于要有些要显示在移动端contentbody下部的内容
+		.mw-parser-output-content .content-footer {
+			display: block;
+		}
+		.mw-parser-output-list .content-footer {
+			display: none;
+		}
 	}
 
-	@media screen and (min-width: 769px) {
+	@media screen and (min-width: 768px) {
 		.mw-parser-output-list {
 			max-width: 320px;
 			align-items: self-start;
