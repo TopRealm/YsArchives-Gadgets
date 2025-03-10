@@ -25,7 +25,8 @@
 }
 
 html.client-darkmode .list-header .list-header-logo-file[typeof~='mw:File'] img {
-	filter: none;
+	filter: invert(1) hue-rotate(180deg);
+	-webkit-filter: invert(1) hue-rotate(180deg);
 }
 
 .list-header-logo div:first-child {

@@ -8,7 +8,7 @@
 @import './modules/summary.less';
 
 // 清除citizen样式
-.page-有兽档案馆_首页 {
+.page-有兽档案馆_首页.action-view {
 	#content {
 		.citizen-body-container {
 			all: unset;
@@ -61,29 +61,32 @@ html.client-darkmode .home-card {
 	margin-right: 0.3rem;
 }
 
-html.client-darkmode .mw-parser-output::after {
+html.client-darkmode .mw-parser-output.mw-content-ltr::after {
 	background: linear-gradient(90deg, transparent, #1e1e1e, transparent);
 }
 
 // 主页主体图片不反色
-html.client-darkmode .mw-parser-output img {
+html.client-darkmode .mw-parser-output.mw-content-ltr img {
 	filter: none;
+	-webkit-filter: none;
 }
 
 // 主页主体部分在darkmode下不反色
-html.client-darkmode .mw-parser-output {
+html.client-darkmode .mw-parser-output.mw-content-ltr {
 	filter: invert(1) hue-rotate(180deg);
+	-webkit-filter: invert(1) hue-rotate(180deg);
 	color: #fff;
 	background-color: rgba(30, 30, 30, 0.9);
 }
 
 // 主页主体部分图片不反色
-html.client-darkmode .mw-parser-output .filter {
+html.client-darkmode .mw-parser-output.mw-content-ltr .filter {
 	filter: invert(1) hue-rotate(180deg);
+	-webkit-filter: invert(1) hue-rotate(180deg);
 }
 
 /* index body */
-.page-有兽档案馆_首页.action-view,
+.page-有兽档案馆_首页,
 .page-Template_首页 {
 	// 主页按钮
 	.btn {
@@ -146,6 +149,11 @@ html.client-darkmode .mw-parser-output .filter {
 		grid-template-columns: 1fr 1fr;
 	}
 
+	// 特殊样式用于要有些要显示在移动端contentbody下部的内容
+	.mw-parser-output-content .content-footer {
+		display: none;
+	}
+
 	.list.grid-2 {
 		display: none;
 	}
@@ -179,9 +187,17 @@ html.client-darkmode .mw-parser-output .filter {
 			border-radius: 0;
 			padding: 1rem;
 		}
+
+		// 特殊样式用于要有些要显示在移动端contentbody下部的内容
+		.mw-parser-output-content .content-footer {
+			display: block;
+		}
+		.mw-parser-output-list .content-footer {
+			display: none;
+		}
 	}
 
-	@media screen and (min-width: 769px) {
+	@media screen and (min-width: 768px) {
 		.mw-parser-output-list {
 			max-width: 320px;
 			align-items: self-start;

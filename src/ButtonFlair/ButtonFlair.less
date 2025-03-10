@@ -37,7 +37,13 @@
 
 /* light时保持颜色为黑色 */
 .button-flair a {
+	text-decoration: none;
 	color: #000 !important;
+}
+
+// 隐藏mediawiki默认样式
+.button-flair a::after {
+	content: none !important;
 }
 
 /* dark时保持颜色为白色 */
