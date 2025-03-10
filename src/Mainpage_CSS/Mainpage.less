@@ -42,11 +42,6 @@
 	width: 100%;
 }
 
-html.client-darkmode .home-card {
-	box-shadow: 0 0 10px 1px rgba(30, 30, 30, 0.9);
-	background: linear-gradient(175deg, #292929, #353535 40%);
-}
-
 // 主页内容卡片title
 .home-card__label {
 	display: flex;
@@ -61,10 +56,15 @@ html.client-darkmode .home-card {
 	margin-right: 0.3rem;
 }
 
-// 首页暗模式
+// 暗模式
 html.client-darkmode {
+	// 首页暗模式
 	.page-有兽档案馆_首页,
 	.page-Template_首页 {
+		.home-card {
+			box-shadow: 0 0 10px 1px rgba(30, 30, 30, 0.9);
+			background: linear-gradient(175deg, #292929, #353535 40%);
+		}
 		.mw-parser-output.mw-content-ltr::after {
 			background: linear-gradient(90deg, transparent, #1e1e1e, transparent);
 		}
@@ -81,6 +81,17 @@ html.client-darkmode {
 		.mw-parser-output.mw-content-ltr .filter {
 			filter: invert(1) hue-rotate(180deg);
 			-webkit-filter: invert(1) hue-rotate(180deg);
+		}
+	}
+	// 同人主页暗模式样式
+	.page-Fanmade_同人主页,
+	.page-Template_同人主页 {
+		.home-card {
+			filter: invert(1) hue-rotate(180deg);
+			-webkit-filter: invert(1) hue-rotate(180deg);
+			color: #fff;
+			box-shadow: 0 0 10px 1px rgba(30, 30, 30, 0.9);
+			background: linear-gradient(175deg, #292929, #353535 40%);
 		}
 	}
 }
