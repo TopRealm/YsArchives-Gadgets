@@ -1,6 +1,8 @@
 import './ShowAvatar.less';
 /* eslint-disable no-jquery/no-parse-html-literal */
 
+const $body: JQuery<HTMLBodyElement> = $('body');
+
 const avatarUrl = new mw.Uri('https://youshou.wiki/');
 avatarUrl.query['user'] = mw.config.get('wgPageName').replace(/^user:/i, '');
 avatarUrl.path = '/extensions/Avatar/avatar.php';
@@ -11,12 +13,16 @@ const img = $('<img>').attr({
 	title: '上传头像',
 });
 const link = $('<a>').attr('href', 'https://youshou.wiki/wiki/Special:UploadAvatar').append(img);
-$('#pt-userpage').before($('<li id="pt-avatar"></li>').append(link));
+
+const $ptUserpage: JQuery = $body.find('#pt-userpage');
+const $ns2FirstHeading: JQuery = $body.find('.ns-2 #firstHeading');
+
+$ptUserpage.before($('<li id="pt-avatar"></li>').append(link));
 if (mw.config.get('wgNamespaceNumber') === 2 && !mw.config.get('wgPageName').includes('/')) {
 	const hrefUrl = new mw.Uri(avatarUrl);
 	hrefUrl.path = '/wiki/Special:Viewavatar';
 	const srcUrl = new mw.Uri(avatarUrl);
-	$('.ns-2 #firstHeading').prepend(
+	$ns2FirstHeading.prepend(
 		$('<a/>')
 			.attr({
 				href: hrefUrl,
