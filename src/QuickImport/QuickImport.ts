@@ -4,7 +4,6 @@ import {detectIfFileRedirect, refreshPage} from './modules/core';
 	const {wgNamespaceNumber, wgPageName, wgWikiID} = mw.config.get();
 
 	// 修改检测器，查找指向qiuwenbaike.cn的外部链接
-	const caViewForeignQwbk = document.querySelector("#ca-view-foreign a[href*='qiuwenbaike.cn']");
 	const redirectTextA = document.querySelector('.redirectText a');
 
 	const isFileNS: boolean = wgNamespaceNumber === 6;

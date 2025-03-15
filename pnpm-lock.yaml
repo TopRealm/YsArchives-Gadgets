@@ -37,11 +37,11 @@ importers:
   .:
     dependencies:
       '@bhsd/codemirror-mediawiki':
-        specifier: ^2.13.0
-        version: 2.15.3
+        specifier: ^2.22.1
+        version: 2.22.1(typescript@5.8.2)
       '@bhsd/common':
-        specifier: ^0.6.7
-        version: 0.6.7
+        specifier: ^0.7.0
+        version: 0.7.0(typescript@5.8.2)
       '@types/toastify-js':
         specifier: ^1.12.3
         version: 1.12.3
@@ -52,11 +52,11 @@ importers:
         specifier: ^2.0.11
         version: 2.0.11
       filter-altered-clicks:
-        specifier: ^2.0.1
+        specifier: ^2.1.1
         version: 2.1.1
       jsx-dom:
-        specifier: ^8.1.4
-        version: 8.1.4
+        specifier: ^8.1.6
+        version: 8.1.6
       monaco-editor:
         specifier: ^0.52.2
         version: 0.52.2
@@ -802,25 +802,32 @@ packages:
     resolution: {integrity: sha512-Y3IR1cRnOxOCDvMmNiym7XpXQ93iGDDPHx+Zj+NM+rg0fBaShfQLkg+hKPaZCEvg5N/LeCo4+Rj/i3FuJsIQaw==}
     engines: {node: '>=6.9.0'}
 
-  '@bhsd/codemirror-mediawiki@2.15.3':
-    resolution: {integrity: sha512-AHWxCntfuZMpc8ZtEfQQZU0WELtfiASF0AU7uhjDoHa8xyGcyKL0N6LbpR/5i2DfGl3B5UJCHs4ARlOrkRDJww==}
-    engines: {node: ^20.9.0}
+  '@bhsd/codemirror-mediawiki@2.22.1':
+    resolution: {integrity: sha512-oOVvREb7hfm0uXiz9ZsDxR2mz/FvYGGIeRGsXC2eUh9wvwIJAS23GHOS0QHHQhraCOXaFRV130d2m/Ul8Kw0sg==}
 
   '@bhsd/common@0.6.7':
     resolution: {integrity: sha512-dXm7FFauvD9J/h8lMhhcsSTW/lX9gggjDk2fQIdzNLlyQB39lofhht0c8bRpRkZAhFl8EOxLmE8W7j777z8adA==}
     hasBin: true
 
-  '@codemirror/language@6.10.2':
-    resolution: {integrity: sha512-kgbTYTo0Au6dCSc/TFy7fK3fpJmgHDv1sG1KNQKJXVi+xBTEeBPY/M30YXiU6mMXeH+YIDLsbrT4ZwNRdtF+SA==}
+  '@bhsd/common@0.7.0':
+    resolution: {integrity: sha512-6IEjgSOr6PkBnyVpoSM7Rzl1wjb2vcW7Dov0Lxvb6nWxZJ2YDpW4a90GxwrEjedFWEUm1qZaYUZMaRfQ+78nqA==}
+    hasBin: true
 
-  '@codemirror/lint@6.8.1':
-    resolution: {integrity: sha512-IZ0Y7S4/bpaunwggW2jYqwLuHj0QtESf5xcROewY6+lDNwZ/NzvR4t+vpYgg9m7V8UXLPYqG+lu3DF470E5Oxg==}
+  '@bhsd/common@0.8.0':
+    resolution: {integrity: sha512-sG/Ndnc3FPzgUjfKp60+MQuXt0mkYxPr6zZ6vExyZKFmvllhdrFzJBC4EiGzmzTZWwx+ki2t3OR1aFGeYGrTKg==}
+    hasBin: true
 
-  '@codemirror/state@6.4.1':
-    resolution: {integrity: sha512-QkEyUiLhsJoZkbumGZlswmAhA7CBU02Wrz7zvH4SrcifbsqwlXShVXg65f3v/ts57W3dqyamEriMhij1Z3Zz4A==}
+  '@codemirror/language@6.11.0':
+    resolution: {integrity: sha512-A7+f++LodNNc1wGgoRDTt78cOwWm9KVezApgjOMp1W4hM0898nsqBXwF+sbePE7ZRcjN7Sa1Z5m2oN27XkmEjQ==}
 
-  '@codemirror/view@6.28.6':
-    resolution: {integrity: sha512-bhwB1AZ6zU4M3dNKm8Aa2BXwj5mWDqE9IWpqxYKJoLCnx+AcwcMuLO01tLWgc1mx4vT1IVYVqx86YoqUsATrqQ==}
+  '@codemirror/lint@6.8.4':
+    resolution: {integrity: sha512-u4q7PnZlJUojeRe8FJa/njJcMctISGgPQ4PnWsd9268R4ZTtU+tfFYmwkBvgcrK2+QQ8tYFVALVb5fVJykKc5A==}
+
+  '@codemirror/state@6.5.2':
+    resolution: {integrity: sha512-FVqsPqtPWKVVL3dPSxy8wEF/ymIEuVzF1PK3VbUgrxXpJUSHQWWZz4JMToquRxnkw+36LTamCZG2iua2Ptq0fA==}
+
+  '@codemirror/view@6.36.4':
+    resolution: {integrity: sha512-ZQ0V5ovw/miKEXTvjgzRyjnrk9TwriUB1k4R5p7uNnHR9Hus+D1SXHGdJshijEzPFjU25xea/7nhIeSqYFKdbA==}
 
   '@commitlint/cli@19.7.1':
     resolution: {integrity: sha512-iObGjR1tE/PfDtDTEfd+tnRkB3/HJzpQqRTyofS2MPPkDn1mp3DBC8SoPDayokfAy+xKhF8+bwRCJO25Nea0YQ==}
@@ -1369,14 +1376,17 @@ packages:
   '@keyv/serialize@1.0.3':
     resolution: {integrity: sha512-qnEovoOp5Np2JDGonIDL6Ayihw0RhnRh6vxPuHo4RDn1UOzwEo4AeIfpL6UGIrsceWrCMiVPgwRjbHu4vYFc3g==}
 
-  '@lezer/common@1.2.1':
-    resolution: {integrity: sha512-yemX0ZD2xS/73llMZIK6KplkjIjf2EvAHcinDi/TfJ9hS25G0388+ClHt6/3but0oOxinTcQHJLDXh6w1crzFQ==}
+  '@lezer/common@1.2.3':
+    resolution: {integrity: sha512-w7ojc8ejBqr2REPsWxJjrMFsA/ysDCFICn8zEOR9mrqzOu2amhITYuLD8ag6XZf0CFXDrhKqw7+tW8cX66NaDA==}
 
-  '@lezer/highlight@1.2.0':
-    resolution: {integrity: sha512-WrS5Mw51sGrpqjlh3d4/fOwpEV2Hd3YOkp9DBt4k8XZQcoTHZFB7sx030A6OcahF4J1nDQAa3jXlTVVYH50IFA==}
+  '@lezer/highlight@1.2.1':
+    resolution: {integrity: sha512-Z5duk4RN/3zuVO7Jq0pGLJ3qynpxUVsh7IbUbGj88+uV2ApSAn6kWg2au3iJb+0Zi7kKtqffIESgNcRXWZWmSA==}
 
-  '@lezer/lr@1.4.1':
-    resolution: {integrity: sha512-CHsKq8DMKBf9b3yXPDIU4DbH+ZJd/sJdYOW2llbW/HudP5u0VS6Bfq1hLYfgU7uAYGFIyGGQIsSOXGPEErZiJw==}
+  '@lezer/lr@1.4.2':
+    resolution: {integrity: sha512-pu0K1jCIdnQ12aWNaAVU5bzi7Bd1w54J3ECgANPmYLtQKP0HBj2cE/5coBD66MT10xbtIuUr7tg0Shbsvk0mDA==}
+
+  '@marijn/find-cluster-break@1.0.2':
+    resolution: {integrity: sha512-l0h88YhZFyKdXIFNfSWpyjStDjGHwZ/U7iobcK1cQQD8sejsONdQtTVU+1wVN1PBw40PiiHB1vA5S7VTfQiP9g==}
 
   '@mdn/browser-compat-data@5.7.0':
     resolution: {integrity: sha512-Z96UeDGT80sBRJAY67xKnbDEdt5F/8wduy6aU5NeEzLwFqWcyx1oNcj9XapZNMp/i0Nz9iTWZqht+1zcq48j5Q==}
@@ -2100,6 +2110,10 @@ packages:
   color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
 
+  color-name@2.0.0:
+    resolution: {integrity: sha512-SbtvAMWvASO5TE2QP07jHBMXKafgdZz8Vrsrn96fiL+O92/FN/PLARzUW5sKt013fjAprK2d2iCn2hk2Xb5oow==}
+    engines: {node: '>=12.20'}
+
   colord@2.9.3:
     resolution: {integrity: sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==}
 
@@ -2363,6 +2377,10 @@ packages:
 
   entities@4.5.0:
     resolution: {integrity: sha512-V0hjH4dGPh9Ao5p0MoRY6BVqtwCjhz6vI5LT8AJ55H+4g9/4vbHx1I54fS0XuclLhDHArPQCiMjDxjaL8fPxhw==}
+    engines: {node: '>=0.12'}
+
+  entities@6.0.0:
+    resolution: {integrity: sha512-aKstq2TDOndCn4diEyp9Uq/Flu2i1GlLkc6XIDQSDMuaFE3OPW5OphLCyQ5SpSJZTb4reN+kTcYru5yIfXoRPw==}
     engines: {node: '>=0.12'}
 
   env-paths@2.2.1:
@@ -3335,6 +3353,9 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
 
+  jsonc-parser@3.3.1:
+    resolution: {integrity: sha512-HUgH65KyejrUFPvHFPbqOY0rsFip3Bo5wb4ngvdi1EpCYWUQDC5V+Y7mZws+DLkr4M//zQJoanu1SP+87Dv1oQ==}
+
   jsonparse@1.3.1:
     resolution: {integrity: sha512-POQXvpdL69+CluYsillJ7SUhKvytYjW9vG/GKpnf+xP8UWgYEM/RaMzHHofbALDiKbbP1W8UEYmgGl39WkPZsg==}
     engines: {'0': node >= 0.2.0}
@@ -3346,8 +3367,8 @@ packages:
     resolution: {integrity: sha512-ZZow9HBI5O6EPgSJLUb8n2NKgmVWTwCvHGwFuJlMjvLFqlGG6pjirPhtdsseaLZjSibD8eegzmYpUZwoIlj2cQ==}
     engines: {node: '>=4.0'}
 
-  jsx-dom@8.1.4:
-    resolution: {integrity: sha512-Wcv5iuOvB5SeF/tj3/sa+B0kqWb22WnlfPg8k64SmHOa/E+2M+cOruke+Dqr0GK2FY5xp0gEj4quWZM8quQN2w==}
+  jsx-dom@8.1.6:
+    resolution: {integrity: sha512-sB8YM7M1aEirenH391h+/Q10UlPuxPA1Gc9OOeONij1eFGu1vAijwzKO1bNcSjCztznjn6puFX43I6FoG8ePjg==}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -4554,6 +4575,12 @@ packages:
     peerDependencies:
       stylelint: ^16.1.0
 
+  stylelint-config-recommended@15.0.0:
+    resolution: {integrity: sha512-9LejMFsat7L+NXttdHdTq94byn25TD+82bzGRiV1Pgasl99pWnwipXS5DguTpp3nP1XjvLXVnEJIuYBfsRjRkA==}
+    engines: {node: '>=18.12.0'}
+    peerDependencies:
+      stylelint: ^16.13.0
+
   stylelint-config-wikimedia@0.18.0:
     resolution: {integrity: sha512-Lr45NIe7pG8i7BPcMc6EddO1pRK8/KNG8gp4o/oOG1Ez10hglJuJb/QT17BlzX8NPkhtP2KdY63NS2f/Wcj6Ww==}
     peerDependencies:
@@ -4804,8 +4831,14 @@ packages:
   volar-service-pug@0.0.62:
     resolution: {integrity: sha512-C0/O8uGnRfijWKE0zFXxJ/o7BbLebzretsEaiMkvBDIxm5oe7HRDzQr6CgknV/WVgiohZ74v+0CwBPl2YmcPUQ==}
 
+  vscode-css-languageservice@6.3.2:
+    resolution: {integrity: sha512-GEpPxrUTAeXWdZWHev1OJU9lz2Q2/PPBxQ2TIRmLGvQiH3WZbqaNoute0n0ewxlgtjzTW3AKZT+NHySk5Rf4Eg==}
+
   vscode-html-languageservice@5.3.1:
     resolution: {integrity: sha512-ysUh4hFeW/WOWz/TO9gm08xigiSsV/FOAZ+DolgJfeLftna54YdmZ4A+lIn46RbdO3/Qv5QHTn1ZGqmrXQhZyA==}
+
+  vscode-json-languageservice@5.4.3:
+    resolution: {integrity: sha512-NVSEQDloP9NYccuqKg4eI46kutZpwucBY4csBB6FCxbM7AZVoBt0oxTItPVA+ZwhnG1bg/fmiBRAwcGJyNQoPA==}
 
   vscode-jsonrpc@8.2.0:
     resolution: {integrity: sha512-C+r0eKJUIfiDIfwJhria30+TYWPtuHJXHtI7J0YlOmKAo7ogxP20T0zxB7HZQIFhIyvoBPwWskjxrvAtfjyZfA==}
@@ -4905,9 +4938,10 @@ packages:
     engines: {node: '>= 8'}
     hasBin: true
 
-  wikiparser-node@1.11.1:
-    resolution: {integrity: sha512-19OXz/esBM17etSDjQUSa5zEW33dpGZ9QiAgPySEvhNLXNhd1XU4KT2gwVy/j+2zO0t2dVkm1hY8RPtan6Ey9g==}
-    engines: {node: ^20.9.0}
+  wikiparser-node@1.18.1:
+    resolution: {integrity: sha512-VTOIdQ8swaQFRWTdIZ0mMjOwEE/EnEKmw6IW7xJbix4cFlLjMClIgjvIRSu42rQ4o9hENTJ+48sZunP799TJDw==}
+    engines: {node: '>=18.17.0'}
+    hasBin: true
 
   with@7.0.2:
     resolution: {integrity: sha512-RNGKj82nUPg3g5ygxkQl0R937xLyho1J24ItRCBTr/m1YnZkzJy1hUiHUJrc/VlsDQzsCnInEGSg3bci0Lmd4w==}
@@ -5624,37 +5658,58 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@bhsd/codemirror-mediawiki@2.15.3':
+  '@bhsd/codemirror-mediawiki@2.22.1(typescript@5.8.2)':
     dependencies:
-      '@codemirror/language': 6.10.2
-      '@codemirror/lint': 6.8.1
-      '@codemirror/state': 6.4.1
-      '@codemirror/view': 6.28.6
-      '@lezer/common': 1.2.1
-      wikiparser-node: 1.11.1
+      '@bhsd/common': 0.6.7
+      '@codemirror/language': 6.11.0
+      '@codemirror/lint': 6.8.4
+      '@codemirror/state': 6.5.2
+      '@codemirror/view': 6.36.4
+      '@lezer/highlight': 1.2.1
+      wikiparser-node: 1.18.1(typescript@5.8.2)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
 
   '@bhsd/common@0.6.7': {}
 
-  '@codemirror/language@6.10.2':
+  '@bhsd/common@0.7.0(typescript@5.8.2)':
     dependencies:
-      '@codemirror/state': 6.4.1
-      '@codemirror/view': 6.28.6
-      '@lezer/common': 1.2.1
-      '@lezer/highlight': 1.2.0
-      '@lezer/lr': 1.4.1
+      stylelint: 16.15.0(typescript@5.8.2)
+      stylelint-config-recommended: 15.0.0(stylelint@16.15.0(typescript@5.8.2))
+      wikiparser-node: 1.18.1(typescript@5.8.2)
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
+
+  '@bhsd/common@0.8.0(stylelint@16.15.0(typescript@5.8.2))':
+    dependencies:
+      stylelint-config-recommended: 15.0.0(stylelint@16.15.0(typescript@5.8.2))
+    transitivePeerDependencies:
+      - stylelint
+
+  '@codemirror/language@6.11.0':
+    dependencies:
+      '@codemirror/state': 6.5.2
+      '@codemirror/view': 6.36.4
+      '@lezer/common': 1.2.3
+      '@lezer/highlight': 1.2.1
+      '@lezer/lr': 1.4.2
       style-mod: 4.1.2
 
-  '@codemirror/lint@6.8.1':
+  '@codemirror/lint@6.8.4':
     dependencies:
-      '@codemirror/state': 6.4.1
-      '@codemirror/view': 6.28.6
+      '@codemirror/state': 6.5.2
+      '@codemirror/view': 6.36.4
       crelt: 1.0.6
 
-  '@codemirror/state@6.4.1': {}
-
-  '@codemirror/view@6.28.6':
+  '@codemirror/state@6.5.2':
     dependencies:
-      '@codemirror/state': 6.4.1
+      '@marijn/find-cluster-break': 1.0.2
+
+  '@codemirror/view@6.36.4':
+    dependencies:
+      '@codemirror/state': 6.5.2
       style-mod: 4.1.2
       w3c-keyname: 2.2.8
 
@@ -6179,15 +6234,17 @@ snapshots:
     dependencies:
       buffer: 6.0.3
 
-  '@lezer/common@1.2.1': {}
+  '@lezer/common@1.2.3': {}
 
-  '@lezer/highlight@1.2.0':
+  '@lezer/highlight@1.2.1':
     dependencies:
-      '@lezer/common': 1.2.1
+      '@lezer/common': 1.2.3
 
-  '@lezer/lr@1.4.1':
+  '@lezer/lr@1.4.2':
     dependencies:
-      '@lezer/common': 1.2.1
+      '@lezer/common': 1.2.3
+
+  '@marijn/find-cluster-break@1.0.2': {}
 
   '@mdn/browser-compat-data@5.7.0': {}
 
@@ -7044,6 +7101,9 @@ snapshots:
 
   color-name@1.1.4: {}
 
+  color-name@2.0.0:
+    optional: true
+
   colord@2.9.3: {}
 
   colorette@2.0.20: {}
@@ -7308,6 +7368,9 @@ snapshots:
       tapable: 2.2.1
 
   entities@4.5.0: {}
+
+  entities@6.0.0:
+    optional: true
 
   env-paths@2.2.1: {}
 
@@ -8404,6 +8467,9 @@ snapshots:
 
   json5@2.2.3: {}
 
+  jsonc-parser@3.3.1:
+    optional: true
+
   jsonparse@1.3.1: {}
 
   jstransformer@1.0.0:
@@ -8418,7 +8484,7 @@ snapshots:
       object.assign: 4.1.7
       object.values: 1.2.1
 
-  jsx-dom@8.1.4:
+  jsx-dom@8.1.6:
     dependencies:
       csstype: 3.1.3
 
@@ -9684,6 +9750,10 @@ snapshots:
     dependencies:
       stylelint: 16.12.0(typescript@5.8.2)
 
+  stylelint-config-recommended@15.0.0(stylelint@16.15.0(typescript@5.8.2)):
+    dependencies:
+      stylelint: 16.15.0(typescript@5.8.2)
+
   stylelint-config-wikimedia@0.18.0(postcss-less@6.0.0(postcss@8.5.3))(typescript@5.8.2):
     dependencies:
       '@stylistic/stylelint-config': 2.0.0(stylelint@16.12.0(typescript@5.8.2))
@@ -10057,12 +10127,29 @@ snapshots:
       vscode-html-languageservice: 5.3.1
       vscode-languageserver-textdocument: 1.0.11
 
+  vscode-css-languageservice@6.3.2:
+    dependencies:
+      '@vscode/l10n': 0.0.18
+      vscode-languageserver-textdocument: 1.0.12
+      vscode-languageserver-types: 3.17.5
+      vscode-uri: 3.1.0
+    optional: true
+
   vscode-html-languageservice@5.3.1:
     dependencies:
       '@vscode/l10n': 0.0.18
       vscode-languageserver-textdocument: 1.0.12
       vscode-languageserver-types: 3.17.5
       vscode-uri: 3.1.0
+
+  vscode-json-languageservice@5.4.3:
+    dependencies:
+      '@vscode/l10n': 0.0.18
+      jsonc-parser: 3.3.1
+      vscode-languageserver-textdocument: 1.0.12
+      vscode-languageserver-types: 3.17.5
+      vscode-uri: 3.1.0
+    optional: true
 
   vscode-jsonrpc@8.2.0: {}
 
@@ -10178,9 +10265,21 @@ snapshots:
     dependencies:
       isexe: 2.0.0
 
-  wikiparser-node@1.11.1:
+  wikiparser-node@1.18.1(typescript@5.8.2):
     dependencies:
+      '@bhsd/common': 0.8.0(stylelint@16.15.0(typescript@5.8.2))
+      vscode-languageserver-types: 3.17.5
+    optionalDependencies:
       chalk: 4.1.2
+      color-name: 2.0.0
+      entities: 6.0.0
+      stylelint: 16.15.0(typescript@5.8.2)
+      vscode-css-languageservice: 6.3.2
+      vscode-html-languageservice: 5.3.1
+      vscode-json-languageservice: 5.4.3
+    transitivePeerDependencies:
+      - supports-color
+      - typescript
 
   with@7.0.2:
     dependencies:
