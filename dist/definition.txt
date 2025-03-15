@@ -107,6 +107,8 @@
 * Navigation_popups[ResourceLoader|dependencies=ext.gadget.i18n,ext.gadget.Util,mediawiki.api,mediawiki.jqueryMsg,mediawiki.user,mediawiki.util,user.options|requiresES6]|Navigation_popups.js|Navigation_popups.css
 * PreviewWithVariant[ResourceLoader|default|dependencies=ext.gadget.i18n,ext.gadget.Util,oojs-ui,oojs-ui-core,user.options|rights=edit|requiresES6]|PreviewWithVariant.js|PreviewWithVariant.css
 * PreviewWithVariant2017[ResourceLoader|default|dependencies=ext.gadget.i18n,ext.gadget.Util,mediawiki.jqueryMsg,oojs-ui,oojs-ui-core,user.options|rights=edit|requiresES6]|PreviewWithVariant2017.js|PreviewWithVariant2017.css
+* QuickImport[ResourceLoader|dependencies=ext.gadget.Toastify,ext.gadget.Util,mediawiki.api,mediawiki.util|rights=import|requiresES6]|QuickImport.js
+* QuickImportAllMedia[ResourceLoader|dependencies=ext.gadget.QuickImport,ext.gadget.Toastify,ext.gadget.Util,mediawiki.api,mediawiki.util|rights=import|requiresES6]|QuickImportAllMedia.js
 * ToolsRedirect[ResourceLoader|actions=view|dependencies=ext.gadget.Util,jquery.ui,mediawiki.api,mediawiki.jqueryMsg,mediawiki.util,user.options|rights=edit|requiresES6]|ToolsRedirect.js|ToolsRedirect.css
 * ToolsRedirect-bio-latin-names[ResourceLoader|actions=view|dependencies=ext.gadget.ToolsRedirect,ext.gadget.Util,mediawiki.api,user.options|rights=edit|requiresES6]|ToolsRedirect-bio-latin-names.js
 * ToolsRedirect-courtesy-and-art-names[ResourceLoader|actions=view|dependencies=ext.gadget.ToolsRedirect,ext.gadget.Util,mediawiki.api,user.options|rights=edit|requiresES6]|ToolsRedirect-courtesy-and-art-names.js
