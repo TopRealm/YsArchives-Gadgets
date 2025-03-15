@@ -26,7 +26,10 @@ const refreshPage: RefreshPage = (title) => {
 	}
 };
 
-const importPage = async (pageName: string, iwprefix: string, isFileNS: boolean = false): Promise<boolean> => {
+const importPage = async (pageName: string, isFileNS: boolean = false): Promise<boolean> => {
+	// 将导入源统一为qwbk
+	const iwprefix: string = 'qwbk';
+
 	toastifyInstance.hideToast();
 	toastifyInstance = toastify(
 		{
@@ -86,11 +89,11 @@ const uploadFile = async (target: string, url?: string): Promise<void> => {
 	);
 
 	const params: ApiUploadParams = {
-		url: url ?? `https://zh.wikipedia.org/wiki/Special:Redirect/file/${mw.util.rawurlencode(target)}`,
+		url: url ?? `https://www.qiuwenbaike.cn/wiki/Special:Redirect/file/${mw.util.rawurlencode(target)}`,
 		action: 'upload',
 		format: 'json',
 		filename: target,
-		comment: '自其他网站迁移文件',
+		comment: '自求闻百科迁移文件',
 		ignorewarnings: true,
 	};
 	await api.postWithEditToken(params);
@@ -156,13 +159,8 @@ const detectIfFileRedirect: DetectIfFileRedirect = async (pageNames, isFileNS = 
 							continue;
 						}
 
-						let ifImportSuccess = false;
-						if (isFileNS) {
-							ifImportSuccess = await importPage(title, 'commons', isFileNS);
-						}
-						if (!ifImportSuccess) {
-							await importPage(title, 'zhwiki', isFileNS);
-						}
+						// 将导入源统一为qwbk
+						await importPage(title, isFileNS);
 					}
 				}
 
@@ -198,10 +196,8 @@ const detectIfFileRedirect: DetectIfFileRedirect = async (pageNames, isFileNS = 
 							}
 
 							if (page2.imagerepository && page2.imagerepository !== 'local') {
-								await uploadFile(
-									title,
-									`${page2.imageinfo[0].url}`.replace('wm.zhongwen.wiki', 'upload.wikimedia.org')
-								);
+								// 使用qiuwenbaike的文件URL
+								await uploadFile(title, page2.imageinfo[0].url);
 							}
 						}
 					}

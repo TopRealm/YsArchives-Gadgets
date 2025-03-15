@@ -3,12 +3,15 @@ import {detectIfFileRedirect, refreshPage} from './modules/core';
 (function quickImport(): void {
 	const {wgNamespaceNumber, wgPageName, wgWikiID} = mw.config.get();
 
-	const caViewForeignZhwiki = document.querySelector("#ca-view-foreign a[href*='zh.wikipedia.org']");
+	// 修改检测器，查找指向qiuwenbaike.cn的外部链接
+	const caViewForeignQwbk = document.querySelector("#ca-view-foreign a[href*='qiuwenbaike.cn']");
 	const redirectTextA = document.querySelector('.redirectText a');
 
 	const isFileNS: boolean = wgNamespaceNumber === 6;
 	const hasMwNoarticletext: boolean = !!document.querySelector('#mw-noarticletext');
-	const iwprefix: string = caViewForeignZhwiki ? 'zhwiki' : 'commons';
+
+	// 将导入源改为qwbk
+	const iwprefix: string = 'qwbk';
 
 	const label: string = isFileNS && !hasMwNoarticletext ? iwprefix : '';
 	const buttonLabel: string = isFileNS
