@@ -3,11 +3,13 @@ import './ShowAvatar.less';
 
 const $body: JQuery<HTMLBodyElement> = $('body');
 
-const avatarUrl = new mw.Uri('https://youshou.wiki/');
-avatarUrl.query['user'] = mw.config.get('wgPageName').replace(/^user:/i, '');
-avatarUrl.path = '/extensions/Avatar/avatar.php';
-const imgUrl = new mw.Uri(avatarUrl);
-imgUrl.query['user'] = mw.config.get('wgUserName');
+const avatarUrl = new URL('https://youshou.wiki/');
+avatarUrl.searchParams.set('user', mw.config.get('wgPageName').replace(/^user:/i, ''));
+avatarUrl.pathname = '/extensions/Avatar/avatar.php';
+const imgUrl = new URL(avatarUrl.toString());
+// 添加空值检查，确保 wgUserName 不为 null
+const username = mw.config.get('wgUserName') || 'default';
+imgUrl.searchParams.set('user', username);
 const img = $('<img>').attr({
 	src: imgUrl,
 	title: '上传头像',
@@ -19,9 +21,9 @@ const $ns2FirstHeading: JQuery = $body.find('.ns-2 #firstHeading');
 
 $ptUserpage.before($('<li id="pt-avatar"></li>').append(link));
 if (mw.config.get('wgNamespaceNumber') === 2 && !mw.config.get('wgPageName').includes('/')) {
-	const hrefUrl = new mw.Uri(avatarUrl);
-	hrefUrl.path = '/wiki/Special:Viewavatar';
-	const srcUrl = new mw.Uri(avatarUrl);
+	const hrefUrl = new URL(avatarUrl.toString());
+	hrefUrl.pathname = '/wiki/Special:Viewavatar';
+	const srcUrl = new URL(avatarUrl.toString());
 	$ns2FirstHeading.prepend(
 		$('<a/>')
 			.attr({
