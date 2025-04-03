@@ -393,7 +393,7 @@ const catALot = (): void => {
 						this.updateCounter();
 					}
 				};
-				if (params.action === 'query') {
+				if (params['action'] === 'query') {
 					CAL.api.get(params).then(callback).catch(handleError);
 				} else {
 					CAL.api.post(params).then(callback).catch(handleError);
