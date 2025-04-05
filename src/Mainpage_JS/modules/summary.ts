@@ -35,7 +35,7 @@ const libSummary = async () => {
 		let extract: string;
 		if (page) {
 			extract =
-				page && page.extract ? page.extract.replace(String.raw`\n<p>.*</p>`, summaryUrlHtml).replace(/…$/g, '') : '';
+				page && page.extract ? page.extract.replace(/\\n<p>.*<\/p>/g, summaryUrlHtml).replace(/…$/g, '') : '';
 		} else {
 			extract = '加载失败QWQ，刷新试试吧';
 		}
