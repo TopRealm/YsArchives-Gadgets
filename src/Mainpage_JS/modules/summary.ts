@@ -34,8 +34,12 @@ const libSummary = async () => {
 		const page = pageKey ? pages[pageKey] : undefined;
 		let extract: string;
 		if (page) {
+			const allPTag = page.extract ? page.extract.match(/<p>[\s\S]*?<\/p>/g) : [];
+			const matchCharacters = allPTag && allPTag.length ? allPTag.at(-1) : '';
 			extract =
-				page && page.extract ? page.extract.replace(/\\n<p>.*<\/p>/g, summaryUrlHtml).replace(/…$/g, '') : '';
+				page && page.extract
+					? page.extract.replace(matchCharacters || '', summaryUrlHtml).replace(/…$/g, '')
+					: '';
 		} else {
 			extract = '加载失败QWQ，刷新试试吧';
 		}
