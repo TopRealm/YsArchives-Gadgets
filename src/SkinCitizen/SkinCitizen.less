@@ -278,49 +278,10 @@ html.client-darkmode body {
 	width: 100%;
 	max-width: 400px;
 }
-.buttom-media() {
-	#p-views {
-		.citizen-ve-edit-merged#ca-edit,
-		.citizen-ve-edit-merged#ca-ve-edit {
-			> a {
-				border-radius: var(--border-radius--medium);
-			}
-		}
-		.citizen-ve-edit-merged#ca-edit {
-			border-left: initial;
-		}
-	}
-}
 
 // 全局 fieldset
 fieldset {
 	min-width: 0;
-}
-
-// 修复可视化和源代码编辑在移动端上两个按钮分离导致样式突兀的问题
-@media (min-width: 300px) and (max-width: 345px) {
-	.buttom-media();
-}
-body[class*='page-User'] {
-	@media (min-width: 348px) and (max-width: 393px) {
-		.buttom-media();
-	}
-
-	@media (min-width: 300px) and (max-width: 345px) {
-		#p-views {
-			.citizen-ve-edit-merged#ca-edit {
-				border-left: 1px solid var(--color-primary--hover);
-				> a {
-					border-bottom-left-radius: 0;
-					border-top-left-radius: 0;
-				}
-			}
-			.citizen-ve-edit-merged#ca-ve-edit > a {
-				border-bottom-right-radius: 0;
-				border-top-right-radius: 0;
-			}
-		}
-	}
 }
 
 // 权限设置页面响应式样式 修改防止元素溢出
@@ -654,10 +615,10 @@ figure[typeof~='mw:File/Frame'] > a:first-child source {
 	contain: inherit;
 }
 
-/* 移除可视化编辑按钮与普通编辑按钮间的圆角 */
-#ca-ve-edit {
-	border-bottom-right-radius: 0;
+// 修复编辑按钮样式异常
+.client-js .citizen-ve-edit-merged#ca-ve-edit > a {
 	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
 }
 
 /* 增大标题字号 */
