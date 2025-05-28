@@ -1552,7 +1552,7 @@ const popups = () => {
 				articles: `${pg.wiki.articlePath}/`,
 				// Only used for Insta previews with images. (not in popups)
 				math: '/math/',
-				images: 'https://tu.zhongwen.wiki/images/qiuwenbaike/zh/',
+				images: 'https://image.youshou.wiki/',
 				images_fallback: '//wm.zhongwen.wiki/commons/',
 			},
 			locale: {
