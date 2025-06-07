@@ -72,6 +72,174 @@ body {
 	background-color: rgba(240, 248, 255, 0.65);
 }
 
+/* CommentStreams 扩展样式 */
+.cs-comments {
+	padding: 1rem;
+	border-radius: 0.5rem;
+	background-color: rgba(240, 248, 255, 0.65);
+
+	/* 评论区标题栏 */
+	.cs-header {
+		margin-bottom: 1rem;
+		padding: 0.75rem;
+		border-radius: 0.5rem;
+		background-color: rgba(240, 248, 255, 0.75);
+
+		.oo-ui-buttonElement-button {
+			border-radius: 0.25rem;
+			transition: background-color 0.2s;
+
+			&:hover {
+				background-color: rgba(var(--color-primary--rgb), 0.1);
+			}
+		}
+	}
+
+	/* 评论流容器 */
+	.cs-stream {
+		margin-bottom: 1.5rem;
+
+		&.cs-expanded {
+			border-left: 2px solid var(--color-progressive);
+			padding-left: 0.5rem;
+		}
+	}
+
+	/* 单个评论 */
+	.cs-comment {
+		padding: 1rem;
+		border-radius: 0.5rem;
+		background-color: rgba(240, 248, 255, 0.65);
+		box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+		margin-bottom: 1rem;
+		transition: background-color 0.2s;
+
+		&:hover {
+			background-color: rgba(240, 248, 255, 0.8);
+		}
+
+		/* 评论头部 */
+		.cs-comment-header {
+			display: flex;
+			align-items: center;
+			margin-bottom: 0.75rem;
+			padding-bottom: 0.5rem;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+			.cs-comment-header-left {
+				flex-shrink: 0;
+				margin-right: 0.5rem;
+			}
+
+			.cs-comment-header-center {
+				flex-grow: 1;
+
+				.cs-comment-title {
+					font-weight: bold;
+					margin-bottom: 0.25rem;
+					color: var(--color-base--emphasized);
+				}
+
+				.cs-comment-author a {
+					color: var(--color-progressive);
+					text-decoration: none;
+
+					&:hover {
+						text-decoration: underline;
+					}
+				}
+
+				.cs-comment-details {
+					color: var(--color-base--subtle);
+					font-size: 0.875rem;
+				}
+			}
+
+			.cs-comment-header-right {
+				flex-shrink: 0;
+			}
+		}
+
+		/* 评论内容 */
+		.cs-comment-body {
+			line-height: 1.6;
+
+			p {
+				margin-top: 0;
+				margin-bottom: 0.5rem;
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+		}
+
+		/* 评论底部 */
+		.cs-comment-footer {
+			margin-top: 0.5rem;
+			font-size: 0.875rem;
+		}
+	}
+
+	/* 头部评论特殊样式 */
+	.cs-head-comment {
+		border-left: 2px solid var(--color-progressive);
+	}
+
+	/* 回复按钮区域 */
+	.cs-stream-footer {
+		padding: 0.5rem;
+
+		.oo-ui-buttonElement-button {
+			border-radius: 0.25rem;
+			transition: background-color 0.2s;
+
+			&:hover {
+				background-color: rgba(var(--color-primary--rgb), 0.1);
+			}
+		}
+	}
+
+	/* 页脚 */
+	.cs-footer {
+		margin-top: 1rem;
+	}
+}
+
+/* 深色模式适配 */
+.client-darkmode .cs-comments {
+	.cs-header,
+	.cs-comment {
+		background-color: rgba(240, 248, 255, 0.15);
+
+		&:hover {
+			background-color: rgba(240, 248, 255, 0.2);
+		}
+	}
+
+	.cs-comment-header {
+		border-bottom-color: rgba(255, 255, 255, 0.1);
+	}
+}
+
+/* 移动设备适配 */
+@media screen and (max-width: 720px) {
+	.cs-comments {
+		.cs-comment-header {
+			flex-direction: column;
+			align-items: flex-start;
+
+			.cs-comment-header-center {
+				margin: 0.5rem 0;
+			}
+
+			.cs-comment-header-right {
+				align-self: flex-end;
+			}
+		}
+	}
+}
+
 @media (min-width: 1440px) {
 	.ns-0 .mw-body-content .mw-parser-output {
 		& > *:not(@{not_figure_selector}) {
