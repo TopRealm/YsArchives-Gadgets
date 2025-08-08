@@ -3,7 +3,7 @@ import {userIsInGroup} from 'ext.gadget.Util';
 const introACH = (): void => {
 	const {wgAction, wgArticleId, wgWikiID, wgNamespaceNumber} = mw.config.get();
 
-	// Disabled for wikis other than zhqiuwenbaike
+	// Disabled for wikis other than ysarchives
 	if (wgWikiID !== 'wiki-ysy') {
 		return;
 	}
