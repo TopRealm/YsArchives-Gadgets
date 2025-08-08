@@ -1,14 +1,3 @@
 #catlinks {
-	display: none;
-}
-
-/* 修复：确保分类链接对所有用户都可见（包括未登录用户） */
-body:not(.page-Project_首页) {
-	#catlinks:not(.catlinks-allhidden) {
-		display: block !important;
-
-		.skin-citizen & {
-			display: flex !important;
-		}
-	}
+	z-index: 0;
 }
