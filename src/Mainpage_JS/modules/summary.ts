@@ -43,7 +43,7 @@ const initDB = () => {
 const dbset = (db: IDBDatabase, value: {date: string; data: string}) => {
 	const transaction = db.transaction(['summary'], 'readwrite');
 	const objectStore = transaction.objectStore('summary');
-	objectStore.add(value);
+	objectStore.put(value);
 };
 
 const dbget = (db: IDBDatabase, key: string): Promise<{date: string; data: string}> => {
@@ -109,7 +109,7 @@ const libSummary = async () => {
 
 	try {
 		const cachedData = await dbget(db, `${d}-${k}`);
-		if (cachedData.date === `${d}-${getMonthFromWeek(2025, k + 1)}/${k}-${k + 1}`) {
+		if (cachedData.date === `${d}-${getMonthFromWeek(d, k + 1)}/${k}-${k + 1}`) {
 			renderSummary(summary, cachedData.data);
 		}
 	} catch {
@@ -117,7 +117,7 @@ const libSummary = async () => {
 		if (extract === '加载失败QWQ，刷新试试吧') {
 			renderSummary(summary, extract);
 		} else if (extract && typeof extract === 'string') {
-			dbset(db, {date: `${d}-${getMonthFromWeek(2025, k + 1)}/${k}-${k + 1}`, data: extract});
+			dbset(db, {date: `${d}-${getMonthFromWeek(d, k + 1)}/${k}-${k + 1}`, data: extract});
 			renderSummary(summary, extract);
 		}
 	}
