@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /*! Twinkle.js - twinklediff.js */
-(function twinklediff($) {
+(function twinklediff() {
 	/**
 	 * twinklediff.js: Diff module
 	 * Mode of invocation: Tab on non-diff pages ("Last");
@@ -101,6 +101,6 @@
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.diff, 'diff');
-})(jQuery);
+})();
 
 export {};

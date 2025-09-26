@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 /*! Twinkle.js - twinklebatchprotect.js */
-(function twinklebatchprotect($) {
+(function twinklebatchprotect() {
 	/**
 	 * twinklebatchprotect.js: Batch protect module (sysops only)
 	 * Mode of invocation: Tab ("P-batch")
@@ -347,6 +347,6 @@
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.batchprotect, 'batchprotect');
-})(jQuery);
+})();
 
 export {};

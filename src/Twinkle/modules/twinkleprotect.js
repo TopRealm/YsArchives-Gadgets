@@ -3,7 +3,7 @@
 import {api} from './api';
 
 /*! Twinkle.js - twinkleprotect.js */
-(function twinkleprotect($) {
+(function twinkleprotect() {
 	const $body = $('body');
 	/**
 	 * twinkleprotect.js: Protect/RPP module
@@ -1692,6 +1692,6 @@ import {api} from './api';
 		return protectionNode;
 	};
 	Twinkle.addInitCallback(Twinkle.protect, 'protect');
-})(jQuery);
+})();
 
 export {};

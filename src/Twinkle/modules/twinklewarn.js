@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 /*! Twinkle.js - twinklewarn.js */
-(function twinklewarn($) {
+(function twinklewarn() {
 	const $body = $('body');
 	/**
 	 * twinklewarn.js: Warn module
@@ -1427,6 +1427,6 @@
 		ysarchives_page.load(Twinkle.warn.callbacks.main);
 	};
 	Twinkle.addInitCallback(Twinkle.warn, 'warn');
-})(jQuery);
+})();
 
 export {};

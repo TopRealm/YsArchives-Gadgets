@@ -3,7 +3,7 @@
 import {generateArray} from 'ext.gadget.Util';
 
 /*! Twinkle.js - twinklespeedy.js */
-(function twinklespeedy($) {
+(function twinklespeedy() {
 	const $body = $('body');
 	/**
 	 * twinklespeedy.js: CSD module
@@ -1767,6 +1767,6 @@ import {generateArray} from 'ext.gadget.Util';
 		ysarchives_page.load(Twinkle.speedy.callbacks.user.main);
 	};
 	Twinkle.addInitCallback(Twinkle.speedy, 'speedy');
-})(jQuery);
+})();
 
 export {};

@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 /*! Twinkle.js - twinklebatchdelete.js */
-(function twinklebatchdelete($) {
+(function twinklebatchdelete() {
 	const $body = $('body');
 	/**
 	 * twinklebatchdelete.js: Batch delete module (sysops only)
@@ -932,6 +932,6 @@
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.batchdelete, 'batchdelete');
-})(jQuery);
+})();
 
 export {};

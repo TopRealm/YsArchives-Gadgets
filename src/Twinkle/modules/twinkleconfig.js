@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 /*! Twinkle.js - twinkleconfig.js */
-(function twinkleconfig($) {
+(function twinkleconfig() {
 	const $body = $('body');
 	/**
 	 * twinkleconfig.js: Preferences module
@@ -1913,6 +1913,6 @@
 		Morebits.status.root.appendChild(noticeclear);
 	};
 	Twinkle.addInitCallback(Twinkle.config.init);
-})(jQuery);
+})();
 
 export {};

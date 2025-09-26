@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 /*! Twinkle.js - friendlytalkback.js */
-(function friendlytalkback($) {
+(function friendlytalkback() {
 	const $body = $('body');
 	/**
 	 * friendlytalkback.js: Talkback module
@@ -453,6 +453,6 @@
 		return [text, title, content];
 	};
 	Twinkle.addInitCallback(Twinkle.talkback, 'talkback');
-})(jQuery);
+})();
 
 export {};

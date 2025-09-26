@@ -2,7 +2,7 @@
 // @ts-nocheck
 import {api} from './api';
 /*! Twinkle.js - twinkle.js */
-(function twinkle($) {
+(function twinkle() {
 	const $body = $('body');
 	const Twinkle = {};
 	window.Twinkle ||= Twinkle; // allow global access
@@ -566,6 +566,6 @@ import {api} from './api';
 		link.setAttribute('rel', 'noopener noreferrer');
 		$checkbox.next().prepend([link, ' ']);
 	};
-})(jQuery);
+})();
 
 export {};

@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 /*! Twinkle.js - twinklearv.js */
-(function twinklearv($) {
+(function twinklearv() {
 	const $body = $('body');
 	/**
 	 * twinklearv.js: ARV module
@@ -924,6 +924,6 @@
 		}
 	};
 	Twinkle.addInitCallback(Twinkle.arv, 'arv');
-})(jQuery);
+})();
 
 export {};

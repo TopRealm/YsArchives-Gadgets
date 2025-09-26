@@ -3,7 +3,7 @@
 import {generateArray} from 'ext.gadget.Util';
 
 /*! Twinkle.js - twinklestub.js */
-(function twinklestub($) {
+(function twinklestub() {
 	/**
 	 * twinklestub.js: Tag module
 	 * Mode of invocation: Tab ("Stub")
@@ -420,6 +420,6 @@ import {generateArray} from 'ext.gadget.Util';
 		}
 	};
 	Twinkle.addInitCallback(Twinkle.stub, 'stub');
-})(jQuery);
+})();
 
 export {};

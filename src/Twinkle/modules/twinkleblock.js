@@ -4,7 +4,7 @@ import {api} from './api';
 import {generateArray} from 'ext.gadget.Util';
 
 /*! Twinkle.js - twinkleblock.js */
-(function twinkleblock($) {
+(function twinkleblock() {
 	const $body = $('body');
 	let relevantUserName;
 	let blockedUserName;
@@ -2562,6 +2562,6 @@ import {generateArray} from 'ext.gadget.Util';
 		pageobj.save();
 	};
 	Twinkle.addInitCallback(Twinkle.block, 'block');
-})(jQuery);
+})();
 
 export {};

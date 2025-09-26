@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 /*! Twinkle.js - twinklefluff.js */
-(function twinklefluff($) {
+(function twinklefluff() {
 	const $body = $('body');
 	/**
 	 * twinklefluff.js: Revert/rollback module
@@ -916,6 +916,6 @@
 		return result;
 	};
 	Twinkle.addInitCallback(Twinkle.fluff, 'fluff');
-})(jQuery);
+})();
 
 export {};

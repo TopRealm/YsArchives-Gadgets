@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 /*! Twinkle.js - twinkleclose.js */
-(function twinkleclose($) {
+(function twinkleclose() {
 	const $body = $('body');
 	/**
 	 * twinkleclose.js: XFD closing module
@@ -666,6 +666,6 @@
 		},
 	};
 	Twinkle.addInitCallback(Twinkle.close, 'close');
-})(jQuery);
+})();
 
 export {};

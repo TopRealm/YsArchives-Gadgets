@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /*! Twinkle.js - friendlytag.js */
-(function friendlytag($) {
+(function friendlytag() {
 	const $body = $('body');
 	/**
 	 * friendlytag.js: Tag module
@@ -2320,6 +2320,6 @@
 		ysarchives_page.load(Twinkle.tag.callbacks[Twinkle.tag.modeEn]);
 	};
 	Twinkle.addInitCallback(Twinkle.tag, 'tag');
-})(jQuery);
+})();
 
 export {};
