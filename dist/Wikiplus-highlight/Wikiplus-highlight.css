@@ -1,0 +1,53 @@
+/**
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * _addText: '{{Gadget Header|title=Wikiplus-highlight|license=GPL-3.0-or-later}}'
+ *
+ * Wikiplus-highlight
+ *
+ * @base {@link https://github.com/bhsd-harry/Wikiplus-highlight/}
+ * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/Wikiplus-highlight}
+ * @author Bhsd <https://github.com/bhsd-harry>, 机智的小鱼君 <https://github.com/Dragon-Fish>
+ * @license GPL-3.0-or-later {@link https://youshou.wiki/wiki/H:GPL-3.0}
+ */
+
+/**
+ * Copyright (C) Bhsd <https://github.com/bhsd-harry>, 机智的小鱼君 <https://github.com/Dragon-Fish>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+/**
+ * +------------------------------------------------------------+
+ * |            === WARNING: GLOBAL GADGET FILE ===             |
+ * +------------------------------------------------------------+
+ * |       All changes should be made in the repository,        |
+ * |                otherwise they will be lost.                |
+ * +------------------------------------------------------------+
+ * |        Changes to this page may affect many users.         |
+ * | Please discuss changes by opening an issue before editing. |
+ * +------------------------------------------------------------+
+ */
+/* <nowiki> */
+
+/* src/Wikiplus-highlight/Wikiplus-highlight.less */
+#Wikiplus-CodeMirror {
+  border: 1px solid #c8ccd1;
+  clear: both;
+}
+div.Wikiplus-InterBox {
+  z-index: 100;
+}
+
+/* </nowiki> */
+
+/*# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiLi4vLi4vc3JjL1dpa2lwbHVzLWhpZ2hsaWdodC9XaWtpcGx1cy1oaWdobGlnaHQubGVzcyJdLAogICJzb3VyY2VzQ29udGVudCI6IFsiI1dpa2lwbHVzLUNvZGVNaXJyb3Ige1xuICBib3JkZXI6IDFweCBzb2xpZCAjYzhjY2QxO1xuICBjbGVhcjogYm90aDtcbn1cbmRpdi5XaWtpcGx1cy1JbnRlckJveCB7XG4gIHotaW5kZXg6IDEwMDtcbn1cbiJdLAogICJtYXBwaW5ncyI6ICI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLENBQUM7QUFDQyxVQUFRLElBQUksTUFBTTtBQUNsQixTQUFPO0FBQ1Q7QUFDQSxHQUFHLENBQUM7QUFDRixXQUFTO0FBQ1g7IiwKICAibmFtZXMiOiBbXQp9Cg== */

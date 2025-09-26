@@ -21,7 +21,6 @@
 4.  **样式管理**
 
 - 如果小工具包含脚本，且使用单独的样式表，则其所使用到的样式表应在脚本中导入<br>If the gadget has script files and style sheets, the style sheets used should be imported in script files
-
     - 如果样式表名形如`*.module.{css, less}`，则其将被视为 [CSS/Less 模块](https://github.com/css-modules/css-modules)<br> If the style sheet name is like `*.module.{css, less}`, it will be considered as [CSS/Less modules](https://github.com/css-modules/css-modules)
         - 如需在 VS Code 中获得代码自动补全功能，应[切换到当前工作区中的 TypeScript 版本](https://code.visualstudio.com/docs/typescript/typescript-compiling#_using-the-workspace-version-of-typescript)。如果在切换后未有效果，可尝试重新加载当前工作区<br>Note that if you want to get code autocompletion in VS Code, you should [switch to the TypeScript version in the current workspace](https://code.visualstudio.com/docs/typescript/typescript-compiling#_using-the-workspace-version-of-typescript). If it doesn't work after switching, try reloading the current workspace.
 
@@ -94,7 +93,6 @@
     也可以将字符串化后的`credentials.json`文本声明为`CREDENTIALS_JSON`环境变量。此时，`credentials.json`文件将被忽略<br>You can declare the stringified `credentials.json` text as the `CREDENTIALS_JSON` environment variable, in which case the `credentials.json` file will be ignored
 
     根据工具需要，你应该授予机器人账号以下额外权限<br>Grant the robot account the following additional permissions:
-
     - 大量编辑<br>High-volume editing
     - 编辑存在的页面<br>Edit existing pages
     - 编辑受保护的页面<br>Edit protected pages

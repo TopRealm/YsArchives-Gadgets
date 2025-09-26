@@ -34,7 +34,6 @@ document.body.append(
 #### 目标 MediaWiki 的版本不低于 1.38 / The target MediaWiki version is at least 1.38
 
 1. 根据实际情况修改`src/JSX`文件夹中的以下文件<br>According to actual needs, modify some files in the `src/JSX` folder
-
     - `JSX.ts`
     - `modules/global.d.ts`
     - `definition.json`（将`enable`属性改为`true`）/ (change `enable` property to `true`)

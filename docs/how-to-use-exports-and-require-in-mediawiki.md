@@ -83,7 +83,6 @@ console.log({
 ```
 
 - `moment`
-
     - 目标 MediaWiki 的版本不低于 1.38<br>The target MediaWiki version is at least 1.38
         - 在小工具对应的`definition.json`中，将`moment`添加为依赖项（`dependencies`）<br>In the corresponding `definition.json` of the gadget, add the `moment` package as a dependency
         - 使用`import`来导入，如：<br> Use `import`. For example:
