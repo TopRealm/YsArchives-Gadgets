@@ -36,6 +36,7 @@ class Wiki {
 	 *
 	 * @param {params.string} title 页面名 / Pagename
 	 * @param {params.revisionId} revisionId 修订版本号 / Revision ID
+	 * @param {params.contentmodel} contentmodel 内容模型 / Content Model
 	 * @returns {Promise<string>}
 	 */
 	async getPageInfo({title, revisionId}) {
@@ -54,24 +55,31 @@ class Wiki {
 					return {
 						timestamp: this.pageInfoCache[title].timestamp,
 						revisionId: this.pageInfoCache[title].revid,
+						contentmodel: this.pageInfoCache[title].contentmodel,
 					};
 				}
 				params.titles = title;
 			}
 			const response = await requests.get(params);
 			if (response.query && response.query.pages) {
+				const contentmodel = response.query.pages[Object.keys(response.query.pages)[0]].contentmodel;
 				if (Object.keys(response.query.pages)[0] === '-1') {
 					// 不存在这一页面
 					// Page not found.
-					return {};
+					this.pageInfoCache[title] = {contentmodel: contentmodel};
+					return {
+						contentmodel: contentmodel,
+					};
 				}
 				const pageInfo = response.query.pages[Object.keys(response.query.pages)[0]].revisions[0];
 				if (title) {
 					this.pageInfoCache[title] = pageInfo;
+					this.pageInfoCache[title].contentmodel = contentmodel;
 				}
 				return {
 					timestamp: pageInfo.timestamp,
 					revisionId: pageInfo.revid,
+					contentmodel: contentmodel,
 				};
 			}
 		} catch {

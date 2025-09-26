@@ -1,3 +1,4 @@
+import './Wikiplus-highlight.less';
 import {checkDependencies} from 'ext.gadget.Util';
 
 (function WikiplusHighlight() {

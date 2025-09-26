@@ -3,42 +3,53 @@
  * @author Bhsd <https://github.com/bhsd-harry>
  * @license GPL-3.0
  */
-import {CDN} from '@bhsd/common';
+import {CDN} from '@bhsd/browser';
 import {renderEditor} from './core';
 
-// eslint-disable-next-line @typescript-eslint/no-namespace
-declare namespace mw.libs {
+declare namespace mediaWiki.libs {
 	let wphl: {version?: string; cmVersion?: string} | undefined;
 }
 
 (async () => {
-	const {libs} = mw,
+	const {libs} = mediaWiki,
 		{wphl} = libs;
 	if (!wphl?.version) {
-		const version = '3.2.5';
+		const version = '3.2.9';
 		libs.wphl = {version, ...wphl}; // 开始加载
 
 		// 路径
-		const MW_CDN = `npm/@bhsd/codemirror-mediawiki@${libs.wphl.cmVersion || 'latest'}/dist/wiki.min.js`,
+		const MW_CDN = `npm/@bhsd/codemirror-mediawiki@${libs.wphl.cmVersion ?? 'latest'}/dist/wiki.min.js`,
 			REPO_CDN = 'npm/wikiplus-highlight';
 
-		if (!('CodeMirror6' in globalThis)) {
-			await $.ajax(`${CDN}/${MW_CDN}`, {dataType: 'script'});
+		if (typeof CodeMirror6 !== 'function') {
+			await $.ajax(`${CDN}/${MW_CDN}`, {dataType: 'script', cache: true});
 		}
 
 		// 监视 Wikiplus 编辑框
 		const observer = new MutationObserver((records) => {
-			const $editArea = $(
-				records.flatMap(({addedNodes}) => {
-					return [...addedNodes];
-				})
-			).find<HTMLTextAreaElement>('#Wikiplus-Quickedit, #Wikiplus-Setting-Input');
-			if ($editArea.length > 0) {
-				void renderEditor($editArea, $editArea.attr('id') === 'Wikiplus-Setting-Input');
+			const selector = '#Wikiplus-Quickedit, #Wikiplus-Setting-Input',
+				[added] = $(
+					records.flatMap(({addedNodes}) => {
+						return [...addedNodes];
+					})
+				).find<HTMLTextAreaElement>(selector);
+			if (added) {
+				void renderEditor(added, added.id === 'Wikiplus-Setting-Input');
+			}
+			const [removed] = $(
+					records.flatMap(({removedNodes}) => {
+						return [...removedNodes];
+					})
+				).find<HTMLTextAreaElement>(selector),
+				cm = CodeMirror6.instances?.get(removed!);
+			if (typeof cm?.destroy === 'function') {
+				cm.destroy();
 			}
 		});
 		observer.observe(document.body, {childList: true});
 
-		mediaWiki.loader.load(`${CDN}/${REPO_CDN}@${version}/styles.min.css`, 'text/css');
+		mw.loader.load(`${CDN}/${REPO_CDN}@${version}/styles.min.css`, 'text/css');
 	}
 })();
+
+export {};

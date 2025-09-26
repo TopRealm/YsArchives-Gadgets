@@ -1,4 +1,4 @@
-import 'types-mediawiki';
+import type {} from 'types-mediawiki';
 import type * as Monaco from 'monaco-editor';
 import type {CodeMirror6} from '@bhsd/codemirror-mediawiki';
 
@@ -9,8 +9,8 @@ interface CodeMirror extends CodeMirror6 {
 type WikiplusPages = Record<number, {title: string; sectionCache: Record<string, string>}>;
 
 declare global {
-	// eslint-disable-next-line no-shadow
 	const CodeMirror6: {
+		instances?: WeakMap<HTMLTextAreaElement, CodeMirror>;
 		fromTextArea(textarea: HTMLTextAreaElement, lang?: string, ns?: number, page?: string): Promise<CodeMirror>;
 	};
 

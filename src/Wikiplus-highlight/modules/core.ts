@@ -1,10 +1,8 @@
-/* eslint-disable jsdoc/require-param-type */
-import {getObject} from '@bhsd/common';
+import {getObject} from '@bhsd/browser';
 
 const {wgPageName: page, wgNamespaceNumber: ns, wgPageContentModel: contentmodel} = mw.config.get();
 
 const CONTENTMODELS: Record<string, string> = {
-		'sanitized-css': 'css',
 		wikitext: 'mediawiki',
 	},
 	EXTS: Record<string, string> = {
@@ -51,10 +49,16 @@ const getPageMode = async (value: string): Promise<[string, (number | undefined)
 					return 'mediawiki';
 				}
 				const mode = EXTS[t.getExtension()?.toLowerCase() ?? ''] ?? NAMESPACES[namespace];
-				if (mode) {
-					return mode === 'javascript' && (namespace === 8 || namespace === 2300) ? 'gadget' : mode;
+				switch (mode) {
+					case 'javascript':
+						return namespace === 8 || namespace === 2300 ? 'gadget' : mode;
+					case 'css':
+						return namespace === 2 || namespace === 8 || namespace === 2300 ? mode : 'sanitized-css';
+					case undefined:
+						return namespace === 10 || namespace === 2 ? 'template' : 'mediawiki';
+					default:
+						return mode;
 				}
-				return namespace === 10 || namespace === 2 ? 'template' : 'mediawiki';
 			})
 		);
 		if (modes.size === 1) {
@@ -107,13 +111,13 @@ const submit = /** 提交编辑 */ (): true => {
 /**
  * 渲染编辑器
  *
- * @param $target 目标编辑框
+ * @param target 目标编辑框
  * @param setting 是否是Wikiplus设置（使用json语法）
  */
-export const renderEditor = async ($target: JQuery<HTMLTextAreaElement>, setting: boolean): Promise<void> => {
+export const renderEditor = async (target: HTMLTextAreaElement, setting: boolean): Promise<void> => {
 	const cm = await CodeMirror6.fromTextArea(
-		$target[0]!,
-		...(setting ? (['json'] satisfies [string]) : await getPageMode($target.val()!))
+		target,
+		...(setting ? (['json'] satisfies [string]) : await getPageMode(target.value))
 	);
 	(cm.view?.dom ?? cm.editor!.getDomNode()!).id = 'Wikiplus-CodeMirror';
 

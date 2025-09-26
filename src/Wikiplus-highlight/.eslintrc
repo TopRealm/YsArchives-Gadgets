@@ -1,9 +1,12 @@
 {
 	"rules": {
+		"@typescript-eslint/no-namespace": "off",
 		"@typescript-eslint/no-unsafe-call": "off",
 		"@typescript-eslint/no-unsafe-assignment": "off",
-		"unicorn/no-await-expression-member": "off",
-		"jsdoc/require-returns": "off"
+		"jsdoc/require-returns": "off",
+		"jsdoc/require-param-type": "off",
+		"no-shadow": "off",
+		"unicorn/no-await-expression-member": "off"
 	},
 	"globals": {
 		"CodeMirror": "readonly",
