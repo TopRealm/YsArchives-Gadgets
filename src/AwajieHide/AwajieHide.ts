@@ -53,12 +53,12 @@
 
 		const newBtn = document.createElement('button');
 		newBtn.className = 'awajie-hide-btn';
-		newBtn.innerHTML = `[<span style="color: var(--color-progressive, #36c);">${show === 'hide' ? expandtext : collapsetext}</span>]`;
+		newBtn.textContent = `[<span style="color: var(--color-progressive, #36c);">${show === 'hide' ? expandtext : collapsetext}</span>]`;
 		newBtn.addEventListener('click', (e) => {
 			e.stopPropagation();
 			const newBtnSpan = newBtn.querySelector('span');
 			if (!newBtnSpan) return;
-			newBtnSpan.innerHTML = newBtnSpan.innerHTML === expandtext ? collapsetext : expandtext;
+			newBtnSpan.textContent = newBtnSpan.innerHTML === expandtext ? collapsetext : expandtext;
 			HiddenSettings(item.dataset['item'] || '', newBtnSpan.innerHTML !== expandtext);
 		});
 		HideTitle.append(newBtn);
