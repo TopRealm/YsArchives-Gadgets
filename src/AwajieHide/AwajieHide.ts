@@ -1,7 +1,14 @@
+import './AwajieHide.less';
+
 (() => {
 	const domList = document.querySelectorAll('.wm-AwajieHide');
 	const domobj: Record<string, HTMLElement> = {};
+	const temp = document.createElement('div');
 
+    const ESCFun = (htmlStr: string) => {
+        temp.innerHTML = htmlStr
+        return temp.textContent
+    };
 	const HiddenSettings = (id: string, valuepx = false) => {
 		const currentItem = domobj[id];
 		if (!currentItem) return;
@@ -43,8 +50,8 @@
 		domobj[String(i)] = item;
 		const HideTitle = item.querySelector('.wm-AwajieHide > .wm-AwajieHide-title');
 		const HideContent = item.querySelector('.wm-AwajieHide > .wm-AwajieHide-content') as HTMLElement;
-		const expandtext = item.dataset['expandtext'] || '展开';
-		const collapsetext = item.dataset['collapsetext'] || '收起';
+		const expandtext = ESCFun(item.dataset['expandtext'] || '展开');
+		const collapsetext = ESCFun(item.dataset['collapsetext'] || '收起');
 		const show = item.dataset['show'] || 'hide';
 
 		if (!HideTitle || !HideContent) continue;
@@ -53,7 +60,7 @@
 
 		const newBtn = document.createElement('button');
 		newBtn.className = 'awajie-hide-btn';
-		newBtn.textContent = `[<span style="color: var(--color-progressive, #36c);">${show === 'hide' ? expandtext : collapsetext}</span>]`;
+		newBtn.innerHTML = `[<span style="color: var(--color-progressive, #36c);">${show === 'hide' ? expandtext : collapsetext}</span>]`;
 		newBtn.addEventListener('click', (e) => {
 			e.stopPropagation();
 			const newBtnSpan = newBtn.querySelector('span');
