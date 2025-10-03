@@ -5,10 +5,10 @@ import './AwajieHide.less';
 	const domobj: Record<string, HTMLElement> = {};
 	const temp = document.createElement('div');
 
-    const ESCFun = (htmlStr: string) => {
-        temp.innerHTML = htmlStr
-        return temp.textContent
-    };
+	const ESCFun = (htmlStr: string) => {
+		temp.innerHTML = htmlStr;
+		return temp.textContent;
+	};
 	const HiddenSettings = (id: string, valuepx = false) => {
 		const currentItem = domobj[id];
 		if (!currentItem) return;
