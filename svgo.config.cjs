@@ -1,4 +1,4 @@
-// @docs https://www.mediawiki.org/wiki/Manual:Coding_conventions/SVG#Exemplified_safe_configuration
+// https://www.mediawiki.org/wiki/Manual:Coding_conventions/SVG#Exemplified_safe_configuration
 module.exports = {
 	js2svg: {
 		eol: 'lf',
@@ -9,12 +9,8 @@ module.exports = {
 	plugins: [
 		{
 			name: 'preset-default',
-			params: {
-				overrides: {
-					removeViewBox: false,
-				},
-			},
 		},
+		'convertStyleToAttrs',
 		'removeRasterImages',
 		'sortAttrs',
 	],
