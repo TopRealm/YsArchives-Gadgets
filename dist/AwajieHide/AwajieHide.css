@@ -1,0 +1,49 @@
+/**
+ * SPDX-License-Identifier: CC-BY-SA-4.0
+ * _addText: '{{Gadget Header|license=CC-BY-SA-4.0|import=no}}'
+ *
+ * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/AwajieHide}
+ * @author [[User:顶呱呱的阿杰]]
+ * @license CC-BY-SA-4.0 {@link https://youshou.wiki/wiki/H:CC-BY-SA-4.0}
+ */
+/**
+ * +------------------------------------------------------------+
+ * |            === WARNING: GLOBAL GADGET FILE ===             |
+ * +------------------------------------------------------------+
+ * |       All changes should be made in the repository,        |
+ * |                otherwise they will be lost.                |
+ * +------------------------------------------------------------+
+ * |        Changes to this page may affect many users.         |
+ * | Please discuss changes by opening an issue before editing. |
+ * +------------------------------------------------------------+
+ */
+/* <nowiki> */
+
+/* src/AwajieHide/AwajieHide.less */
+.wm-AwajieHide {
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin: 0.5rem auto;
+  box-shadow: 1px 1px 5px rgba(77, 77, 77, 0.2);
+}
+.wm-AwajieHide .wm-AwajieHide-title {
+  text-align: center;
+  background-color: rgba(234, 236, 240);
+}
+.wm-AwajieHide .wm-AwajieHide-title button {
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+.wm-AwajieHide .wm-AwajieHide-content {
+  transition: height 0.5s;
+  background-color: #fff;
+  overflow-y: hidden;
+}
+.wm-AwajieHide .wm-AwajieHide-content .wm-AwajieHide-content-p {
+  padding: 0.5rem;
+}
+
+/* </nowiki> */
+
+/*# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiLi4vLi4vc3JjL0F3YWppZUhpZGUvQXdhamllSGlkZS5sZXNzIl0sCiAgInNvdXJjZXNDb250ZW50IjogWyIud20tQXdhamllSGlkZSB7XG4gIGJvcmRlci1yYWRpdXM6IDAuNXJlbTtcbiAgb3ZlcmZsb3c6IGhpZGRlbjtcbiAgbWFyZ2luOiAwLjVyZW0gYXV0bztcbiAgYm94LXNoYWRvdzogMXB4IDFweCA1cHggcmdiYSg3NywgNzcsIDc3LCAwLjIpO1xufVxuLndtLUF3YWppZUhpZGUgLndtLUF3YWppZUhpZGUtdGl0bGUge1xuICB0ZXh0LWFsaWduOiBjZW50ZXI7XG4gIGJhY2tncm91bmQtY29sb3I6IHJnYmEoMjM0LCAyMzYsIDI0MCk7XG59XG4ud20tQXdhamllSGlkZSAud20tQXdhamllSGlkZS10aXRsZSBidXR0b24ge1xuICBib3JkZXI6IDA7XG4gIGJhY2tncm91bmQtY29sb3I6IHRyYW5zcGFyZW50O1xuICBjdXJzb3I6IHBvaW50ZXI7XG59XG4ud20tQXdhamllSGlkZSAud20tQXdhamllSGlkZS1jb250ZW50IHtcbiAgdHJhbnNpdGlvbjogaGVpZ2h0IDAuNXM7XG4gIGJhY2tncm91bmQtY29sb3I6ICNmZmY7XG4gIG92ZXJmbG93LXk6IGhpZGRlbjtcbn1cbi53bS1Bd2FqaWVIaWRlIC53bS1Bd2FqaWVIaWRlLWNvbnRlbnQgLndtLUF3YWppZUhpZGUtY29udGVudC1wIHtcbiAgcGFkZGluZzogMC41cmVtO1xufVxuIl0sCiAgIm1hcHBpbmdzIjogIjs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUFBLENBQUM7QUFDQyxpQkFBZTtBQUNmLFlBQVU7QUFDVixVQUFRLE9BQU87QUFDZixjQUFZLElBQUksSUFBSSxJQUFJLEtBQUssRUFBRSxFQUFFLEVBQUUsRUFBRSxFQUFFLEVBQUU7QUFDM0M7QUFDQSxDQU5DLGNBTWMsQ0FBQztBQUNkLGNBQVk7QUFDWixvQkFBa0IsS0FBSyxHQUFHLEVBQUUsR0FBRyxFQUFFO0FBQ25DO0FBQ0EsQ0FWQyxjQVVjLENBSkMsb0JBSW9CO0FBQ2xDLFVBQVE7QUFDUixvQkFBa0I7QUFDbEIsVUFBUTtBQUNWO0FBQ0EsQ0FmQyxjQWVjLENBQUM7QUFDZCxjQUFZLE9BQU87QUFDbkIsb0JBQWtCO0FBQ2xCLGNBQVk7QUFDZDtBQUNBLENBcEJDLGNBb0JjLENBTEMsc0JBS3NCLENBQUM7QUFDckMsV0FBUztBQUNYOyIsCiAgIm5hbWVzIjogW10KfQo= */

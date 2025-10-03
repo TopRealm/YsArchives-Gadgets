@@ -70,6 +70,7 @@
 		"MediaWiki:Gadget-AutoLink/zh-sg",
 		"MediaWiki:Gadget-AutoLink/zh-tw",
 		"MediaWiki:Gadget-AwajieHide",
+		"MediaWiki:Gadget-AwajieHide.css",
 		"MediaWiki:Gadget-AwajieHide.js",
 		"MediaWiki:Gadget-AwajieHide/zh",
 		"MediaWiki:Gadget-AwajieHide/zh-cn",
