@@ -1,12 +1,14 @@
 (() => {
-	const domList = document.querySelectorAll('.wm-AwajieHide');
+	const domList = document.querySelectorAll('.wm-NewHideTemplate');
 	const domobj: Record<string, HTMLElement> = {};
 
 	const HiddenSettings = (id: string, valuepx = false) => {
 		const currentItem = domobj[id];
 		if (!currentItem) return;
 
-		const HideContent = currentItem.querySelector('.wm-AwajieHide > .wm-AwajieHide-content') as HTMLElement;
+		const HideContent = currentItem.querySelector(
+			'.wm-NewHideTemplate > .wm-NewHideTemplate-content'
+		) as HTMLElement;
 		if (!HideContent) return;
 
 		if (valuepx) {
@@ -20,10 +22,10 @@
 		}
 		let parent = currentItem.parentElement;
 		while (parent) {
-			const parentHide = parent.closest('.wm-AwajieHide');
+			const parentHide = parent.closest('.wm-NewHideTemplate');
 			if (parentHide) {
 				const parentContent = parentHide.querySelector(
-					'.wm-AwajieHide > .wm-AwajieHide-content'
+					'.wm-NewHideTemplate > .wm-NewHideTemplate-content'
 				) as HTMLElement;
 				if (parentContent && parentContent.style.height !== '0px') {
 					parentContent.style.height = 'auto';
@@ -41,8 +43,8 @@
 		if (!item) continue;
 		item.dataset['item'] = String(i);
 		domobj[String(i)] = item;
-		const HideTitle = item.querySelector('.wm-AwajieHide > .wm-AwajieHide-title');
-		const HideContent = item.querySelector('.wm-AwajieHide > .wm-AwajieHide-content') as HTMLElement;
+		const HideTitle = item.querySelector('.wm-NewHideTemplate > .wm-NewHideTemplate-title');
+		const HideContent = item.querySelector('.wm-NewHideTemplate > .wm-NewHideTemplate-content') as HTMLElement;
 		const expandtext = item.dataset['expandtext'] || '展开';
 		const collapsetext = item.dataset['collapsetext'] || '收起';
 		const show = item.dataset['show'] || 'hide';
@@ -52,7 +54,7 @@
 		HideContent.style.height = show === 'hide' && show ? '0px' : `${HideContent.clientHeight}px`;
 
 		const newBtn = document.createElement('button');
-		newBtn.className = 'awajie-hide-btn';
+		newBtn.className = 'new-hide-template-btn';
 		newBtn.textContent = `[<span style="color: var(--color-progressive, #36c);">${show === 'hide' ? expandtext : collapsetext}</span>]`;
 		newBtn.addEventListener('click', (e) => {
 			e.stopPropagation();

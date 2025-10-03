@@ -1,0 +1,8 @@
+{
+	"enable": true,
+	"description": "<sup><abbr title=\"默认为所有注册用户启用\">U</abbr></sup><span id=\"Gadget-NewHideTemplate\"></span> NewHideTemplate <small>提供新的Hide模板</small>",
+	"section": "browser",
+	"default": true,
+	"dependencies": ["mediawiki.user"],
+	"hidden": true
+}
