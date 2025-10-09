@@ -1,11 +1,14 @@
 /* [[Special:CreateAccount]]页面样式 */
+
 .mw-special-CreateAccount {
 	.mw-ui-container {
+		display: flex;
 		flex-flow: row wrap;
 		place-content: flex-start space-between;
 		align-items: flex-start;
 		margin-right: 0 !important;
 		float: none !important;
+		gap: 2em;
 
 		#signupstart {
 			flex: 1 1 100%;
@@ -14,16 +17,35 @@
 		#userloginForm {
 			display: flex;
 			flex: 1 1 100px;
+			min-width: 0;
 			margin: 2em;
 
-			@media screen and (max-width: 768px) {
+			@media screen and (max-width: 1024px) {
 				flex: 1 1 100%;
+			}
+
+			@media screen and (max-width: 768px) {
+				flex-direction: column;
+				margin: 1.5em 0 0;
 			}
 		}
 	}
 
 	.mw-createacct-benefits-container {
 		flex: 1 1 100px;
+		min-width: 0;
 		margin: 2em;
+
+		@media screen and (max-width: 768px) {
+			margin: 1.5em 0;
+		}
+	}
+
+	@media screen and (max-width: 768px) {
+		.mw-ui-container {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 1.5em;
+		}
 	}
 }
