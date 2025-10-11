@@ -108,7 +108,7 @@
 		"eslint-plugin-vue": "^9.33.0",
 		"git-pull-run": "^1.6.2",
 		"glob": "^11.0.3",
-		"happy-dom": "^17.6.3",
+		"happy-dom": "^20.0.0",
 		"husky": "^9.1.7",
 		"less-plugin-npm-import": "^2.1.0",
 		"less-plugin-preset-env": "^2.0.2",
