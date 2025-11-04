@@ -3,7 +3,7 @@ const getShortDomains = (): string[] => {
 	let domains: string[] = [];
 
 	switch (wgWikiID) {
-		case 'wiki-ysy':
+		case 'zhysy':
 			domains = ['ysymh.cc', 'youshou.wiki'];
 			break;
 	}

@@ -154,7 +154,7 @@ var getShortDomains = () => {
   } = mw.config.get();
   let domains2 = [];
   switch (wgWikiID) {
-    case "wiki-ysy":
+    case "zhysy":
       domains2 = ["ysymh.cc", "youshou.wiki"];
       break;
   }

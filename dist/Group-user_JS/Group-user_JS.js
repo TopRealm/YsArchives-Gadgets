@@ -212,7 +212,7 @@ var replaceRandom = ($body) => {
   const {
     wgWikiID
   } = mw.config.get();
-  if (wgWikiID !== "wiki-ysy") {
+  if (wgWikiID !== "zhysy") {
     return;
   }
   if (!(0, import_ext_gadget2.userIsInGroup)(["rnrsverify-confirmed", "rnrsverify-exempt", "steward", "qiuwen", "confirmed", "autoconfirmed"])) {
