@@ -305,8 +305,10 @@ const catALot = (): void => {
 			if (CAL.variantCache[category] !== undefined) {
 				return CAL.variantCache[category];
 			}
-			if (mw.storage.getObject(OPTIONS.storageKey + category)) {
-				CAL.variantCache[category] = mw.storage.getObject(OPTIONS.storageKey + category) as string[];
+			// Prefer session storage to avoid filling persistent localStorage
+			const store = (mw.storage.session || mw.storage) as typeof mw.storage;
+			if (store.getObject(OPTIONS.storageKey + category)) {
+				CAL.variantCache[category] = store.getObject(OPTIONS.storageKey + category) as string[];
 				return CAL.variantCache[category];
 			}
 			let results: string[] = [];
@@ -331,7 +333,7 @@ const catALot = (): void => {
 			// De-duplicate
 			results = uniqueArray(results); // Replace Set with uniqueArray, avoiding core-js polyfilling
 			CAL.variantCache[category] = results;
-			mw.storage.setObject(OPTIONS.storageKey + category, results, 60 * 60 * 24); // 1 day
+			store.setObject(OPTIONS.storageKey + category, results, 60 * 60 * 24); // 1 day
 			return results;
 		}
 

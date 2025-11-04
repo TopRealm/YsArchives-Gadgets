@@ -1,6 +1,9 @@
 import * as OPTIONS from '../../options.json';
 import {api} from './api';
 
+// Prefer session storage to avoid filling persistent localStorage
+const store = (mw.storage.session || mw.storage) as typeof mw.storage;
+
 const queryUserGroups = async (ususers: string | string[]) => {
 	const params: ApiQueryUsersParams = {
 		ususers,
@@ -41,8 +44,8 @@ const getLocalUserGroups = async (ususers: string[]): Promise<Record<string, str
 	});
 
 	for (const user of ususers) {
-		if (mw.storage.getObject(OPTIONS.storageKeyLocal + user)) {
-			userGroups[user] = mw.storage.getObject(OPTIONS.storageKeyLocal + user) as string[];
+		if (store.getObject(OPTIONS.storageKeyLocal + user)) {
+			userGroups[user] = store.getObject(OPTIONS.storageKeyLocal + user) as string[];
 		}
 		ususers = ususers.filter((username) => {
 			return username !== user;
@@ -72,7 +75,7 @@ const getLocalUserGroups = async (ususers: string[]): Promise<Record<string, str
 			];
 
 			// Cache for 1 hour
-			mw.storage.setObject(OPTIONS.storageKeyLocal + name, userGroups[name], 60 * 60);
+			store.setObject(OPTIONS.storageKeyLocal + name, userGroups[name], 60 * 60);
 		}
 	} catch (error: unknown) {
 		console.error('[MarkRights] Ajax error:', error);
@@ -89,8 +92,8 @@ const getGlobalUserGroups = async (ususers: string[]): Promise<Record<string, st
 	});
 
 	for (const user of ususers) {
-		if (mw.storage.getObject(OPTIONS.storageKeyGlobal + user)) {
-			userGroups[user] = mw.storage.getObject(OPTIONS.storageKeyGlobal + user) as string[];
+		if (store.getObject(OPTIONS.storageKeyGlobal + user)) {
+			userGroups[user] = store.getObject(OPTIONS.storageKeyGlobal + user) as string[];
 		}
 		ususers = ususers.filter((username) => {
 			return username !== user;
@@ -115,7 +118,7 @@ const getGlobalUserGroups = async (ususers: string[]): Promise<Record<string, st
 			userGroups[user] = [...userGroups[user], ...groups];
 
 			// Cache for 1 hour
-			mw.storage.setObject(OPTIONS.storageKeyGlobal + user, userGroups[user], 60 * 60);
+			store.setObject(OPTIONS.storageKeyGlobal + user, userGroups[user], 60 * 60);
 		} catch (error: unknown) {
 			console.error('[MarkRights] Ajax error:', error);
 		}
