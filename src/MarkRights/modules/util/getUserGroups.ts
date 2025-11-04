@@ -21,12 +21,17 @@ const getLocalUserGroups = async (ususers: string[]): Promise<Record<string, str
 	const userGroups: Record<string, string[]> = {};
 
 	ususers = ususers.filter((username) => {
-		if (mw.storage.getObject(OPTIONS.storageKeyLocal + username)) {
-			userGroups[username] = mw.storage.getObject(OPTIONS.storageKeyLocal + username) as string[];
-		}
-
 		return !userGroups?.[username]?.length;
 	});
+
+	for (const user of ususers) {
+		if (mw.storage.getObject(OPTIONS.storageKeyLocal + user)) {
+			userGroups[user] = mw.storage.getObject(OPTIONS.storageKeyLocal + user) as string[];
+		}
+		ususers = ususers.filter((username) => {
+			return username !== user;
+		});
+	}
 
 	try {
 		const response = await queryUserGroups(ususers);
