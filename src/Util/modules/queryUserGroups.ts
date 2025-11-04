@@ -6,9 +6,6 @@ type QueryUserGroups = typeof queryUserGroups;
 async function queryUserGroups(users: string[]) {
 	const api: mw.Api = initMwApi('Util-QueryUserGroups');
 
-	// Prefer session storage to avoid filling persistent localStorage
-	const store = (mw.storage.session || mw.storage) as typeof mw.storage;
-
 	const CACHE_KEY_PREFIX = 'ext.gadget.Util_queryUserGroups-';
 
 	const cachedQueryUsers: {groups: string[]; name: string}[] = [];
@@ -17,8 +14,8 @@ async function queryUserGroups(users: string[]) {
 	for (const user of users) {
 		// Check if user group info is cached in LocalStorage
 		// If cached, get them from LocalStorage
-		if (store.getObject(CACHE_KEY_PREFIX + user)) {
-			let groups = store.getObject(CACHE_KEY_PREFIX + user) as string[];
+		if (mw.storage.getObject(CACHE_KEY_PREFIX + user)) {
+			let groups = mw.storage.getObject(CACHE_KEY_PREFIX + user) as string[];
 			// Remove '*' from groups
 			groups = groups.filter((element) => {
 				return element !== '*';
@@ -31,7 +28,7 @@ async function queryUserGroups(users: string[]) {
 	// Query from web
 	const ususers = users.filter((v) => {
 		// Remove user that have cached user groups locally
-		return !store.getObject(CACHE_KEY_PREFIX + v);
+		return !mw.storage.getObject(CACHE_KEY_PREFIX + v);
 	});
 
 	// Query params
@@ -62,7 +59,7 @@ async function queryUserGroups(users: string[]) {
 			});
 
 			// Cache for 1 hour
-			store.setObject(CACHE_KEY_PREFIX + user.name, groups, 60 * 60);
+			mw.storage.setObject(CACHE_KEY_PREFIX + user.name, groups, 60 * 60);
 		}
 	}
 

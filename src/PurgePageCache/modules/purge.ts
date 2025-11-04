@@ -26,31 +26,6 @@ const purge: Purge = async (title) => {
 		await api.post(params);
 		localStorage.removeItem(`MediaWikiModuleStore:${wgWikiID}`);
 
-		// Clean up potentially large legacy gadget caches to free up localStorage
-		try {
-			localStorage.removeItem('Wikiplus_i18nCache');
-			localStorage.removeItem('Wikiplus_LanguageVersion');
-			localStorage.removeItem('ext.gadget.AdvancedSiteNotices_cache');
-			// Remove per-user/group caches that can accumulate many keys
-			const prefixes = [
-				'ext.gadget.Util_queryUserGroups-',
-				'ext.gadget.Util_queryGlobalUserGroups-',
-				'ext.gadget.MarkRights_local-',
-				'ext.gadget.MarkRights_global-',
-				'ext.gadget.Cat-a-Lot_results-',
-			];
-			for (const key in localStorage) {
-				if (!Object.hasOwn(localStorage, key)) continue;
-				if (
-					prefixes.some((p) => {
-						return key.startsWith(p);
-					})
-				) {
-					localStorage.removeItem(key);
-				}
-			}
-		} catch {}
-
 		toastifyInstance.hideToast();
 		toastify(
 			{

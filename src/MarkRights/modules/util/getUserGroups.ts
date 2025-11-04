@@ -1,9 +1,6 @@
 import * as OPTIONS from '../../options.json';
 import {api} from './api';
 
-// Prefer session storage to avoid filling persistent localStorage
-const store = (mw.storage.session || mw.storage) as typeof mw.storage;
-
 const queryUserGroups = async (ususers: string | string[]) => {
 	const params: ApiQueryUsersParams = {
 		ususers,
@@ -20,37 +17,16 @@ const queryUserGroups = async (ususers: string | string[]) => {
 	return response;
 };
 
-const queryGlobalUserGroups = async (guiuser: string) => {
-	const params = {
-		action: 'query',
-		format: 'json',
-		formatversion: '2',
-		meta: 'globaluserinfo',
-		guiuser,
-		guiprop: 'groups',
-		smaxage: 600,
-		maxage: 600,
-	};
-	const response = await api.get(params);
-
-	return response;
-};
-
 const getLocalUserGroups = async (ususers: string[]): Promise<Record<string, string[]>> => {
 	const userGroups: Record<string, string[]> = {};
 
 	ususers = ususers.filter((username) => {
+		if (mw.storage.getObject(OPTIONS.storageKeyLocal + username)) {
+			userGroups[username] = mw.storage.getObject(OPTIONS.storageKeyLocal + username) as string[];
+		}
+
 		return !userGroups?.[username]?.length;
 	});
-
-	for (const user of ususers) {
-		if (store.getObject(OPTIONS.storageKeyLocal + user)) {
-			userGroups[user] = store.getObject(OPTIONS.storageKeyLocal + user) as string[];
-		}
-		ususers = ususers.filter((username) => {
-			return username !== user;
-		});
-	}
 
 	try {
 		const response = await queryUserGroups(ususers);
@@ -75,7 +51,7 @@ const getLocalUserGroups = async (ususers: string[]): Promise<Record<string, str
 			];
 
 			// Cache for 1 hour
-			store.setObject(OPTIONS.storageKeyLocal + name, userGroups[name], 60 * 60);
+			mw.storage.setObject(OPTIONS.storageKeyLocal + name, userGroups[name], 60 * 60);
 		}
 	} catch (error: unknown) {
 		console.error('[MarkRights] Ajax error:', error);
@@ -84,47 +60,4 @@ const getLocalUserGroups = async (ususers: string[]): Promise<Record<string, str
 	return userGroups;
 };
 
-const getGlobalUserGroups = async (ususers: string[]): Promise<Record<string, string[]>> => {
-	const userGroups: Record<string, string[]> = {};
-
-	ususers = ususers.filter((username) => {
-		return !userGroups?.[username]?.length;
-	});
-
-	for (const user of ususers) {
-		if (store.getObject(OPTIONS.storageKeyGlobal + user)) {
-			userGroups[user] = store.getObject(OPTIONS.storageKeyGlobal + user) as string[];
-		}
-		ususers = ususers.filter((username) => {
-			return username !== user;
-		});
-	}
-
-	for (const user of ususers) {
-		try {
-			const response = await queryGlobalUserGroups(user);
-			const {globaluserinfo} = response['query'] as {
-				globaluserinfo: {groups: string[]};
-			};
-
-			if (!globaluserinfo?.groups) {
-				continue;
-			}
-
-			const {groups} = globaluserinfo;
-
-			userGroups[user] ??= [];
-
-			userGroups[user] = [...userGroups[user], ...groups];
-
-			// Cache for 1 hour
-			store.setObject(OPTIONS.storageKeyGlobal + user, userGroups[user], 60 * 60);
-		} catch (error: unknown) {
-			console.error('[MarkRights] Ajax error:', error);
-		}
-	}
-
-	return userGroups;
-};
-
-export {getLocalUserGroups, getGlobalUserGroups, queryUserGroups, queryGlobalUserGroups};
+export {getLocalUserGroups, queryUserGroups};

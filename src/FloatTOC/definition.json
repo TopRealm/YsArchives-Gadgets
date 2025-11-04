@@ -2,6 +2,7 @@
 	"enable": true,
 	"description": "<span id=\"Gadget-FloatTOC\"></span> 浮动目录",
 	"section": "browser",
+	"excludeSites": ["loginwiki"],
 	"actions": ["view"],
 	"dependencies": [
 		"ext.gadget.FilterAlteredClicks",

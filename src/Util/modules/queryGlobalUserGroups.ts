@@ -6,9 +6,6 @@ type QueryGlobalUserGroups = typeof queryGlobalUserGroups;
 async function queryGlobalUserGroups(guiuser: string) {
 	const api: mw.Api = initMwApi('Util-QueryGlobalUserGroups');
 
-	// Prefer session storage to avoid filling persistent localStorage
-	const store = (mw.storage.session || mw.storage) as typeof mw.storage;
-
 	const CACHE_KEY_PREFIX = 'ext.gadget.Util_queryGlobalUserGroups-';
 
 	let groups: string[] = [];
@@ -16,8 +13,8 @@ async function queryGlobalUserGroups(guiuser: string) {
 	// Query from cache
 	// Check if user group info is cached in LocalStorage
 	// If cached, get them from LocalStorage
-	if (store.getObject(CACHE_KEY_PREFIX + guiuser)) {
-		groups = store.getObject(CACHE_KEY_PREFIX + guiuser) as string[];
+	if (mw.storage.getObject(CACHE_KEY_PREFIX + guiuser)) {
+		groups = mw.storage.getObject(CACHE_KEY_PREFIX + guiuser) as string[];
 		// Remove '*' from groups
 		groups = groups.filter((element) => {
 			return element !== '*';
@@ -50,7 +47,7 @@ async function queryGlobalUserGroups(guiuser: string) {
 			});
 
 			// Cache for 1 hour
-			store.setObject(CACHE_KEY_PREFIX + guiuser, groups, 60 * 60);
+			mw.storage.setObject(CACHE_KEY_PREFIX + guiuser, groups, 60 * 60);
 		}
 	}
 

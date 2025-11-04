@@ -2,7 +2,7 @@ import {userIsInGroup} from 'ext.gadget.Util';
 
 const replaceRandom = ($body: JQuery<HTMLBodyElement>) => {
 	const {wgWikiID} = mw.config.get();
-	if (wgWikiID !== 'zhysy') {
+	if (wgWikiID !== 'wiki-ysy') {
 		return;
 	}
 

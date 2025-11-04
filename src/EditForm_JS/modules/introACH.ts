@@ -4,7 +4,7 @@ const introACH = (): void => {
 	const {wgAction, wgArticleId, wgWikiID, wgNamespaceNumber} = mw.config.get();
 
 	// Disabled for wikis other than ysarchives
-	if (wgWikiID !== 'zhysy') {
+	if (wgWikiID !== 'wiki-ysy') {
 		return;
 	}
 
