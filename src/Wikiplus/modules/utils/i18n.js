@@ -14,15 +14,18 @@ class I18n {
 				.toLowerCase();
 		}
 		this.language = language;
-		// Merge with localStorage i18n cache
+		// Merge with sessionStorage i18n cache (limit to current language to avoid bloating storage)
 		try {
-			const i18nCache = JSON.parse(localStorage.getItem('Wikiplus_i18nCache'));
-			for (const key of Object.keys(i18nCache)) {
-				this.i18nData[key] = i18nCache[key];
+			const raw = sessionStorage.getItem('Wikiplus_i18nCache') || '{}';
+			const i18nCache = JSON.parse(raw);
+			if (i18nCache && typeof i18nCache === 'object' && i18nCache[language]) {
+				this.i18nData[language] = i18nCache[language];
 			}
 		} catch {
-			// Fail to parse i18n cache, reset
-			localStorage.setItem('Wikiplus_i18nCache', '{}');
+			// Fail to parse i18n cache, reset (in session)
+			try {
+				sessionStorage.setItem('Wikiplus_i18nCache', '{}');
+			} catch {}
 		}
 	}
 	translate(key, placeholders = []) {
@@ -62,14 +65,19 @@ class I18n {
 					`https://gitcdn.qiuwen.net.cn/InterfaceAdmin/Wikiplus/raw/branch/dev/languages/${language}.json`
 				)
 			).json();
-			const nowVersion = localStorage.getItem('Wikiplus_LanguageVersion') || '000';
+			const nowVersion = sessionStorage.getItem('Wikiplus_LanguageVersion') || '000';
 			this.sessionUpdateLog.push(language);
 			if (response.__version !== nowVersion || !(language in this.i18nData)) {
 				// Language get updated
 				console.info(`Update ${language} support to version ${response.__version}`);
 				this.i18nData[language] = response;
-				// Update localStorage cache
-				localStorage.setItem('Wikiplus_i18nCache', JSON.stringify(this.i18nData));
+				// Update sessionStorage cache, only keep current language to reduce footprint
+				try {
+					sessionStorage.setItem('Wikiplus_i18nCache', JSON.stringify({[language]: response}));
+					sessionStorage.setItem('Wikiplus_LanguageVersion', String(response.__version || ''));
+				} catch (e) {
+					// Quota exceeded or disabled storage; ignore persistence
+				}
 			}
 		} catch {
 			// Unsupported language

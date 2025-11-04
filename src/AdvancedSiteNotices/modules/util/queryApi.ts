@@ -22,13 +22,16 @@ const parameters: ApiParseParams = {
 
 const queryApi = async (): Promise<ReturnType<mw.Api['get']>> => {
 	try {
+		// Use session storage if available to avoid filling persistent localStorage
+		const store = (mw.storage.session || mw.storage) as typeof mw.storage;
 		let response;
 
-		if (mw.storage.getObject(OPTIONS.cacheKey)) {
-			response = mw.storage.getObject(OPTIONS.cacheKey) as ReturnType<mw.Api['get']>;
+		if (store.getObject(OPTIONS.cacheKey)) {
+			response = store.getObject(OPTIONS.cacheKey) as ReturnType<mw.Api['get']>;
 		} else {
 			response = await api.get(parameters);
-			mw.storage.setObject(OPTIONS.cacheKey, response, 60 * 10);
+			// Use session storage for this short-lived cache to reduce localStorage footprint
+			store.setObject(OPTIONS.cacheKey, response, 60 * 10);
 		}
 
 		return response;

@@ -26,6 +26,13 @@ const purge: Purge = async (title) => {
 		await api.post(params);
 		localStorage.removeItem(`MediaWikiModuleStore:${wgWikiID}`);
 
+		// Clean up potentially large legacy gadget caches to free up localStorage
+		try {
+			localStorage.removeItem('Wikiplus_i18nCache');
+			localStorage.removeItem('Wikiplus_LanguageVersion');
+			localStorage.removeItem('ext.gadget.AdvancedSiteNotices_cache');
+		} catch {}
+
 		toastifyInstance.hideToast();
 		toastify(
 			{
