@@ -17,6 +17,22 @@ const queryUserGroups = async (ususers: string | string[]) => {
 	return response;
 };
 
+const queryGlobalUserGroups = async (guiuser: string) => {
+	const params = {
+		action: 'query',
+		format: 'json',
+		formatversion: '2',
+		meta: 'globaluserinfo',
+		guiuser,
+		guiprop: 'groups',
+		smaxage: 600,
+		maxage: 600,
+	};
+	const response = await api.get(params);
+
+	return response;
+};
+
 const getLocalUserGroups = async (ususers: string[]): Promise<Record<string, string[]>> => {
 	const userGroups: Record<string, string[]> = {};
 
@@ -65,4 +81,47 @@ const getLocalUserGroups = async (ususers: string[]): Promise<Record<string, str
 	return userGroups;
 };
 
-export {getLocalUserGroups, queryUserGroups};
+const getGlobalUserGroups = async (ususers: string[]): Promise<Record<string, string[]>> => {
+	const userGroups: Record<string, string[]> = {};
+
+	ususers = ususers.filter((username) => {
+		return !userGroups?.[username]?.length;
+	});
+
+	for (const user of ususers) {
+		if (mw.storage.getObject(OPTIONS.storageKeyGlobal + user)) {
+			userGroups[user] = mw.storage.getObject(OPTIONS.storageKeyGlobal + user) as string[];
+		}
+		ususers = ususers.filter((username) => {
+			return username !== user;
+		});
+	}
+
+	for (const user of ususers) {
+		try {
+			const response = await queryGlobalUserGroups(user);
+			const {globaluserinfo} = response['query'] as {
+				globaluserinfo: {groups: string[]};
+			};
+
+			if (!globaluserinfo?.groups) {
+				continue;
+			}
+
+			const {groups} = globaluserinfo;
+
+			userGroups[user] ??= [];
+
+			userGroups[user] = [...userGroups[user], ...groups];
+
+			// Cache for 1 hour
+			mw.storage.setObject(OPTIONS.storageKeyGlobal + user, userGroups[user], 60 * 60);
+		} catch (error: unknown) {
+			console.error('[MarkRights] Ajax error:', error);
+		}
+	}
+
+	return userGroups;
+};
+
+export {getLocalUserGroups, getGlobalUserGroups, queryUserGroups, queryGlobalUserGroups};

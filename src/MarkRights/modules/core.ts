@@ -1,6 +1,6 @@
+import {getGlobalUserGroups, getLocalUserGroups} from './util/getUserGroups';
 import {appendUserRightsMark} from './util/appendUserRightsMark';
 import {generateUserLinks} from './util/generateUserLinks';
-import {getLocalUserGroups} from './util/getUserGroups';
 
 const markUserRights = ($content: JQuery): void => {
 	const userLinks = generateUserLinks($content);
@@ -34,6 +34,18 @@ const markUserRights = ($content: JQuery): void => {
 
 			try {
 				userGroups = await getLocalUserGroups(ususers);
+			} catch (error: unknown) {
+				console.error('[MarkRights] Ajax error:', error);
+			}
+
+			appendUserRightsMark($userLinks, userGroups);
+		};
+
+		promises[promises.length] = async (): Promise<void> => {
+			let userGroups: Record<string, string[]> = {};
+
+			try {
+				userGroups = await getGlobalUserGroups(ususers);
 			} catch (error: unknown) {
 				console.error('[MarkRights] Ajax error:', error);
 			}

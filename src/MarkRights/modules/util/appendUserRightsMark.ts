@@ -25,7 +25,8 @@ const appendUserRightsMark = ($userLinks: JQuery<HTMLAnchorElement>[], userGroup
 
 		for (const group of uniqueArray(groups)) {
 			const className: string = `gadgets-markrights__${group}`;
-			if ($sups.find('sup').hasClass(className)) {
+			const deprecatedClassName: string = `gadgets-markrights-${group}`;
+			if ($sups.find('sup').hasClass(className) || $sups.find('sup').hasClass(deprecatedClassName)) {
 				continue;
 			}
 
@@ -35,6 +36,7 @@ const appendUserRightsMark = ($userLinks: JQuery<HTMLAnchorElement>[], userGroup
 				// * for more information
 				$('<sup>')
 					.addClass(className)
+					.addClass(deprecatedClassName)
 					.attr({
 						alt: getMessage(group as UserRights),
 						title: getMessage(group as UserRights),

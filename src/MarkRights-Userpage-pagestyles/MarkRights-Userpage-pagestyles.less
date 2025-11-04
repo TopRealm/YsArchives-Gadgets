@@ -1,24 +1,20 @@
+@import (reference) '../mixins.less';
 @import (reference) '../variables.less';
 
 .gadget-markrights_userpage {
 	display: inline-block;
-	margin-bottom: 0.25em !important;
+	margin: 0 0.25em !important;
 	padding: 0 0.5em !important;
-	border: 1px solid #ddd;
+	border: 1px solid @const-color-gray;
 	white-space: nowrap;
 	border-radius: @border-radius--small;
 	font-size: 0.9em;
+	user-select: none;
 
 	.mw-footer & {
 		margin-bottom: 0.25em !important;
 
-		& + .gadget-markrights_userpage {
-			margin-left: 0.25em !important;
-		}
-
-		.ve-activated & {
-			display: none;
-		}
+		.ve-activated-disabled();
 	}
 
 	&__text {
