@@ -7,7 +7,15 @@ const replaceRandom = ($body: JQuery<HTMLBodyElement>) => {
 	}
 
 	if (
-		!userIsInGroup(['rnrsverify-confirmed', 'rnrsverify-exempt', 'steward', 'qiuwen', 'confirmed', 'autoconfirmed'])
+		!userIsInGroup([
+			'rnrsverify-confirmed',
+			'rnrsverify-exempt',
+			'steward',
+			'honorary-maintainer',
+			'qiuwen',
+			'confirmed',
+			'autoconfirmed',
+		])
 	) {
 		return;
 	}

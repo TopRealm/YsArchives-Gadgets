@@ -17,6 +17,11 @@ const getI18nMessages = () => {
 			'zh-hans': '档案理事员',
 			'zh-hant': '檔案理事員',
 		}),
+		'honorary-maintainer': localize({
+			en: 'Honorary Maintainer',
+			'zh-hans': '荣誉维护员',
+			'zh-hant': '榮譽維護員',
+		}),
 		checkuser: localize({
 			en: 'CheckUser',
 			'zh-hans': '用户查核',

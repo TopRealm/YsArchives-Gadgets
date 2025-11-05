@@ -1,0 +1,44 @@
+/**
+ * +------------------------------------------------------------+
+ * |            === WARNING: GLOBAL GADGET FILE ===             |
+ * +------------------------------------------------------------+
+ * |       All changes should be made in the repository,        |
+ * |                otherwise they will be lost.                |
+ * +------------------------------------------------------------+
+ * |        Changes to this page may affect many users.         |
+ * | Please discuss changes by opening an issue before editing. |
+ * +------------------------------------------------------------+
+ */
+/* <nowiki> */
+
+/* src/Group-honorary-maintainer/Group-honorary-maintainer.less */
+/*!
+ * SPDX-License-Identifier: CC-BY-SA-4.0
+ *
+ * @base {@link https://zh.wikipedia.org/wiki/MediaWiki:Group-user.css}
+ * @license CC-BY-SA-4.0 {@link https://www.qiuwenbaike.cn/wiki/H:CC-BY-SA-4.0}
+ */
+div.honorary-maintainer-show,
+p.honorary-maintainer-show {
+  display: block !important;
+}
+span.honorary-maintainer-show,
+small.honorary-maintainer-show {
+  display: inline !important;
+}
+table.honorary-maintainer-show {
+  display: table !important;
+}
+tr.honorary-maintainer-show {
+  display: table-row !important;
+}
+td.honorary-maintainer-show {
+  display: table-cell !important;
+}
+li.honorary-maintainer-show {
+  display: list-item !important;
+}
+
+/* </nowiki> */
+
+/*# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiLi4vLi4vc3JjL0dyb3VwLWhvbm9yYXJ5LW1haW50YWluZXIvR3JvdXAtaG9ub3JhcnktbWFpbnRhaW5lci5sZXNzIl0sCiAgInNvdXJjZXNDb250ZW50IjogWyIvKiFcbiAqIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBDQy1CWS1TQS00LjBcbiAqXG4gKiBAYmFzZSB7QGxpbmsgaHR0cHM6Ly96aC53aWtpcGVkaWEub3JnL3dpa2kvTWVkaWFXaWtpOkdyb3VwLXVzZXIuY3NzfVxuICogQGxpY2Vuc2UgQ0MtQlktU0EtNC4wIHtAbGluayBodHRwczovL3d3dy5xaXV3ZW5iYWlrZS5jbi93aWtpL0g6Q0MtQlktU0EtNC4wfVxuICovXG5kaXYuaG9ub3JhcnktbWFpbnRhaW5lci1zaG93LFxucC5ob25vcmFyeS1tYWludGFpbmVyLXNob3cge1xuICBkaXNwbGF5OiBibG9jayAhaW1wb3J0YW50O1xufVxuc3Bhbi5ob25vcmFyeS1tYWludGFpbmVyLXNob3csXG5zbWFsbC5ob25vcmFyeS1tYWludGFpbmVyLXNob3cge1xuICBkaXNwbGF5OiBpbmxpbmUgIWltcG9ydGFudDtcbn1cbnRhYmxlLmhvbm9yYXJ5LW1haW50YWluZXItc2hvdyB7XG4gIGRpc3BsYXk6IHRhYmxlICFpbXBvcnRhbnQ7XG59XG50ci5ob25vcmFyeS1tYWludGFpbmVyLXNob3cge1xuICBkaXNwbGF5OiB0YWJsZS1yb3cgIWltcG9ydGFudDtcbn1cbnRkLmhvbm9yYXJ5LW1haW50YWluZXItc2hvdyB7XG4gIGRpc3BsYXk6IHRhYmxlLWNlbGwgIWltcG9ydGFudDtcbn1cbmxpLmhvbm9yYXJ5LW1haW50YWluZXItc2hvdyB7XG4gIGRpc3BsYXk6IGxpc3QtaXRlbSAhaW1wb3J0YW50O1xufVxuIl0sCiAgIm1hcHBpbmdzIjogIjs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQTtBQUFBO0FBQUE7QUFBQTtBQUFBO0FBQUE7QUFNQSxHQUFHLENBQUM7QUFDSixDQUFDLENBREc7QUFFRixXQUFTO0FBQ1g7QUFDQSxJQUFJLENBSkE7QUFLSixLQUFLLENBTEQ7QUFNRixXQUFTO0FBQ1g7QUFDQSxLQUFLLENBUkQ7QUFTRixXQUFTO0FBQ1g7QUFDQSxFQUFFLENBWEU7QUFZRixXQUFTO0FBQ1g7QUFDQSxFQUFFLENBZEU7QUFlRixXQUFTO0FBQ1g7QUFDQSxFQUFFLENBakJFO0FBa0JGLFdBQVM7QUFDWDsiLAogICJuYW1lcyI6IFtdCn0K */

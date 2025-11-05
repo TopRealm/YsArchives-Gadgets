@@ -3,6 +3,7 @@ type UserRights =
 	| 'webmaster'
 	| 'responsibleoperator'
 	| 'steward'
+	| 'honorary-maintainer'
 	| 'checkuser'
 	| 'suppress'
 	| 'sysop'

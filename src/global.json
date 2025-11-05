@@ -44,6 +44,10 @@
 			"enable": true,
 			"sourceCode": "mw.loader.using(['ext.gadget.Group-steward']);"
 		},
+		"Group-honorary-maintainer.js": {
+			"enable": true,
+			"sourceCode": "mw.loader.using(['ext.gadget.Group-honorary-maintainer']);"
+		},
 		"Group-sysop.js": {
 			"enable": true,
 			"sourceCode": "mw.loader.using(['ext.gadget.Group-sysop']);"

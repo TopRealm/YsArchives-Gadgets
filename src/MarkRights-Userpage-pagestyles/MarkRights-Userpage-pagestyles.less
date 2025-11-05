@@ -43,6 +43,14 @@
 			content: '【理】';
 		}
 
+		&__honorary-maintainer::before {
+			content: '【誉】';
+
+			html:lang(zh-hant) & {
+				content: '【譽】';
+			}
+		}
+
 		&__sysop::before {
 			content: '【管】';
 		}
@@ -141,6 +149,12 @@
 	&__steward {
 		border-color: @color-group--steward;
 		color: @color-group--steward;
+	}
+
+	/* 荣誉维护员：橙 */
+	&__honorary-maintainer {
+		border-color: @color-group--honorary-maintainer;
+		color: @color-group--honorary-maintainer;
 	}
 
 	/* 高级管理人员（管、界、监、查）：紫红 */
