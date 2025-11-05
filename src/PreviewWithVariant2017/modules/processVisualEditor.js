@@ -196,7 +196,7 @@ const processVisualEditor = ($body) => {
 			classes: [OPTIONS.className],
 			options: [
 				{
-					optgroup: mw.msg('pwv-2017-caption'),
+					optgroup: mw.message('pwv-2017-caption').parse(),
 				},
 				...DATA.map((item) => {
 					return {

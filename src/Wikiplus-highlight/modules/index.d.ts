@@ -4,6 +4,8 @@ import type {CodeMirror6} from '@bhsd/codemirror-mediawiki';
 
 interface CodeMirror extends CodeMirror6 {
 	editor?: Monaco.editor.IStandaloneCodeEditor;
+	view?: {dom: HTMLElement};
+	extraKeys(keys: Array<{key: string; run: () => boolean}>): void;
 }
 
 type WikiplusPages = Record<number, {title: string; sectionCache: Record<string, string>}>;

@@ -340,7 +340,7 @@ const getViewer = ($body: JQuery<HTMLBodyElement>, hash: string): typeof viewer 
 	NoteTAViewer.static.title = getMessage('Title');
 	NoteTAViewer.static.actions = [
 		{
-			label: mw.msg('ooui-dialog-process-dismiss'),
+			label: mw.message('ooui-dialog-process-dismiss').parse(),
 			flags: 'safe',
 		},
 	];

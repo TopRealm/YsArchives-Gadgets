@@ -81,7 +81,7 @@ const getPageMode = async (value: string): Promise<[string, (number | undefined)
 	}
 	await mw.loader.using('oojs-ui-windows');
 	if (
-		await OO.ui.confirm(mw.msg('cm-mw-contentmodel'), {
+		await OO.ui.confirm(mw.message('cm-mw-contentmodel').parse(), {
 			actions: [{label: ns === 274 ? 'Widget' : 'Lua'}, {label: 'Wikitext', action: 'accept'}],
 		})
 	) {
