@@ -124,11 +124,13 @@ const queryImageInfo = async (titles: string | string[]) => {
 };
 
 const detectIfFileRedirect: DetectIfFileRedirect = async (pageNames, isFileNS = false) => {
-	pageNames = uniqueArray(generateArray(pageNames));
+	// generateArray/uniqueArray 在此处保证只产生字符串标题，已人工确认安全
+
+	const titlesArray = uniqueArray(generateArray(pageNames));
 	const promises: (() => Promise<void>)[] = [];
 
-	for (let i = 0; i < pageNames.length; i++) {
-		let titles = pageNames.splice(0, 25);
+	while (titlesArray.length) {
+		let titles: string[] = titlesArray.splice(0, 25);
 		if (!titles.length) {
 			continue;
 		}
@@ -196,7 +198,7 @@ const detectIfFileRedirect: DetectIfFileRedirect = async (pageNames, isFileNS = 
 							}
 
 							if (page2.imagerepository && page2.imagerepository !== 'local') {
-								// 使用qiuwenbaike的文件URL
+								// 使用wiki文件URL
 								await uploadFile(title, page2.imageinfo[0].url);
 							}
 						}

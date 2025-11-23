@@ -12,7 +12,7 @@
  *
  * @source {@link https://www.qiuwenbaike.cn/wiki/File:Chinese_conversion_black.svg}
  * @author Chiefwei
- * @license CC-BY-SA-4.0 {@link https://www.qiuwenbaike.cn/wiki/H:CC-BY-SA-4.0}
+ * @license CC-BY-SA-4.0 {@link https://youshou.wiki/wiki/H:CC-BY-SA-4.0}
  */
 
 /**

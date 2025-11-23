@@ -3,7 +3,7 @@
  * _addText: '{{Gadget Header|title=GeoLocationReader|license=CC-BY-SA-4.0}}'
  *
  * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/GeoLocationReader}
- * @license CC-BY-SA-4.0 {@link https://www.qiuwenbaike.cn/wiki/H:CC-BY-SA-4.0}
+ * @license CC-BY-SA-4.0 {@link https://youshou.wiki/wiki/H:CC-BY-SA-4.0}
  */
 /**
  * +------------------------------------------------------------+

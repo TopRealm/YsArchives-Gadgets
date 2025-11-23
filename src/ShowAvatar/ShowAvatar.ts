@@ -1,7 +1,10 @@
 import './ShowAvatar.less';
 /* eslint-disable no-jquery/no-parse-html-literal */
 
-const header = $('#citizen-page-header .citizen-page-header-inner .citizen-page-heading .firstHeading-container');
+const $body: JQuery<HTMLBodyElement> = $('body');
+const header = $body.find(
+	'#citizen-page-header .citizen-page-header-inner .citizen-page-heading .firstHeading-container'
+);
 
 const avatarUrl = new URL('https://youshou.wiki/');
 avatarUrl.searchParams.set('user', mw.config.get('wgPageName').replace(/^user:/i, ''));
