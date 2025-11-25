@@ -12,7 +12,7 @@
 		"editor.defaultFormatter": "esbenp.prettier-vscode"
 	},
 	"[css]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
+		"editor.defaultFormatter": "vscode.css-language-features"
 	},
 	"[less]": {
 		"editor.defaultFormatter": "esbenp.prettier-vscode"

@@ -1,0 +1,6 @@
+{
+	"enable": true,
+	"description": "<span id=\"Gadget-InPageEdit-v2\"></span> [[Help:InPageEdit|InPageEdit v2]] <small>已过时版本</small>",
+	"section": "edit",
+	"rights": ["skipcaptcha"]
+}

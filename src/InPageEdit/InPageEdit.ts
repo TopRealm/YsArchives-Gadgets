@@ -1,13 +1,17 @@
-import './InPageEdit.less';
-
 (function inPageEditLoader(): void {
 	/**!
-	 * SPDX-License-Identifier: GPL-3.0-or-later
+	 * SPDX-License-Identifier: MIT
 	 *
-	 * @name InPageEdit
-	 * @source {@link https://git.qiuwen.net.cn/AnYi/inpageedit-v2/src/branch/master}
+	 * @name InPageEdit NEXT
+	 * @source {@link https://git.qiuwen.net.cn/InterfaceAdmin/inpageedit-next/src/branch/master}
 	 * @author 机智的小鱼君 Dragon-Fish <dragon-fish@qq.com>
-	 * @license GPL-3.0-or-later {@link https://git.qiuwen.net.cn/AnYi/inpageedit-v2/src/branch/master/LICENSE}
+	 * @license MIT {@link https://git.qiuwen.net.cn/InterfaceAdmin/inpageedit-next/src/branch/master/LICENSE}
 	 */
-	mw.loader.load('https://gitcdn.qiuwen.net.cn/AnYi/inpageedit-v2/raw/branch/master/dist/InPageEdit.min.js');
+	// InPageEdit NEXT
+	document.body.append(
+		Object.assign(document.createElement('script'), {
+			src: 'https://gitcdn.qiuwen.net.cn/InterfaceAdmin/inpageedit-next/raw/branch/master/packages/core/dist/index.js',
+			type: 'module',
+		})
+	);
 })();
