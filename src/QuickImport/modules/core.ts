@@ -197,9 +197,18 @@ const detectIfFileRedirect: DetectIfFileRedirect = async (pageNames, isFileNS = 
 								continue;
 							}
 
-							if (page2.imagerepository && page2.imagerepository !== 'local') {
-								// 使用wiki文件URL
-								await uploadFile(title, page2.imageinfo[0].url);
+							const isSharedFile = page2.imagerepository && page2.imagerepository !== 'local';
+							const isMissingContent =
+								(!page2.imagerepository || page2.imagerepository === 'local') &&
+								(!page2.imageinfo || !page2.imageinfo.length);
+
+							if (isSharedFile || isMissingContent) {
+								// 如果是共享文件，使用已知的 URL；如果是缺失文件，传 undefined 让 uploadFile 使用默认的 Special:Redirect URL
+								const urlToUse =
+									isSharedFile && page2.imageinfo && page2.imageinfo[0]
+										? page2.imageinfo[0].url
+										: undefined;
+								await uploadFile(title, urlToUse);
 							}
 						}
 					}

@@ -21,7 +21,7 @@ import {detectIfFileRedirect, refreshPage} from './modules/core';
 			? '重定向目标'
 			: '页面';
 
-	if ((wgWikiID !== 'zhqiuwenbaike' && isFileNS) || wgNamespaceNumber < 0) {
+	if ((wgWikiID !== 'zhysy' && isFileNS) || wgNamespaceNumber < 0) {
 		return;
 	}
 
