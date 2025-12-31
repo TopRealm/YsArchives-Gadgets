@@ -455,33 +455,6 @@ fieldset {
 	min-width: 0;
 }
 
-// 权限设置页面响应式样式 修改防止元素溢出
-body[class*='page-Special_用户权限'] {
-	fieldset {
-		border-radius: 5px;
-		#wpReason,
-		#username {
-			width: 90%;
-			padding: 5px;
-			border-radius: 5px;
-		}
-		input[value='保存用户组'],
-		input[name='saveusergroups'] {
-			.input-bottom();
-		}
-		#mw-userrights-table-outer {
-			input[name='user-reason'] {
-				width: 95%;
-				padding: 5px;
-				border-radius: 4px;
-			}
-			input[name='saveusergroups'] {
-				.input-bottom();
-			}
-		}
-	}
-}
-
 // 搜索页面样式 微调
 body.page-Special_搜索 {
 	.oo-ui-layout.oo-ui-fieldLayout.oo-ui-fieldLayout-align-top.oo-ui-actionFieldLayout {
