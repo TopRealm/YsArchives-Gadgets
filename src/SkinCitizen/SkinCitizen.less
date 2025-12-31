@@ -459,21 +459,29 @@ fieldset {
 body[class*='page-Special_用户权限'] {
 	fieldset {
 		border-radius: 5px;
+		.cdx-text-input,
+		.cdx-checkbox,
 		#wpReason,
 		#username {
 			width: 90%;
-			padding: 5px;
-			border-radius: 5px;
+			&:not(.cdx-text-input, .cdx-checkbox) {
+				padding: 5px;
+				border-radius: 5px;
+			}
 		}
-		input[value='加载用户组'],
+		input[value='保存用户组'],
 		input[name='saveusergroups'] {
 			.input-bottom();
 		}
 		#mw-userrights-table-outer {
+			.cdx-text-input,
+			.cdx-checkbox,
 			input[name='user-reason'] {
 				width: 95%;
-				padding: 5px;
-				border-radius: 4px;
+				&:not(.cdx-text-input, .cdx-checkbox) {
+					padding: 5px;
+					border-radius: 4px;
+				}
 			}
 			input[name='saveusergroups'] {
 				.input-bottom();
