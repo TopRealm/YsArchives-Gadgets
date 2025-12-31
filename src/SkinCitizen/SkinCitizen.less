@@ -459,26 +459,34 @@ fieldset {
 body[class*='page-Special_用户权限'] {
 	fieldset {
 		border-radius: 5px;
+		// 文本输入框样式
 		.cdx-text-input,
-		.cdx-checkbox,
 		#wpReason,
 		#username {
 			width: 90%;
-			&:not(.cdx-text-input, .cdx-checkbox) {
+			&:not(.cdx-text-input) {
 				padding: 5px;
 				border-radius: 5px;
 			}
 		}
+		// 复选框样式 (Codex & Native) - 避免拉伸
+		.cdx-checkbox,
+		.mw-userrights-groupcheckbox,
+		#wpWatch {
+			max-width: 90%;
+			vertical-align: middle;
+		}
+
 		input[value='保存用户组'],
 		input[name='saveusergroups'] {
 			.input-bottom();
 		}
 		#mw-userrights-table-outer {
+			// 表格内的输入框
 			.cdx-text-input,
-			.cdx-checkbox,
 			input[name='user-reason'] {
 				width: 95%;
-				&:not(.cdx-text-input, .cdx-checkbox) {
+				&:not(.cdx-text-input) {
 					padding: 5px;
 					border-radius: 4px;
 				}
