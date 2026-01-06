@@ -72,6 +72,7 @@ const DEFINITION_SECTION_MAP = {
 	edit: '编辑类小工具',
 	skin: '皮肤脚本、样式表',
 	sysop: '管理类小工具',
+	usergroup: '用户组专用小工具',
 } as const satisfies DefaultSectionMap;
 
 /**
