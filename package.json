@@ -90,6 +90,8 @@
 		"@vue/eslint-config-typescript": "^13.0.0",
 		"@vue/language-plugin-pug": "^2.2.10",
 		"alpha-sort": "^5.0.0",
+		"baseline": "^0.3.0",
+		"baseline-browser-mapping": "^2.9.11",
 		"broadcastchannel-polyfill": "^1.0.1",
 		"browserslist": "^4.24.4",
 		"caniuse-api": "^3.0.0",
