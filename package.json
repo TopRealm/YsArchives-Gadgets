@@ -110,7 +110,7 @@
 		"eslint-plugin-unicorn": "^56.0.1",
 		"eslint-plugin-vue": "^9.33.0",
 		"git-pull-run": "^1.6.1",
-		"glob": "^11.0.2",
+		"glob": "^11.1.0",
 		"happy-dom": "^20.0.2",
 		"husky": "^9.1.7",
 		"less-plugin-npm-import": "^2.1.0",
