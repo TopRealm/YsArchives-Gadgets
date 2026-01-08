@@ -65,7 +65,6 @@
 * GeoLocationReader[ResourceLoader|default|dependencies=ext.gadget.i18n,ext.gadget.JSX,ext.gadget.MarkRights,ext.gadget.Util,mediawiki.api,mediawiki.Title|namespaces=2|peers=GeoLocationReader-pagestyles|rights=edit|requiresES6]|GeoLocationReader.js
 * GeoLocationReader-pagestyles[ResourceLoader|hidden|requiresES6]|GeoLocationReader-pagestyles.css
 * i18n[ResourceLoader|dependencies=ext.gadget.Util|hidden|requiresES6]|i18n.js
-* IDBPlus[ResourceLoader|hidden|requiresES6]|IDBPlus.js
 * JSX[ResourceLoader|hidden|requiresES6]|JSX.js
 * morebits[ResourceLoader|dependencies=ext.gadget.i18n,ext.gadget.select2,ext.gadget.Util,jquery.ui,mediawiki.Title,mediawiki.user,mediawiki.util|hidden|requiresES6]|morebits.js|morebits.css
 * NavFrame-pagestyles[ResourceLoader|hidden|requiresES6]|NavFrame-pagestyles.css
