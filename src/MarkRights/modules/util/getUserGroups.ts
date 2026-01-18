@@ -25,7 +25,7 @@ const getLocalUserGroups = async (ususers: string[]): Promise<Record<string, str
 			userGroups[username] = mw.storage.getObject(OPTIONS.storageKeyLocal + username) as string[];
 		}
 
-		return !userGroups?.[username]?.length;
+		return !Object.keys(userGroups).includes(username);
 	});
 
 	try {
