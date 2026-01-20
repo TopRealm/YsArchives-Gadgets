@@ -11,9 +11,13 @@ const markUserRights = ($content: JQuery): void => {
 		return;
 	}
 
-	const $userLinks = Object.values(userLinks).reduce((previousValue, currentValue) => {
-		return [...previousValue, ...currentValue];
-	});
+	const $userLinks: JQuery<HTMLAnchorElement>[] = [];
+	for (const links of Object.values(userLinks)) {
+		for (const link of links) {
+			$userLinks.push(link);
+		}
+	}
+
 	if (!$userLinks.length) {
 		return;
 	}

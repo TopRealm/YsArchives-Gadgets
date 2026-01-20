@@ -12,23 +12,24 @@ const markBlockedUserLinks = (userLinks: Record<string, JQuery[]>) => {
 
 	const promises: (() => Promise<void>)[] = [];
 
+	const usersToQuery: string[] = [];
 	for (const user of users) {
-		if (mw.storage.getObject(OPTIONS.storageKeyBlocked + user)) {
-			const response = mw.storage.getObject(
-				OPTIONS.storageKeyBlocked + user
-			) as QueryLocalAndGlobalBlocksResponse;
+		let processed = false;
 
-			if (response['query']?.blocks) {
-				if (response['query']?.blocks) {
-					markLocalBlocks({response, userLinks});
-				}
+		const cached = mw.storage.getObject(OPTIONS.storageKeyBlocked + user) as
+			| QueryLocalAndGlobalBlocksResponse
+			| undefined;
 
-				users = users.filter((element) => {
-					return element !== user;
-				});
-			}
+		if (cached && cached['query']?.blocks) {
+			markLocalBlocks({response: cached, userLinks});
+			processed = true;
+		}
+
+		if (!processed) {
+			usersToQuery.push(user);
 		}
 	}
+	users = usersToQuery;
 
 	// Local and global user block queries
 	for (let i = 0; i < users.length; i++) {
