@@ -31,7 +31,7 @@ const getLocalUserGroups = async (ususers: string[]): Promise<Record<string, str
 	try {
 		const response = await queryUserGroups(ususers);
 		const {users: queryUsers} = response['query'] as {
-			users: {groups: string[]; name: string}[];
+			users: {groups: string[]; implicitgroups: string[]; name: string}[];
 		};
 
 		for (const user of queryUsers) {
@@ -39,13 +39,16 @@ const getLocalUserGroups = async (ususers: string[]): Promise<Record<string, str
 				continue;
 			}
 
-			const {name, groups} = user;
+			const {name, groups, implicitgroups} = user;
 
 			userGroups[name] ??= [];
 
 			userGroups[name] = [
 				...userGroups[name],
 				...groups.filter((element) => {
+					return element !== '*';
+				}),
+				...(implicitgroups || []).filter((element) => {
 					return element !== '*';
 				}),
 			];

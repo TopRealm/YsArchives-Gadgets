@@ -20,7 +20,7 @@ const markUserRights = ($content: JQuery): void => {
 
 	const promises: (() => Promise<void>)[] = [];
 
-	for (let i = 0; i < users.length; i++) {
+	while (users.length) {
 		const ususers = users.splice(0, 25).filter((element) => {
 			return !(mw.util.isIPv4Address(element) || mw.util.isIPv6Address(element));
 		});
