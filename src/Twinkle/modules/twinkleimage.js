@@ -312,7 +312,7 @@
 			}
 			pageobj.setPageText(tag + text);
 			let editSummary = window.wgULS('请求快速删除（', '請求快速刪除（');
-			editSummary += `[[QW:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]`;
+			editSummary += `[[LIB:CSD#${params.normalized.toUpperCase()}|CSD ${params.normalized.toUpperCase()}]]`;
 			editSummary += '）';
 			pageobj.setEditSummary(editSummary);
 			pageobj.setChangeTags(Twinkle.changeTags);

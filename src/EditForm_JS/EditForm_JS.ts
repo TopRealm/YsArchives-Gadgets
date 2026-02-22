@@ -16,6 +16,6 @@ void getBody().then(function editForm($body: JQuery<HTMLBodyElement>): void {
 		preloadRevid($editForm);
 	});
 
-	// 新用户引导至条目创建向导（[[QW:AFC]]）
+	// 新用户引导至条目创建向导（[[LIB:AFC]]）
 	// introACH();
 });

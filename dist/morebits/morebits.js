@@ -2674,7 +2674,7 @@ var import_ext_gadget = require("ext.gadget.Util");
             return;
           }
         }
-        ctx.editSummary = "[[QW:UNDO|撤销]]由 ".concat(ctx.revertUser, " 所做出的").concat(window.wgULS("修订 ", "修訂 ")).concat(ctx.revertOldID, "：").concat(ctx.editSummary);
+        ctx.editSummary = "[[LIB:UNDO|撤销]]由 ".concat(ctx.revertUser, " 所做出的").concat(window.wgULS("修订 ", "修訂 ")).concat(ctx.revertOldID, "：").concat(ctx.editSummary);
       }
       ctx.pageLoaded = true;
       ctx.onLoadSuccess(this);

@@ -63,9 +63,9 @@ const introACH = (): void => {
 		} else if (wgNamespaceNumber === 0) {
 			/**
 			 * If editing pages under main namespace,
-			 * redirect to [[QW:ACH]]
+			 * redirect to [[LIB:ACH]]
 			 */
-			location.href = '/wiki/QW:ACH';
+			location.href = '/wiki/LIB:ACH';
 		}
 	}
 };

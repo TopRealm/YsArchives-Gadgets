@@ -7297,7 +7297,7 @@ var init_twinkleimage = __esm({
           }
           pageobj.setPageText(tag + text);
           let editSummary = window.wgULS("请求快速删除（", "請求快速刪除（");
-          editSummary += "[[QW:CSD#".concat(params.normalized.toUpperCase(), "|CSD ").concat(params.normalized.toUpperCase(), "]]");
+          editSummary += "[[LIB:CSD#".concat(params.normalized.toUpperCase(), "|CSD ").concat(params.normalized.toUpperCase(), "]]");
           editSummary += "）";
           pageobj.setEditSummary(editSummary);
           pageobj.setChangeTags(Twinkle.changeTags);
@@ -10600,7 +10600,7 @@ var init_twinklestub = __esm({
       Twinkle.stub.callback = () => {
         const Window = new Morebits.simpleWindow(630, Twinkle.stub.mode === "article" ? 450 : 400);
         Window.setScriptName("Twinkle");
-        Window.addFooterLink(window.wgULS("小作品說明", "小作品说明"), "QW:小作品");
+        Window.addFooterLink(window.wgULS("小作品說明", "小作品说明"), "LIB:小作品");
         Window.addFooterLink(window.wgULS("小作品设置", "小作品設定"), "H:TW/PREF#stub");
         Window.addFooterLink(window.wgULS("Twinkle帮助", "Twinkle說明"), "H:TW/DOC#stub");
         const form = new Morebits.quickForm(Twinkle.stub.callback.evaluate);
