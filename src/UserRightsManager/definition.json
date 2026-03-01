@@ -1,0 +1,16 @@
+{
+	"enable": true,
+	"description": "<span id=\"Gadget-UserRightsManager\"></span> 用户权限管理器 <small>用于[[Project talk:权限申请|权限申请]]页面</small>",
+	"section": "sysop",
+	"dependencies": [
+		"ext.gadget.i18n",
+		"ext.gadget.morebits",
+		"ext.gadget.Util",
+		"mediawiki.api",
+		"mediawiki.util",
+		"mediawiki.widgets.expiry",
+		"mediawiki.widgets.SelectWithInputWidget",
+		"oojs"
+	],
+	"rights": ["protect"]
+}
