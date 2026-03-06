@@ -14,5 +14,5 @@
 		"oojs-ui.styles.icons-interactions",
 		"oojs-ui.styles.icons-movement"
 	],
-	"skins": ["citizen", "vector"]
+	"skins": ["vector"]
 }
