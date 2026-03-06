@@ -11,5 +11,6 @@
 		"mediawiki.language",
 		"mediawiki.util"
 	],
+	"peers": ["Twinkle-pagestyles"],
 	"rights": ["skipcaptcha"]
 }
