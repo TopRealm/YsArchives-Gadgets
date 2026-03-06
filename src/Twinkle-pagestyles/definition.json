@@ -3,5 +3,6 @@
 	"description": "<span id=\"Gadget-Twinkle\"></span> “[[Help:Twinkle|Twinkle]]”配套样式表",
 	"section": "sysop",
 	"hidden": true,
+	"peers": ["Twinkle-pagestyles"],
 	"rights": ["skipcaptcha"]
 }
