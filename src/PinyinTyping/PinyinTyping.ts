@@ -25,11 +25,11 @@ const startTyping = (element: HTMLElement, targetText: string): void => {
 				for (const element_ of py) {
 					currentPinyin += element_;
 					outputElement.innerHTML = `${targetText.slice(0, Math.max(0, currentIndex))}<span class="pinyin-typing-ime-text">${currentPinyin}</span>`;
-					await delay(Math.random() * 50 + 40);
+					await delay(Math.random() * 30 + 30);
 				}
 
 				// 2. Pause to simulate IME word selection
-				await delay(150);
+				await delay(100);
 
 				// 3. Replace with the Chinese character
 				outputElement.innerHTML = targetText.slice(0, Math.max(0, currentIndex + 1));
@@ -41,9 +41,9 @@ const startTyping = (element: HTMLElement, targetText: string): void => {
 			currentIndex++;
 
 			// Random delay for the next character
-			let nextDelay = isChinese(char ?? '') ? Math.random() * 150 + 100 : Math.random() * 60 + 40;
+			let nextDelay = isChinese(char ?? '') ? Math.random() * 80 + 80 : Math.random() * 40 + 30;
 			if (/[。？！，.,!?]/.test(char ?? '')) {
-				nextDelay += 400; // Longer pause after punctuation
+				nextDelay += 250; // Longer pause after punctuation
 			}
 
 			window.setTimeout(() => {
