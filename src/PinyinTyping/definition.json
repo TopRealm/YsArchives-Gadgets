@@ -1,0 +1,6 @@
+{
+	"enable": true,
+	"description": "<span id=\"Gadget-PinyinTyping\"></span>精准拼音打字效果，支持通过设定特定的id（<code>id=\"pinyin-typing\"</code>）或类（<code>class=\"pinyin-typing\"</code>）触发。",
+	"section": "general",
+	"dependencies": ["ext.gadget.PinyinTyping-pagestyles", "ext.gadget.Util"]
+}
