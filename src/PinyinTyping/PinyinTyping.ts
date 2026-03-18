@@ -46,7 +46,7 @@ const main = async () => {
 			continue;
 		}
 
-		const to3rdPage = container.dataset['to3rd-page'] ?? '';
+		const to3rdPage = container.dataset['to3rdPage'] ?? '';
 		if (!to3rdPage) {
 			console.error('[PinyinTyping] To3RD page is not defined');
 			continue;
