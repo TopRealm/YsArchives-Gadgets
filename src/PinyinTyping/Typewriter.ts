@@ -1,12 +1,13 @@
 import {pinyin} from 'pinyin-pro';
 
 export type Config = {
-	list: string[];
+	list?: string[];
 	speed?: number;
 	pinyinspeed?: number;
 	dhtime?: number;
 	delay?: number;
 	tail?: string;
+	thispage?: boolean;
 };
 
 export default class Typewriter {
