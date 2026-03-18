@@ -58,3 +58,23 @@
 		opacity: 0;
 	}
 }
+
+// === To3RD 公告轮播支持 ===
+.to3rd-container {
+	position: relative;
+	min-height: 2em;
+}
+.to3rd-item {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	opacity: 0;
+	transition: opacity 0.5s;
+	pointer-events: none;
+}
+.to3rd-item.to3rd-active {
+	opacity: 1;
+	pointer-events: auto;
+	z-index: 1;
+}

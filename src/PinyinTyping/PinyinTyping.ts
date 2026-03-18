@@ -56,21 +56,37 @@ const startTyping = (element: HTMLElement, targetText: string): void => {
 };
 
 void getBody().then(($body: JQuery<HTMLElement>): void => {
-	// Support either finding an element by explicit ID or by class name
+	// 1. 拼音打字功能
 	const $targets = $body.find('#pinyin-typing, .pinyin-typing');
-
 	$targets.each((_, elem) => {
 		if (elem.classList.contains('pinyin-typing-container')) {
 			return; // already processed
 		}
-
 		const targetText = elem.textContent?.trim() ?? '';
 		if (targetText !== '') {
-			// Apply a container class just in case the wrapper needs styling later
 			elem.classList.add('pinyin-typing-container');
-			// Remove text immediately to prevent showing the full text before the effect starts
 			elem.replaceChildren();
 			startTyping(elem, targetText);
 		}
+	});
+
+	// 2. 全站公告式显隐轮播功能
+	// 支持 .to3rd-container 结构
+	$('.to3rd-container').each(function () {
+		const $items = $(this).find('.to3rd-item');
+		if ($items.length === 0) return;
+
+		// 初始化：随机显示一个
+		let currentIndex = Math.floor(Math.random() * $items.length);
+		$items.removeClass('to3rd-active').css('opacity', 0);
+		$items.eq(currentIndex).addClass('to3rd-active').css('opacity', 1);
+
+		if ($items.length <= 1) return;
+
+		setInterval(() => {
+			$items.eq(currentIndex).removeClass('to3rd-active').css('opacity', 0);
+			currentIndex = (currentIndex + 1) % $items.length;
+			$items.eq(currentIndex).addClass('to3rd-active').css('opacity', 1);
+		}, 5000);
 	});
 });
