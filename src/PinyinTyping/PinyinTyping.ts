@@ -8,6 +8,16 @@ type ParseResponse = {
 		text?: string;
 	};
 };
+type comments = {
+	username: string;
+	html: string;
+};
+
+declare const RLCONF: {
+	CommentStreams?: {
+		comments?: comments[];
+	};
+};
 
 const fetchTo3rdItems = async (pageTitle: string): Promise<string> => {
 	try {
@@ -39,17 +49,20 @@ const fetchTo3rdItems = async (pageTitle: string): Promise<string> => {
 const thisPageMessage = () => {
 	const list = [] as string[];
 
-	const Message = document.querySelectorAll<HTMLElement>('.cs-head-comment');
+	const Message = RLCONF?.CommentStreams?.comments ?? [];
 	if (!Message.length) {
 		console.error('[PinyinTyping] thisPageMessage head-comment is not defined');
 		return list;
 	}
 
+	const d = document.createElement('div');
+
 	for (const item of Message) {
-		const author = item.querySelector<HTMLElement>('.cs-comment-author');
-		const text = item.querySelector<HTMLElement>('.cs-comment-body');
+		const author = item.username;
+		d.innerHTML = item.html;
+		const text = d.textContent;
 		if (author && text) {
-			list.push(`${text.textContent ?? ''}  ————${author.textContent ?? ''}`);
+			list.push(`${text ?? ''}  ——${author ?? ''}`);
 		}
 	}
 	return list;
