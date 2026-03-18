@@ -1,5 +1,13 @@
-import {delay, getBody} from 'ext.gadget.Util';
+import {delay, getBody, initMwApi} from 'ext.gadget.Util';
 import {pinyin} from 'pinyin-pro';
+
+type ParseResponse = {
+	parse?: {
+		text?: string;
+	};
+};
+
+const api = initMwApi('PinyinTyping/To3RD');
 
 const isChinese = (char: string): boolean => {
 	return /[\u4e00-\u9fa5]/.test(char);
@@ -55,7 +63,121 @@ const startTyping = (element: HTMLElement, targetText: string): void => {
 	void typeCharacter();
 };
 
-void getBody().then(($body: JQuery<HTMLElement>): void => {
+const buildTo3rdItemsFromElements = (elements: HTMLElement[]): HTMLElement[] => {
+	return elements.map((element) => {
+		const item = document.createElement('div');
+		item.className = 'to3rd-item';
+		item.innerHTML = element.innerHTML;
+		return item;
+	});
+};
+
+const extractTo3rdItems = (html: string): HTMLElement[] => {
+	const wrapper = document.createElement('div');
+	wrapper.innerHTML = html;
+
+	const existingItems = [...wrapper.querySelectorAll<HTMLElement>('.to3rd-item')];
+	if (existingItems.length > 0) {
+		return existingItems;
+	}
+
+	const listItems = [...wrapper.querySelectorAll<HTMLLIElement>('li')];
+	if (listItems.length > 0) {
+		return buildTo3rdItemsFromElements(listItems);
+	}
+
+	const paragraphs = [...wrapper.querySelectorAll<HTMLParagraphElement>('p')];
+	if (paragraphs.length > 0) {
+		return buildTo3rdItemsFromElements(paragraphs);
+	}
+
+	const text = wrapper.textContent?.trim();
+	if (!text) {
+		return [];
+	}
+
+	const singleItem = document.createElement('div');
+	singleItem.className = 'to3rd-item';
+	singleItem.textContent = text;
+	return [singleItem];
+};
+
+const fetchTo3rdItems = async (pageTitle: string): Promise<HTMLElement[]> => {
+	try {
+		const response = (await api.get({
+			action: 'parse',
+			format: 'json',
+			formatversion: '2',
+			prop: 'text',
+			page: pageTitle,
+			uselang: mw.config.get('wgUserLanguage'),
+			variant: mw.config.get('wgUserLanguage'),
+			smaxage: 600,
+			maxage: 600,
+		})) as ParseResponse;
+
+		const html = response?.parse?.text ?? '';
+		if (!html) {
+			return [];
+		}
+
+		return extractTo3rdItems(html);
+	} catch (error) {
+		console.error('[PinyinTyping] To3RD fetch error:', error);
+		return [];
+	}
+};
+
+const getTo3rdInterval = ($container: JQuery): number => {
+	const interval = Number($container.data('to3rd-interval'));
+	if (Number.isFinite(interval) && interval > 0) {
+		return interval;
+	}
+	return 5000;
+};
+
+const startTo3rdRotation = ($container: JQuery): void => {
+	const $items = $container.find('.to3rd-item');
+	if ($items.length === 0) return;
+
+	let currentIndex = Math.floor(Math.random() * $items.length);
+	$items.removeClass('to3rd-active').css('opacity', 0);
+	$items.eq(currentIndex).addClass('to3rd-active').css('opacity', 1);
+
+	if ($items.length <= 1) return;
+
+	const interval = getTo3rdInterval($container);
+	setInterval(() => {
+		$items.eq(currentIndex).removeClass('to3rd-active').css('opacity', 0);
+		currentIndex = (currentIndex + 1) % $items.length;
+		$items.eq(currentIndex).addClass('to3rd-active').css('opacity', 1);
+	}, interval);
+};
+
+const initTo3rdContainer = async ($container: JQuery): Promise<void> => {
+	if ($container.hasClass('to3rd-initialized')) {
+		return;
+	}
+	$container.addClass('to3rd-initialized');
+
+	const pageTitle = ($container.data('to3rd-page') as string | undefined)?.trim();
+	if (pageTitle) {
+		const items = await fetchTo3rdItems(pageTitle);
+		if (items.length > 0) {
+			$container.empty();
+			for (const item of items) {
+				if (!item.classList.contains('to3rd-item')) {
+					item.classList.add('to3rd-item');
+				}
+				$container.append(item);
+			}
+		}
+	}
+
+	startTo3rdRotation($container);
+};
+
+void getBody().then(async ($body: JQuery<HTMLElement>): Promise<void> => {
 	// 1. 拼音打字功能
 	const $targets = $body.find('#pinyin-typing, .pinyin-typing');
 	$targets.each((_, elem) => {
@@ -71,22 +193,10 @@ void getBody().then(($body: JQuery<HTMLElement>): void => {
 	});
 
 	// 2. 全站公告式显隐轮播功能
-	// 支持 .to3rd-container 结构
-	$('.to3rd-container').each(function () {
-		const $items = $(this).find('.to3rd-item');
-		if ($items.length === 0) return;
-
-		// 初始化：随机显示一个
-		let currentIndex = Math.floor(Math.random() * $items.length);
-		$items.removeClass('to3rd-active').css('opacity', 0);
-		$items.eq(currentIndex).addClass('to3rd-active').css('opacity', 1);
-
-		if ($items.length <= 1) return;
-
-		setInterval(() => {
-			$items.eq(currentIndex).removeClass('to3rd-active').css('opacity', 0);
-			currentIndex = (currentIndex + 1) % $items.length;
-			$items.eq(currentIndex).addClass('to3rd-active').css('opacity', 1);
-		}, 5000);
+	// 支持 .to3rd-container 结构，可通过 data-to3rd-page 异步加载
+	const to3rdTasks: Promise<void>[] = [];
+	$body.find('.to3rd-container').each((_, element) => {
+		to3rdTasks.push(initTo3rdContainer($(element)));
 	});
+	await Promise.all(to3rdTasks);
 });

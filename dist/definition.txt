@@ -14,7 +14,7 @@
 * LoginToEdit[ResourceLoader|default|dependencies=ext.gadget.i18n,ext.gadget.Util,mediawiki.util,oojs-ui-windows|hidden|requiresES6]|LoginToEdit.js
 * NavboxCSS[ResourceLoader|default|hidden|requiresES6]|NavboxCSS.css
 * NospzGothic[ResourceLoader|default|requiresES6]|NospzGothic.css
-* PinyinTyping[ResourceLoader|default|dependencies=ext.gadget.PinyinTyping-pagestyles,ext.gadget.Util|requiresES6]|PinyinTyping.js
+* PinyinTyping[ResourceLoader|default|dependencies=ext.gadget.PinyinTyping-pagestyles,ext.gadget.Util,mediawiki.api|requiresES6]|PinyinTyping.js
 * PinyinTyping-pagestyles[ResourceLoader|default|hidden|requiresES6]|PinyinTyping-pagestyles.css
 * ShowAvatar[ResourceLoader|default|requiresES6]|ShowAvatar.js|ShowAvatar.css
 * StickyTableHeaders[ResourceLoader|dependencies=ext.gadget.Util|skins=gongbi,vector,vector-2022|requiresES6]|StickyTableHeaders.js|StickyTableHeaders.css

@@ -137,7 +137,7 @@ const GLOBAL_REQUIRES_ES6 = true satisfies boolean;
  *
  * The maximum concurrency number of requests to the API during deployment, the upper limit is 256
  */
-const MAX_CONCURRENCY = 6 satisfies number;
+const MAX_CONCURRENCY = 4 satisfies number;
 
 /**
  * 启用此选项会为全部小工具生成内联源映射
