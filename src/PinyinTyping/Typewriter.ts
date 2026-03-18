@@ -28,21 +28,24 @@ export default class Typewriter {
 		this.dom = dom;
 
 		this.rdom = document.createElement('span');
+		this.rdom.classList.add('typeing-text');
 		this.dom.append(this.rdom);
 		this.domAnimation = this.dom.animate([{opacity: 1}, {opacity: 0}], 500);
 		this.domAnimation.pause();
 		this.domAnimation.onfinish = () => {
 			this.rdom.textContent = '';
 			this.domAnimation.pause();
-			this.pinyindom.innerHTML = '';
+			this.pinyindom.textContent = '';
 			this.draw();
 		};
 
 		this.pinyindom = document.createElement('span');
+		this.pinyindom.classList.add('typeing-pinyin');
 		this.dom.append(this.pinyindom);
 
 		this.tail = config.tail ?? '';
 		this.tailDom = document.createElement('span');
+		this.tailDom.classList.add('typeing-tail');
 		this.tailDom.textContent = this.tail;
 		this.dom.append(this.tailDom);
 
@@ -80,15 +83,15 @@ export default class Typewriter {
 					this.pinyinIndex = 0;
 					this.pinyinStatus = false;
 				} else {
-					this.pinyindom.innerHTML += pinyinStr[this.pinyinIndex];
+					this.pinyindom.textContent += pinyinStr[this.pinyinIndex];
 					this.pinyinIndex++;
 				}
 				this.draw();
 			}, this.pinyinspeed);
 		} else {
 			setTimeout(() => {
-				this.rdom.innerHTML += currentWord[this.i];
-				this.pinyindom.innerHTML = '';
+				this.rdom.textContent += currentWord[this.i];
+				this.pinyindom.textContent = '';
 				this.i++;
 				this.pinyinStatus = true;
 				this.draw();
