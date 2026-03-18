@@ -65,9 +65,6 @@ const otherPageMessage = async (container: HTMLElement) => {
 	}
 	const html = await fetchTo3rdItems(to3rdPage);
 
-	const placeholder = container.querySelector<HTMLElement>('.placeholder');
-	if (placeholder) placeholder.style.display = 'none';
-
 	const datalist = document.createElement('div');
 	datalist.innerHTML = html;
 
@@ -114,6 +111,9 @@ const main = async () => {
 				list.push(...otherPageMessageData);
 			}
 		}
+
+		const placeholder = container.querySelector<HTMLElement>('.placeholder');
+		if (placeholder) placeholder.style.display = 'none';
 
 		try {
 			const domdatalist = typeing.dataset['list'] ?? '';
