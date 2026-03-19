@@ -8,6 +8,7 @@ export type Config = {
 	delay?: number;
 	tail?: string;
 	thispage?: boolean;
+	random?: boolean;
 };
 
 export default class Typewriter {
@@ -26,6 +27,8 @@ export default class Typewriter {
 	pinyindom: HTMLElement;
 	tail: string;
 	tailDom: HTMLElement;
+	random: boolean;
+	randomIndex: number;
 
 	constructor(dom: HTMLElement, config: Config) {
 		this.dom = dom;
@@ -58,6 +61,8 @@ export default class Typewriter {
 		this.speed = config.speed ?? 100;
 		this.pinyinspeed = config.pinyinspeed ?? 100;
 		this.delay = config.delay ?? 2000;
+		this.random = config.random ?? false;
+		this.randomIndex = 0;
 		this.aChiefOfStaff = 0;
 		// 当前拼音状态
 		this.pinyinStatus = true;
@@ -68,10 +73,11 @@ export default class Typewriter {
 
 	draw() {
 		if (!this.list.length) return;
-		const currentWord = this.list[this.aChiefOfStaff];
+		const currentWord = this.random ? this.list[this.randomIndex] : this.list[this.aChiefOfStaff];
 		if (!currentWord) return;
 
 		if (this.i >= currentWord.length) {
+			this.randomIndex = Math.floor(Math.random() * this.list.length);
 			if (this.aChiefOfStaff >= this.list.length - 1) {
 				this.aChiefOfStaff = 0;
 			} else {
