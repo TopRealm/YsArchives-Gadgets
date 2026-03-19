@@ -62,7 +62,7 @@ export default class Typewriter {
 		this.pinyinspeed = config.pinyinspeed ?? 100;
 		this.delay = config.delay ?? 2000;
 		this.random = config.random ?? false;
-		this.randomIndex = 0;
+		this.randomIndex = Math.floor(Math.random() * this.list.length);
 		this.aChiefOfStaff = 0;
 		// 当前拼音状态
 		this.pinyinStatus = true;
