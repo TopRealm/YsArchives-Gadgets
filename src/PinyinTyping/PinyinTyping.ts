@@ -94,8 +94,8 @@ const main = async () => {
 	if (!to3rdContainer.length) return;
 
 	for (const container of to3rdContainer) {
-		const typeing = container.querySelector<HTMLElement>('#typeing');
-		if (!typeing) {
+		const typing = container.querySelector<HTMLElement>('#typing');
+		if (!typing) {
 			console.error('[PinyinTyping] To3RD typring is not defined');
 			continue;
 		}
@@ -103,7 +103,7 @@ const main = async () => {
 		let config = {} as Config;
 
 		try {
-			const domdataconfig = typeing.dataset['config'] ?? '';
+			const domdataconfig = typing.dataset['config'] ?? '';
 			config = domdataconfig ? (JSON.parse(domdataconfig) as Config) : {};
 		} catch (error) {
 			console.error('Failed to parse config data', error);
@@ -129,7 +129,7 @@ const main = async () => {
 		if (placeholder) placeholder.style.display = 'none';
 
 		try {
-			const domdatalist = typeing.dataset['list'] ?? '';
+			const domdatalist = typing.dataset['list'] ?? '';
 			if (domdatalist) {
 				const dataslist = JSON.parse(domdatalist) as string[];
 				if (Array.isArray(dataslist)) {
@@ -142,7 +142,7 @@ const main = async () => {
 
 		if (!list.length) return;
 
-		const typewriter = new Typewriter(typeing, {
+		const typewriter = new Typewriter(typing, {
 			...config,
 			list,
 		});

@@ -11,6 +11,15 @@ export type Config = {
 	random?: boolean;
 };
 
+const shuffleList = (list: string[]): string[] => {
+	const shuffledList = [...list];
+	for (let index = shuffledList.length - 1; index > 0; index--) {
+		const randomIndex = Math.floor(Math.random() * (index + 1));
+		[shuffledList[index], shuffledList[randomIndex]] = [shuffledList[randomIndex]!, shuffledList[index]!];
+	}
+	return shuffledList;
+};
+
 export default class Typewriter {
 	dom: HTMLElement;
 	rdom: HTMLElement;
@@ -28,6 +37,7 @@ export default class Typewriter {
 	tail: string;
 	tailDom: HTMLElement;
 	random: boolean;
+	randomList: string[];
 	randomIndex: number;
 
 	constructor(dom: HTMLElement, config: Config) {
@@ -36,7 +46,7 @@ export default class Typewriter {
 		this.Animationtime = config.dhtime ?? 5000;
 
 		this.rdom = document.createElement('span');
-		this.rdom.classList.add('typeing-text');
+		this.rdom.classList.add('typing-text');
 		this.dom.append(this.rdom);
 		this.domAnimation = this.dom.animate([{opacity: 1}, {opacity: 0}], this.Animationtime);
 		this.domAnimation.pause();
@@ -48,12 +58,12 @@ export default class Typewriter {
 		};
 
 		this.pinyindom = document.createElement('span');
-		this.pinyindom.classList.add('typeing-pinyin');
+		this.pinyindom.classList.add('typing-pinyin');
 		this.dom.append(this.pinyindom);
 
 		this.tail = config.tail ?? '';
 		this.tailDom = document.createElement('span');
-		this.tailDom.classList.add('typeing-tail');
+		this.tailDom.classList.add('typing-tail');
 		this.tailDom.textContent = this.tail;
 		this.dom.append(this.tailDom);
 
@@ -62,7 +72,8 @@ export default class Typewriter {
 		this.pinyinspeed = config.pinyinspeed ?? 100;
 		this.delay = config.delay ?? 2000;
 		this.random = config.random ?? false;
-		this.randomIndex = Math.floor(Math.random() * this.list.length);
+		this.randomList = this.random ? shuffleList(this.list) : [];
+		this.randomIndex = 0;
 		this.aChiefOfStaff = 0;
 		// 当前拼音状态
 		this.pinyinStatus = true;
@@ -73,12 +84,18 @@ export default class Typewriter {
 
 	draw() {
 		if (!this.list.length) return;
-		const currentWord = this.random ? this.list[this.randomIndex] : this.list[this.aChiefOfStaff];
+		const currentWord = this.random ? this.randomList[this.randomIndex] : this.list[this.aChiefOfStaff];
 		if (!currentWord) return;
 
 		if (this.i >= currentWord.length) {
-			this.randomIndex = Math.floor(Math.random() * this.list.length);
-			if (this.aChiefOfStaff >= this.list.length - 1) {
+			if (this.random) {
+				if (this.randomIndex >= this.randomList.length - 1) {
+					this.randomList = shuffleList(this.list);
+					this.randomIndex = 0;
+				} else {
+					this.randomIndex++;
+				}
+			} else if (this.aChiefOfStaff >= this.list.length - 1) {
 				this.aChiefOfStaff = 0;
 			} else {
 				this.aChiefOfStaff++;
