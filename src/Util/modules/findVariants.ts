@@ -23,7 +23,7 @@ async function findVariants(text: string) {
 
 	for (const variant of VARIANTS) {
 		params.uselang = variant;
-		params.variant = variant;
+		params['variant'] = variant;
 		const response = await api.post(params);
 
 		const displaytitle = response?.['query']?.displaytitle as string;

@@ -223,6 +223,7 @@ const showDialog = function showDialog({
 	const dialog = new Dialog();
 
 	const windowManager = new OO.ui.WindowManager();
+	// eslint-disable-next-line no-jquery/no-global-selector
 	$('body').append(windowManager.$element);
 	windowManager.addWindows([dialog]);
 	void windowManager.openWindow(dialog);

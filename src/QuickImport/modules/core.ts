@@ -44,7 +44,7 @@ const refreshPage: RefreshPage = (title) => {
 
 const importPage = async (pageName: string, isFileNS: boolean = false): Promise<boolean> => {
 	// 将导入源统一为qwbk
-	const iwprefix: string = 'qwbk';
+	const iwprefix = 'qwbk';
 
 	toastifyInstance.hideToast();
 	toastifyInstance = toastify(
@@ -60,7 +60,7 @@ const importPage = async (pageName: string, isFileNS: boolean = false): Promise<
 		summary += '；文件作者请参见此页面及来源页面记载';
 	}
 
-	const params: ApiImportParams = {
+	const params = {
 		action: 'import',
 		format: 'json',
 		assignknownusers: true,
@@ -68,7 +68,7 @@ const importPage = async (pageName: string, isFileNS: boolean = false): Promise<
 		interwikiprefix: iwprefix,
 		interwikisource: iwprefix,
 		summary: `［${summary}］`,
-	};
+	} as unknown as ApiImportParams;
 	const result = await api.postWithEditToken(params);
 
 	if (result['import'] && result['import'][0] && result['import'].revisions) {

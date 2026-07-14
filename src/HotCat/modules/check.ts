@@ -46,6 +46,7 @@ import {mwApi} from './api';
 	};
 	// Remove "check categories" when using HotCat
 	// Only executed on first submit
+	// eslint-disable-next-line no-jquery/no-global-selector
 	$('body').one('submit.checkCatListener', '#hotcatCommitForm', function (e) {
 		if (storageItem === 'disabled') {
 			return true;
@@ -188,6 +189,7 @@ import {mwApi} from './api';
 				width: 450,
 				buttons: dlgButtons,
 				close: () => {
+					// eslint-disable-next-line no-jquery/no-global-selector
 					const $body = $('body');
 					$body.find('#hotcatCommitForm').trigger('submit');
 				},
@@ -263,6 +265,7 @@ import {mwApi} from './api';
 				} else {
 					$el.text('Edit Done.');
 				}
+				// eslint-disable-next-line no-jquery/no-global-selector
 				const $body = $('body');
 				$body.find('.checkcategories').fadeOut();
 			};
@@ -286,6 +289,7 @@ import {mwApi} from './api';
 		});
 	});
 	$(function loadHotCatCheck() {
+		// eslint-disable-next-line no-jquery/no-global-selector
 		const $body = $('body');
 		$body.find('#catlinks').find('ul:first').append($('<li>').append($okLink));
 	});

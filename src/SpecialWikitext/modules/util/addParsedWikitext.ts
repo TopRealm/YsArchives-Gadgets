@@ -3,6 +3,7 @@ import {checkElementExist} from './checkElementExist';
 
 // 将解析后的wikitext加入页面中
 const addParsedWikitext = (parsedWikitext: string | React.ReactElement): void => {
+	// eslint-disable-next-line no-jquery/no-global-selector
 	const $body: JQuery<HTMLBodyElement> = $('body');
 	const $parsedWikitext: JQuery = $().html(parsedWikitext);
 

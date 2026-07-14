@@ -20,11 +20,11 @@ defineProps<{
 		}"
 		@click="$emit('click')"
 	>
-		<VAIcon v-if="icon !== undefined" class="va-button__icon" :icon="icon" :size="20" />
+		<v-a-icon v-if="icon !== undefined" class="va-button__icon" :icon="icon" :size="20" />
 		<span v-if="$slots['default']" class="va-button__text">
 			<slot />
 		</span>
-		<VAIcon v-if="indicator !== undefined" class="va-button__indicator" :icon="indicator" :size="16" />
+		<v-a-icon v-if="indicator !== undefined" class="va-button__indicator" :icon="indicator" :size="16" />
 	</button>
 </template>
 

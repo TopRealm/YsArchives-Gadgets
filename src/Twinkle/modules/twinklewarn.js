@@ -1,3 +1,4 @@
+/* eslint-disable no-jquery/no-global-selector */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 

@@ -1,5 +1,5 @@
 import './ShowAvatar.less';
-/* eslint-disable no-jquery/no-parse-html-literal */
+/* eslint-disable no-jquery/no-parse-html-literal, no-jquery/no-global-selector */
 
 const $body: JQuery<HTMLBodyElement> = $('body');
 const header = $body.find(

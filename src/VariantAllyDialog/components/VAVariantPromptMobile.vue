@@ -58,7 +58,7 @@ function select(variant: ValidVariant) {
 				<h2 :id="titleId" class="va-variant-prompt-mobile__header__title va-title">
 					{{ useI18n('vp.main') }}
 				</h2>
-				<VAButton
+				<v-a-button
 					class="va-variant-prompt-mobile__header__close"
 					weight="quiet"
 					icon="close"
@@ -69,7 +69,7 @@ function select(variant: ValidVariant) {
 				/>
 			</div>
 			<div class="va-variant-prompt-mobile__main">
-				<VASelect
+				<v-a-select
 					v-model="selectedVariant"
 					class="va-variant-prompt-mobile__main__select"
 					:lang="selectedVariant"
@@ -79,14 +79,14 @@ function select(variant: ValidVariant) {
 					<option v-for="variant in VALID_VARIANTS" :key="variant" :value="variant" :lang="variant">
 						{{ messages.variants[variant] }}
 					</option>
-				</VASelect>
-				<VAButton
+				</v-a-select>
+				<v-a-button
 					class="va-variant-prompt-mobile__main__action"
 					action="progressive"
 					icon="arrowNext"
 					:disabled="disabled"
 					@click="select(selectedVariant)"
-					>{{ useI18n('vp.button.ok') }}</VAButton
+					>{{ useI18n('vp.button.ok') }}</v-a-button
 				>
 			</div>
 			<footer class="va-variant-prompt-mobile__footer">

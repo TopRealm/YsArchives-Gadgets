@@ -7,6 +7,7 @@ if (username) {
 } else {
 	imgsrc = 'https://image.youshou.wiki/avatars/default/default.gif';
 }
+// eslint-disable-next-line no-jquery/no-global-selector
 const $body: JQuery<HTMLBodyElement> = $('body');
 $body.find('.citizen-ui-icon.mw-ui-icon-userAvatar.mw-ui-icon-wikimedia-userAvatar').css({
 	background: `url(${imgsrc}) center / 100% no-repeat`,

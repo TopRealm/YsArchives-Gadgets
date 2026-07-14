@@ -1,2 +1,12 @@
+allowBuilds:
+  '@parcel/watcher': true
+  core-js: true
+  esbuild: true
+  vue-demi: true
+overrides:
+  '@types/oojs-ui': latest
+  browserslist-config-wikimedia: latest
+  emoji-regex: latest
+  known-css-properties: latest
 publicHoistPattern:
   - "*eslint-plugin*"

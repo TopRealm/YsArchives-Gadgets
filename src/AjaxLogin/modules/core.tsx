@@ -16,6 +16,7 @@ const ajaxLogin = (toastifyInstance: ToastifyInstance, isAgreeTos: boolean = fal
 		$agreeTos,
 		$forgotPassword,
 		$inputBox,
+		$qqLoginSection,
 		$rememberMe,
 		$tosLabel,
 		agreeTosCheckbox,
@@ -24,6 +25,9 @@ const ajaxLogin = (toastifyInstance: ToastifyInstance, isAgreeTos: boolean = fal
 		nameInput,
 		pwdInput,
 	} = generateElements(isAgreeTos);
+
+	// Check whether QQConnect is available (its AppId is public in extension.json)
+	const hasQqConnect: boolean = Boolean(mw.config.get('wgQQConnectAppId'));
 
 	let loginToken: string = '';
 	const login = async ({loginContinue = false, retypePassword = false} = {}): Promise<void> => {
@@ -240,7 +244,16 @@ const ajaxLogin = (toastifyInstance: ToastifyInstance, isAgreeTos: boolean = fal
 			},
 		],
 		message: $(
-			<div className="oo-ui-window-foot">{[$inputBox, $forgotPassword, $rememberMe, $agreeTos, $tosLabel]}</div>
+			<div className="oo-ui-window-foot">
+				{[
+					$inputBox,
+					$forgotPassword,
+					$rememberMe,
+					$agreeTos,
+					$tosLabel,
+					...(hasQqConnect ? [$qqLoginSection] : []),
+				]}
+			</div>
 		),
 		title: $(<b className="oo-ui-window-head">{getMessage('Login')}</b>),
 		size: 'small',

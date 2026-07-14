@@ -142,31 +142,5 @@
 		"vue": "3.4.27",
 		"vue-eslint-parser": "^9.4.3",
 		"vue-tsc": "^2.2.10"
-	},
-	"pnpm": {
-		"onlyBuiltDependencies": [
-			"@parcel/watcher",
-			"core-js",
-			"esbuild",
-			"vue-demi"
-		],
-		"overrides": {
-			"@types/oojs-ui": "latest",
-			"@typescript-eslint/utils": "$@typescript-eslint/eslint-plugin",
-			"browserslist-config-wikimedia": "latest",
-			"emoji-regex": "latest",
-			"eslint-config-wikimedia": "$eslint-config-wikimedia",
-			"eslint-plugin-unicorn": "$eslint-plugin-unicorn",
-			"eslint-plugin-vue@<9": "$eslint-plugin-vue",
-			"known-css-properties": "latest",
-			"stylelint-config-wikimedia": "$stylelint-config-wikimedia"
-		},
-		"patchedDependencies": {
-			"alpha-sort": "patches/alpha-sort.patch",
-			"esbuild-css-modules-plugin": "patches/esbuild-css-modules-plugin.patch",
-			"eslint-config-wikimedia": "patches/eslint-config-wikimedia.patch",
-			"eslint-plugin-no-jquery": "patches/eslint-plugin-no-jquery.patch",
-			"types-mediawiki": "patches/types-mediawiki.patch"
-		}
 	}
 }

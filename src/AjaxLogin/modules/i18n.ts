@@ -194,6 +194,24 @@ const getI18nMessages = () => {
 			'zh-hans': '意外的API响应：$1。重定向中……',
 			'zh-hant': '意外的API響應：$1。重新導向中……',
 		}),
+		'Login with QQ': localize({
+			en: 'Login with QQ',
+			ja: 'QQでログイン',
+			'zh-hans': 'QQ登录',
+			'zh-hant': 'QQ登入',
+		}),
+		Or: localize({
+			en: 'or',
+			ja: 'または',
+			'zh-hans': '或',
+			'zh-hant': '或',
+		}),
+		'QQ login description': localize({
+			en: 'Use your QQ account to log in quickly. You will be redirected to the QQ authorization page.',
+			ja: 'QQアカウントで素早くログインできます。QQ認証ページにリダイレクトします。',
+			'zh-hans': '使用 QQ 账户快捷登录，即将跳转至 QQ 授权页面。',
+			'zh-hant': '使用 QQ 賬戶快捷登入，即將跳轉至 QQ 授權頁面。',
+		}),
 	};
 };
 const i18nMessages = getI18nMessages();

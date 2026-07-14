@@ -6,7 +6,8 @@ import {luaCheck} from '../lua/luaCheck';
 import {mwAddWikiText} from './mwAddText';
 import {removeLoadingNotice} from '../notice';
 
-const {skin, wgRevisionId} = mw.config.get();
+const skin = mw.config.get('skin') as ApiParseParams['useskin'];
+const {wgRevisionId} = mw.config.get();
 
 // 加入编辑提示（若存在）
 const mwApplyNotice = async (currentPageName: string, pageSubName: string): Promise<void> => {
@@ -20,7 +21,7 @@ const mwApplyNotice = async (currentPageName: string, pageSubName: string): Prom
 			text: `{{#invoke:Special wikitext/Template|getNotices|${currentPageName}|${pageSubName}}}`,
 			prop: 'text',
 			uselang: getLanguage(),
-			useskin: skin,
+			...(skin && {useskin: skin}),
 			smaxage: 600,
 			maxage: 600,
 		};
