@@ -63,7 +63,7 @@ const generateElements = (isAgreeTos: boolean) => {
 	const $rememberMe: JQuery = $label.clone().append(keepLoginLayout.$element.css('margin-top', '6px'));
 
 	// QQ login element — conditionally included when QQConnect is available
-	const qqLoginUrl: string = `${mw.util.getUrl('Special:UserLogin')}?returnto=${encodeURIComponent(location.href)}`;
+	const qqLoginUrl: string = `${mw.util.getUrl('Special:QQConnectLogin')}?returnto=${encodeURIComponent(location.href)}`;
 	const qqIconDataUrl: string = generateSvgDataUrl(qqLogoSvg as string);
 	const $qqLoginSection: JQuery = $label
 		.clone()
