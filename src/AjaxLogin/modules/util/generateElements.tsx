@@ -62,8 +62,12 @@ const generateElements = (isAgreeTos: boolean) => {
 	const $tosLabel: JQuery = $label.clone().html(getMessage('help for I agree with the relevant terms'));
 	const $rememberMe: JQuery = $label.clone().append(keepLoginLayout.$element.css('margin-top', '6px'));
 
-	// QQ login element — conditionally included when QQConnect is available
-	const qqLoginUrl: string = `${mw.util.getUrl('Special:QQConnectLogin')}?returnto=${encodeURIComponent(location.href)}`;
+	// QQ login element — conditionally included when QQConnect is available.
+	// Links to Special:Userlogin (not Special:QQConnectLogin directly) so that
+	// the AuthManager login flow is properly initiated.  This ensures secondary
+	// authentication providers (e.g. OATHAuth / 2FA) are handled correctly
+	// through Special:Userlogin's native form continuation mechanism.
+	const qqLoginUrl: string = `${mw.util.getUrl('Special:Userlogin')}?returnto=${encodeURIComponent(location.href)}`;
 	const qqIconDataUrl: string = generateSvgDataUrl(qqLogoSvg as string);
 	const $qqLoginSection: JQuery = $label
 		.clone()
