@@ -90,6 +90,7 @@ const generateElements = (isAgreeTos: boolean) => {
 					border: '1px solid #12B7F5',
 					'border-radius': '2px',
 					color: '#fff',
+					cursor: 'pointer',
 					display: 'inline-flex',
 					'align-items': 'center',
 					gap: '6px',

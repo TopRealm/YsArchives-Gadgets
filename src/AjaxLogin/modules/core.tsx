@@ -29,6 +29,20 @@ const ajaxLogin = (toastifyInstance: ToastifyInstance, isAgreeTos: boolean = fal
 	// Check whether QQConnect is available (its AppId is public in extension.json)
 	const hasQqConnect: boolean = Boolean(mw.config.get('wgQQConnectAppId'));
 
+	// Intercept QQ login click: require ToS agreement before redirecting
+	$qqLoginSection.find('a').on('click', (event: JQuery.ClickEvent): void => {
+		if (!agreeTosCheckbox.isSelected()) {
+			event.preventDefault();
+			toastifyInstance = toastify(
+				{
+					text: getMessage('AgreedOrNot'),
+					duration: -1,
+				},
+				'info'
+			);
+		}
+	});
+
 	let loginToken: string = '';
 	const login = async ({loginContinue = false, retypePassword = false} = {}): Promise<void> => {
 		try {
