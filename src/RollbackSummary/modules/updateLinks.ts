@@ -3,42 +3,38 @@ import {getMessage} from './i18n';
 
 const updateLinks = ($content: JQuery): void => {
 	const $body: JQuery<HTMLBodyElement> = $content.parents('body');
-	if (!$body.length) {
-		return;
-	}
+	const $mwRollbackLinkA: JQuery<HTMLAnchorElement> = $body.find<HTMLAnchorElement>('.mw-rollback-link a');
 
-	if (!$body.data('gadgetRollbackSummaryBound')) {
-		$body.on(
-			'click.gadgetRollbackSummary',
-			'.mw-rollback-link a',
-			filterAlteredClicks((event: JQuery.ClickEvent): void => {
-				event.preventDefault();
+	$mwRollbackLinkA.off('click');
 
-				let {href} = event.currentTarget as HTMLAnchorElement;
+	$mwRollbackLinkA.on(
+		'click',
+		filterAlteredClicks((event: JQuery.ClickEvent): void => {
+			event.preventDefault();
 
-				let summary: string | null = prompt(getMessage('Prompt'));
-				if (summary === null) {
-					/* empty */
-				} else if (summary === '') {
-					location.assign(href);
+			let {href} = event.currentTarget as HTMLAnchorElement;
+
+			let summary: string | null = prompt(getMessage('Prompt'));
+			if (summary === null) {
+				/* empty */
+			} else if (summary === '') {
+				location.assign(href);
+			} else {
+				const username: string | null = mw.util.getParamValue('from', href);
+				if (username) {
+					summary = getMessage('Rollback edits by').replaceAll('$1', username) + summary;
 				} else {
-					const username: string | null = mw.util.getParamValue('from', href);
-					if (username) {
-						summary = getMessage('Rollback edits by').replaceAll('$1', username) + summary;
-					} else {
-						summary = getMessage('Rollback edits by a hidden user') + summary;
-					}
-					href += `&summary=${encodeURIComponent(summary)}`;
-
-					location.assign(href);
+					summary = getMessage('Rollback edits by a hidden user') + summary;
 				}
-			})
-		);
 
-		$body.data('gadgetRollbackSummaryBound', true);
-	}
+				href += `&summary=${encodeURIComponent(summary)}`;
 
-	$content.find<HTMLAnchorElement>('.mw-rollback-link a').css('color', '#099');
+				location.assign(href);
+			}
+		})
+	);
+
+	$mwRollbackLinkA.css('color', '#099');
 };
 
 export {updateLinks};
