@@ -37,6 +37,20 @@ const edit = async (title: string, text: string, summary?: string) => {
 const submit = async (ids: string[], toHide: string, reason: string, otherReasons: string): Promise<void> => {
 	const {wgPageName} = mw.config.get();
 
+	for (const RDid of [1, 2, 3, 4, 5]) {
+		if (reason.includes(`RD${RDid}`)) {
+			reason = `RD${RDid}`;
+			break;
+		}
+	}
+
+	for (const OSid of [1, 2, 3, 4]) {
+		if (reason.includes(`OS${OSid}`)) {
+			reason = `OS${OSid}`;
+			break;
+		}
+	}
+
 	const rrdArr: string[] = [
 		'{{Revdel',
 		'|status = ',
@@ -49,7 +63,7 @@ const submit = async (ids: string[], toHide: string, reason: string, otherReason
 		// Replace Set with uniqueArray, avoiding core-js polyfilling
 		rrdArr[rrdArr.length] = `|id${index + 1} = ${id}`;
 	}
-	rrdArr[rrdArr.length] = '}}\n--~~'.concat('~~');
+	rrdArr[rrdArr.length] = '}}\n——~~'.concat('~~');
 
 	try {
 		const response = await queryRevisions(OPTIONS.rrdPage);
