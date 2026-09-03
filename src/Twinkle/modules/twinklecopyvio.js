@@ -1,6 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /*! Twinkle.js - twinklecopyvio.js */
+import {createApp, h} from 'vue';
+import TwCopyvioDialog from './ui/TwCopyvioDialog.vue';
+
 (function twinklecopyvio() {
 	/**
 	 * twinklecopyvio.js: Copyvio module
@@ -33,58 +36,27 @@
 		);
 	};
 	Twinkle.copyvio.callback = () => {
-		const Window = new Morebits.simpleWindow(600, 350);
-		Window.setTitle(window.wgULS('提报侵权页面', '提報侵權頁面'));
-		Window.setScriptName('Twinkle');
-		Window.addFooterLink(window.wgULS('侵权设置', '侵權設定'), 'H:TW/PREF#copyvio');
-		Window.addFooterLink(window.wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#copyvio');
-		const form = new Morebits.quickForm(Twinkle.copyvio.callback.evaluate);
-		form.append({
-			type: 'textarea',
-			label: window.wgULS('侵权来源：', '侵權來源：'),
-			name: 'source',
-		});
-		form.append({
-			type: 'checkbox',
-			list: [
-				{
-					label: window.wgULS(
-						'CSD G4: 曾经根据侵权审核删除后又重新创建的内容',
-						'CSD G4: 曾經根據侵權審核刪除後又重新建立的內容'
-					),
-					value: 'g4',
-					name: 'g4',
-					tooltip: window.wgULS('同时以G4准则提报快速删除', '同時以G4準則提報快速刪除'),
-					subgroup: [
-						{
-							name: 'g4_pagename',
-							type: 'input',
-							label: window.wgULS('前次删除的页面名称', '前次刪除的頁面名稱'),
-							tooltip: window.wgULS(
-								'选填，若前次删除的页面名称不同，请提供',
-								'選填，若前次刪除的頁面名稱不同，請提供'
-							),
-						},
+		const root = document.createElement('div');
+		document.body.append(root);
+		const app = createApp({
+			render: () => {
+				return h(TwCopyvioDialog, {
+					title: window.wgULS('提报侵权页面', '提報侵權頁面'),
+					footerLinks: [
+						{text: window.wgULS('侵权设置', '侵權設定'), href: mw.util.getUrl('H:TW/PREF#copyvio')},
+						{text: window.wgULS('Twinkle帮助', 'Twinkle說明'), href: mw.util.getUrl('H:TW/DOC#copyvio')},
 					],
-				},
-				{
-					label: window.wgULS('通知页面创建者', '通知頁面建立者'),
-					value: 'notify',
-					name: 'notify',
-					tooltip: window.wgULS(
-						'在页面创建者讨论页上放置一通知模板。',
-						'在頁面建立者討論頁上放置一通知模板。'
-					),
-					checked: true,
-				},
-			],
+					onSubmit: (params, statusContainer) => {
+						Twinkle.copyvio.callback.evaluate(params, statusContainer);
+					},
+					onClose: () => {
+						app.unmount();
+						root.remove();
+					},
+				});
+			},
 		});
-		form.append({
-			type: 'submit',
-		});
-		const result = form.render();
-		Window.setContent(result);
-		Window.display();
+		app.mount(root);
 	};
 	Twinkle.copyvio.callbacks = {
 		tryTagging: (pageobj) => {
@@ -203,8 +175,7 @@
 			pageobj.append();
 		},
 	};
-	Twinkle.copyvio.callback.evaluate = (e) => {
-		const params = Morebits.quickForm.getInputData(e.target);
+	Twinkle.copyvio.callback.evaluate = (params, statusContainer) => {
 		if (!params.source.trim()) {
 			void mw.notify(window.wgULS('请指定侵权来源', '請指定侵權來源'), {
 				type: 'warn',
@@ -212,8 +183,7 @@
 			});
 			return;
 		}
-		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(e.target);
+		Morebits.status.init(statusContainer);
 		params.logpage = 'LIB_talk:侵权提报';
 		Morebits.wiki.addCheckpoint();
 		// Updating data for the action completed event

@@ -71,6 +71,28 @@ declare module '@wikimedia/codex' {
 		};
 	};
 
+	export const CdxRadio: new () => {
+		$props: {
+			modelValue: string | number | boolean;
+			inputValue?: string | number | boolean | undefined;
+			name: string;
+			disabled?: boolean | undefined;
+		};
+		$emit: {
+			(event: 'update:modelValue', value: string | number | boolean): void;
+		};
+	};
+
+	export const CdxTextArea: new () => {
+		$props: {
+			modelValue: string;
+			disabled?: boolean | undefined;
+		};
+		$emit: {
+			(event: 'update:modelValue', value: string): void;
+		};
+	};
+
 	export const CdxSelect: new () => {
 		$props: {
 			selected: string | number | null;
