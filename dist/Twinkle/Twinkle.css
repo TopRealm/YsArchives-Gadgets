@@ -1,0 +1,68 @@
+/**
+ * SPDX-License-Identifier: CC-BY-SA-4.0
+ * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
+ *
+ * @base {@link https://git.qiuwen.net.cn/Mirror/xiplus-twinkle}
+ * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/Twinkle}
+ * @license CC-BY-SA-4.0 {@link https://youshou.wiki/wiki/H:CC-BY-SA-4.0}
+ */
+/**
+ * +------------------------------------------------------------+
+ * |            === WARNING: GLOBAL GADGET FILE ===             |
+ * +------------------------------------------------------------+
+ * |       All changes should be made in the repository,        |
+ * |                otherwise they will be lost.                |
+ * +------------------------------------------------------------+
+ * |        Changes to this page may affect many users.         |
+ * | Please discuss changes by opening an issue before editing. |
+ * +------------------------------------------------------------+
+ */
+/* <nowiki> */
+
+/* sfc-style:E:\ghRepo\YsArchives-Gadgets\src\Twinkle\modules\ui\TwStatus.vue?type=style&index=0 */
+.tw-status-messages[data-v-dc2c89b3] {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 8px;
+}
+
+/* sfc-style:E:\ghRepo\YsArchives-Gadgets\src\Twinkle\modules\ui\TwTalkbackDialog.vue?type=style&index=0 */
+.tw-talkback-optout[data-v-cba7caa1] {
+  color: #f00;
+}
+
+/* sfc-style:E:\ghRepo\YsArchives-Gadgets\src\Twinkle\modules\ui\TwStubDialog.vue?type=style&index=0 */
+.tw-stub-group-header[data-v-ffa9486f] {
+  margin: 0.5em 0 0;
+}
+.tw-stub-template-link[data-v-ffa9486f] {
+  margin-left: 0.25em;
+}
+
+/* sfc-style:E:\ghRepo\YsArchives-Gadgets\src\Twinkle\modules\ui\TwUnlinkDialog.vue?type=style&index=0 */
+.tw-unlink-doc[data-v-37ffaf81] {
+  margin-bottom: 0.5em;
+}
+
+/* sfc-style:E:\ghRepo\YsArchives-Gadgets\src\Twinkle\modules\ui\TwBatchDeleteDialog.vue?type=style&index=0 */
+.tw-dbatch-subgroup[data-v-f1b435c4] {
+  margin-left: 1.5em;
+}
+.tw-batch-protected[data-v-f1b435c4] {
+  color: #f00;
+}
+
+/* sfc-style:E:\ghRepo\YsArchives-Gadgets\src\Twinkle\modules\ui\TwBatchUndeleteDialog.vue?type=style&index=0 */
+.tw-batch-protected[data-v-e53e84a1] {
+  color: #f00;
+}
+
+/* sfc-style:E:\ghRepo\YsArchives-Gadgets\src\Twinkle\modules\ui\TwBatchProtectDialog.vue?type=style&index=0 */
+.tw-batch-protected[data-v-2046f0ba] {
+  color: #f00;
+}
+
+/* </nowiki> */
+
+/*# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsic2ZjLXN0eWxlOkU6XFxnaFJlcG9cXFlzQXJjaGl2ZXMtR2FkZ2V0c1xcc3JjXFxUd2lua2xlXFxtb2R1bGVzXFx1aVxcVHdTdGF0dXMudnVlP3R5cGU9c3R5bGUmaW5kZXg9MCIsICJzZmMtc3R5bGU6RTpcXGdoUmVwb1xcWXNBcmNoaXZlcy1HYWRnZXRzXFxzcmNcXFR3aW5rbGVcXG1vZHVsZXNcXHVpXFxUd1RhbGtiYWNrRGlhbG9nLnZ1ZT90eXBlPXN0eWxlJmluZGV4PTAiLCAic2ZjLXN0eWxlOkU6XFxnaFJlcG9cXFlzQXJjaGl2ZXMtR2FkZ2V0c1xcc3JjXFxUd2lua2xlXFxtb2R1bGVzXFx1aVxcVHdTdHViRGlhbG9nLnZ1ZT90eXBlPXN0eWxlJmluZGV4PTAiLCAic2ZjLXN0eWxlOkU6XFxnaFJlcG9cXFlzQXJjaGl2ZXMtR2FkZ2V0c1xcc3JjXFxUd2lua2xlXFxtb2R1bGVzXFx1aVxcVHdVbmxpbmtEaWFsb2cudnVlP3R5cGU9c3R5bGUmaW5kZXg9MCIsICJzZmMtc3R5bGU6RTpcXGdoUmVwb1xcWXNBcmNoaXZlcy1HYWRnZXRzXFxzcmNcXFR3aW5rbGVcXG1vZHVsZXNcXHVpXFxUd0JhdGNoRGVsZXRlRGlhbG9nLnZ1ZT90eXBlPXN0eWxlJmluZGV4PTAiLCAic2ZjLXN0eWxlOkU6XFxnaFJlcG9cXFlzQXJjaGl2ZXMtR2FkZ2V0c1xcc3JjXFxUd2lua2xlXFxtb2R1bGVzXFx1aVxcVHdCYXRjaFVuZGVsZXRlRGlhbG9nLnZ1ZT90eXBlPXN0eWxlJmluZGV4PTAiLCAic2ZjLXN0eWxlOkU6XFxnaFJlcG9cXFlzQXJjaGl2ZXMtR2FkZ2V0c1xcc3JjXFxUd2lua2xlXFxtb2R1bGVzXFx1aVxcVHdCYXRjaFByb3RlY3REaWFsb2cudnVlP3R5cGU9c3R5bGUmaW5kZXg9MCJdLAogICJzb3VyY2VzQ29udGVudCI6IFsiLnR3LXN0YXR1cy1tZXNzYWdlc1tkYXRhLXYtZGMyYzg5YjNdIHtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjtcbiAgZ2FwOiA0cHg7XG4gIG1hcmdpbi10b3A6IDhweDtcbn1cbiIsICIudHctdGFsa2JhY2stb3B0b3V0W2RhdGEtdi1jYmE3Y2FhMV0ge1xuICBjb2xvcjogI2YwMDtcbn1cbiIsICIudHctc3R1Yi1ncm91cC1oZWFkZXJbZGF0YS12LWZmYTk0ODZmXSB7XG4gIG1hcmdpbjogMC41ZW0gMCAwO1xufVxuLnR3LXN0dWItdGVtcGxhdGUtbGlua1tkYXRhLXYtZmZhOTQ4NmZdIHtcbiAgbWFyZ2luLWxlZnQ6IDAuMjVlbTtcbn1cbiIsICIudHctdW5saW5rLWRvY1tkYXRhLXYtMzdmZmFmODFdIHtcbiAgbWFyZ2luLWJvdHRvbTogMC41ZW07XG59XG4iLCAiLnR3LWRiYXRjaC1zdWJncm91cFtkYXRhLXYtZjFiNDM1YzRdIHtcbiAgbWFyZ2luLWxlZnQ6IDEuNWVtO1xufVxuLnR3LWJhdGNoLXByb3RlY3RlZFtkYXRhLXYtZjFiNDM1YzRdIHtcbiAgY29sb3I6ICNmMDA7XG59XG4iLCAiLnR3LWJhdGNoLXByb3RlY3RlZFtkYXRhLXYtZTUzZTg0YTFdIHtcbiAgY29sb3I6ICNmMDA7XG59XG4iLCAiLnR3LWJhdGNoLXByb3RlY3RlZFtkYXRhLXYtMjA0NmYwYmFdIHtcbiAgY29sb3I6ICNmMDA7XG59XG4iXSwKICAibWFwcGluZ3MiOiAiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7O0FBQUEsQ0FBQyxrQkFBa0IsQ0FBQztBQUNsQixXQUFTO0FBQ1Qsa0JBQWdCO0FBQ2hCLE9BQUs7QUFDTCxjQUFZO0FBQ2Q7OztBQ0xBLENBQUMsa0JBQWtCLENBQUM7QUFDbEIsU0FBTztBQUNUOzs7QUNGQSxDQUFDLG9CQUFvQixDQUFDO0FBQ3BCLFVBQVEsTUFBTSxFQUFFO0FBQ2xCO0FBQ0EsQ0FBQyxxQkFBcUIsQ0FBQztBQUNyQixlQUFhO0FBQ2Y7OztBQ0xBLENBQUMsYUFBYSxDQUFDO0FBQ2IsaUJBQWU7QUFDakI7OztBQ0ZBLENBQUMsa0JBQWtCLENBQUM7QUFDbEIsZUFBYTtBQUNmO0FBQ0EsQ0FBQyxrQkFBa0IsQ0FBQztBQUNsQixTQUFPO0FBQ1Q7OztBQ0xBLENBQUMsa0JBQWtCLENBQUM7QUFDbEIsU0FBTztBQUNUOzs7QUNGQSxDQUFDLGtCQUFrQixDQUFDO0FBQ2xCLFNBQU87QUFDVDsiLAogICJuYW1lcyI6IFtdCn0K */

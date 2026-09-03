@@ -1569,6 +1569,7 @@
 		"MediaWiki:Gadget-Twinkle-pagestyles/zh-my",
 		"MediaWiki:Gadget-Twinkle-pagestyles/zh-sg",
 		"MediaWiki:Gadget-Twinkle-pagestyles/zh-tw",
+		"MediaWiki:Gadget-Twinkle.css",
 		"MediaWiki:Gadget-Twinkle.js",
 		"MediaWiki:Gadget-Twinkle/zh",
 		"MediaWiki:Gadget-Twinkle/zh-cn",
