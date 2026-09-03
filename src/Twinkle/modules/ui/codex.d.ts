@@ -22,11 +22,6 @@ declare module '@wikimedia/codex' {
 		icon?: unknown;
 	}
 
-	export interface MenuGroupData {
-		label: string;
-		items: MenuItemData[];
-	}
-
 	export const CdxDialog: new () => {
 		$props: {
 			open: boolean;
@@ -78,13 +73,13 @@ declare module '@wikimedia/codex' {
 
 	export const CdxSelect: new () => {
 		$props: {
-			modelValue: string | number | null;
-			menuItems: (MenuItemData | MenuGroupData)[];
+			selected: string | number | null;
+			menuItems: MenuItemData[];
 			defaultLabel?: string | undefined;
 			disabled?: boolean | undefined;
 		};
 		$emit: {
-			(event: 'update:modelValue', value: string | number | null): void;
+			(event: 'update:selected', value: string | number | null): void;
 		};
 	};
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {CdxCheckbox, CdxField, CdxSelect, CdxTextInput, type MenuGroupData, type MenuItemData} from '@wikimedia/codex';
+import {CdxCheckbox, CdxField, CdxSelect, CdxTextInput, type MenuItemData} from '@wikimedia/codex';
 import {computed, ref, watch} from 'vue';
 import TwDialog from './TwDialog.vue';
 import {uls} from './useUls';
@@ -48,7 +48,7 @@ const emit = defineEmits<{
 }>();
 
 const open = ref(true);
-const selectedCode = ref<string | null>(props.defaultCode ?? null);
+const selectedCode = ref<string | number | null>(props.defaultCode ?? null);
 const sdreason = ref('');
 const remark = ref('');
 const noop = ref(props.initialNoop);
@@ -69,23 +69,30 @@ const redirectsDisabled = computed(
 );
 const showSdreason = computed(() => selectedCode.value === 'sd' && currentAction.value !== 'noop' && !noop.value);
 
-const menuItems = computed<MenuGroupData[]>(() =>
-	props.groups.map(
-		(group): MenuGroupData => ({
+// The Select component shipped with the target wiki's Codex does not support
+// menu groups, so flatten the groups and insert a disabled group-heading item
+// before each group to emulate the original <optgroup> layout.
+const menuItems = computed<MenuItemData[]>(() => {
+	const items: MenuItemData[] = [];
+	for (const [groupIndex, group] of props.groups.entries()) {
+		items.push({
+			value: `__group_${groupIndex}`,
 			label: group.label,
-			items: group.items.map((item) => {
-				const menuItem: MenuItemData = {
-					value: item.value,
-					label: item.label,
-				};
-				if (item.disabled) {
-					menuItem.disabled = item.disabled;
-				}
-				return menuItem;
-			}),
-		})
-	)
-);
+			disabled: true,
+		});
+		for (const item of group.items) {
+			const menuItem: MenuItemData = {
+				value: item.value,
+				label: item.label,
+			};
+			if (item.disabled) {
+				menuItem.disabled = item.disabled;
+			}
+			items.push(menuItem);
+		}
+	}
+	return items;
+});
 
 // Faithful port of Twinkle.close.callback.change_operation: toggling noop
 // (un)checks and (dis)ables talkpage/redirects.
@@ -131,7 +138,7 @@ const submit = () => {
 		'submit',
 		{
 			title: props.title,
-			code: selectedCode.value,
+			code: typeof selectedCode.value === 'string' ? selectedCode.value : null,
 			remark: remark.value,
 			sdreason: sdreason.value,
 			section: Number.parseInt(props.section, 10),
@@ -164,7 +171,7 @@ watch(open, (value) => {
 	>
 		<cdx-field>
 			<template #label>处理结果：</template>
-			<cdx-select v-model="selectedCode" :menu-items="menuItems" :disabled="submitting" />
+			<cdx-select v-model:selected="selectedCode" :menu-items="menuItems" :disabled="submitting" />
 		</cdx-field>
 		<cdx-field v-if="showSdreason">
 			<template #label>速删理由：</template>

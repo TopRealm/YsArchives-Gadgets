@@ -6,9 +6,16 @@ Codex（Vue 3）的团队规范。每个模块迁移时请遵循本文件。
 ## 基线
 
 - 目标 MediaWiki 版本：≥ 1.41（`@wikimedia/codex` 与 `vue` 由 ResourceLoader 提供，
-  已在 `definition.json` 的 `dependencies` 中声明）。
-- 采用 **Codex 1.x API**（`v-model` 绑定）。Codex 2.x 中 `CdxSelect` 等组件改用
-  `v-model:selected`，若站点升级至 MW 1.45+（Codex 2.x）需调整绑定。
+  已在 `definition.json` 的 `dependencies` 中声明）。实测站点为 MediaWiki 1.43.9。
+- **以站点实际部署的 Codex API 为准**：可用
+  `https://<站>/load.php?modules=%40wikimedia%2Fcodex&only=scripts` 抓取模块源码验证
+  props/emits。已知实测结论：
+    - `CdxSelect` 使用 **`selected` prop + `update:selected` 事件**（即
+      `v-model:selected`），**没有** `modelValue`；
+    - `CdxSelect` 的 `menuItems` **不支持**分组对象（无 `MenuGroupData`），
+      分组用“disabled 组头项 + 平铺项”模拟（见 `TwCloseDialog.vue`）。
+    - `CdxDialog` 绑定为 `v-model:open`（`open` + `update:open`）。
+- 迁移新组件前，先按上述方法验证站点实际 API，再同步更新 `codex.d.ts`。
 
 ## 目录约定
 
@@ -19,17 +26,17 @@ Codex（Vue 3）的团队规范。每个模块迁移时请遵循本文件。
 
 ## 组件映射
 
-| 旧实现                       | Codex                                         | 说明                                       |
-| ---------------------------- | --------------------------------------------- | ------------------------------------------ |
-| `Morebits.simpleWindow`      | `CdxDialog`（经 `TwDialog.vue` 封装）         | 标题前缀、footer 链接由封装层处理          |
-| quickForm `input`            | `CdxTextInput`（配 `CdxField`）               | `label` 用 `#label` slot                   |
-| quickForm `checkbox`/`radio` | `CdxCheckbox` / `CdxRadio`                    | `shiftClickSupport` 需自实现               |
-| quickForm `select`           | `CdxSelect`                                   | 分组用 `MenuGroupData`（`{label, items}`） |
-| select2 搜索下拉             | `CdxLookup`                                   | 阶段 3 引入                                |
-| quickForm `tooltip`          | `title` 属性或 `CdxPopover`                   | 迁移时逐处评估                             |
-| `Morebits.status`            | `CdxMessage` / `CdxProgressBar`               | 见 `TwStatus`（阶段 5）                    |
-| `setButtonsEnabled(false)`   | `primaryAction.disabled`（`submitting` 状态） | 提交后禁用以防重复提交                     |
-| `mw.util.addCSS` 补丁        | 设计 token / 组件 props                       | 禁止新增 `addCSS`                          |
+| 旧实现                       | Codex                                         | 说明                                |
+| ---------------------------- | --------------------------------------------- | ----------------------------------- |
+| `Morebits.simpleWindow`      | `CdxDialog`（经 `TwDialog.vue` 封装）         | 标题前缀、footer 链接由封装层处理   |
+| quickForm `input`            | `CdxTextInput`（配 `CdxField`）               | `label` 用 `#label` slot            |
+| quickForm `checkbox`/`radio` | `CdxCheckbox` / `CdxRadio`                    | `shiftClickSupport` 需自实现        |
+| quickForm `select`           | `CdxSelect`（`v-model:selected`）             | 站点不支持分组：disabled 组头项模拟 |
+| select2 搜索下拉             | `CdxLookup`                                   | 阶段 3 引入                         |
+| quickForm `tooltip`          | `title` 属性或 `CdxPopover`                   | 迁移时逐处评估                      |
+| `Morebits.status`            | `CdxMessage` / `CdxProgressBar`               | 见 `TwStatus`（阶段 5）             |
+| `setButtonsEnabled(false)`   | `primaryAction.disabled`（`submitting` 状态） | 提交后禁用以防重复提交              |
+| `mw.util.addCSS` 补丁        | 设计 token / 组件 props                       | 禁止新增 `addCSS`                   |
 
 ## 数据流约定
 
