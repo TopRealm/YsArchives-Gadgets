@@ -90,7 +90,7 @@ import {generateArray} from 'ext.gadget.Util';
 					catGroups,
 					alphaTags,
 					footerLinks: [
-						{text: window.wgULS('小作品說明', '小作品说明'), href: mw.util.getUrl('LIB:小作品')},
+						{text: window.wgULS('小作品说明', '小作品說明'), href: mw.util.getUrl('LIB:小作品')},
 						{text: window.wgULS('小作品设置', '小作品設定'), href: mw.util.getUrl('H:TW/PREF#stub')},
 						{text: window.wgULS('Twinkle帮助', 'Twinkle說明'), href: mw.util.getUrl('H:TW/DOC#stub')},
 					],
