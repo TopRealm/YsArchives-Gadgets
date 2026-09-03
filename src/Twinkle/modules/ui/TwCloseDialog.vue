@@ -2,7 +2,12 @@
 import {CdxCheckbox, CdxField, CdxSelect, CdxTextInput, type MenuItemData} from '@wikimedia/codex';
 import {computed, ref, watch} from 'vue';
 import TwDialog from './TwDialog.vue';
+import TwStatus from './TwStatus.vue';
 import {uls} from './useUls';
+
+interface TwStatusExposed {
+	getStatusRoot: () => HTMLElement | null;
+}
 
 interface CloseOption {
 	value: string;
@@ -55,7 +60,7 @@ const noop = ref(props.initialNoop);
 const talkpage = ref(true);
 const redirects = ref(true);
 const submitting = ref(false);
-const statusRoot = ref<HTMLElement | null>(null);
+const statusRef = ref<TwStatusExposed | null>(null);
 
 const options = computed(() => props.groups.flatMap((group) => group.items));
 const currentOption = computed(() => options.value.find((item) => item.value === selectedCode.value) ?? null);
@@ -148,7 +153,7 @@ const submit = () => {
 			redirects: redirects.value,
 			noop: noop.value,
 		},
-		statusRoot.value
+		statusRef.value?.getStatusRoot() ?? null
 	);
 };
 
@@ -194,6 +199,6 @@ watch(open, (value) => {
 		<cdx-checkbox v-model="redirects" :disabled="redirectsDisabled || submitting">
 			{{ uls('删除重定向页', '刪除重定向頁') }}
 		</cdx-checkbox>
-		<div ref="statusRoot" class="tw-status-root"></div>
+		<tw-status ref="statusRef" />
 	</tw-dialog>
 </template>
