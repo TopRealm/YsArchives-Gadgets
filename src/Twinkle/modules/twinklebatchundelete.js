@@ -1,6 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /*! Twinkle.js - twinklebatchundelete.js */
+import {createApp, h, reactive} from 'vue';
+import TwBatchUndeleteDialog from './ui/TwBatchUndeleteDialog.vue';
+
 (function twinklebatchundelete() {
 	/**
 	 * twinklebatchundelete.js: Batch undelete module
@@ -24,33 +27,39 @@
 		);
 	};
 	Twinkle.batchundelete.callback = () => {
-		const Window = new Morebits.simpleWindow(600, 400);
-		Window.setScriptName('Twinkle');
-		Window.setTitle(window.wgULS('批量反删除', '批次反刪除'));
-		Window.addFooterLink(window.wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#batchundelete');
-		const form = new Morebits.quickForm(Twinkle.batchundelete.callback.evaluate);
-		form.append({
-			type: 'checkbox',
-			list: [
-				{
-					label: window.wgULS('若存在已删除的讨论页，也恢复', '若存在已刪除的討論頁，也恢復'),
-					name: 'undel_talk',
-					value: 'undel_talk',
-					checked: true,
-				},
-			],
+		const root = document.createElement('div');
+		document.body.append(root);
+		const list = reactive([]);
+		let dialogInstance = null;
+		const app = createApp({
+			render: () => {
+				return h(TwBatchUndeleteDialog, {
+					ref: (instance) => {
+						dialogInstance = instance;
+					},
+					title: window.wgULS('批量反删除', '批次反刪除'),
+					list,
+					footerLinks: [
+						{
+							text: window.wgULS('Twinkle帮助', 'Twinkle說明'),
+							href: mw.util.getUrl('H:TW/DOC#batchundelete'),
+						},
+					],
+					onSubmit: (params, statusContainer) => {
+						Twinkle.batchundelete.callback.evaluate(params, statusContainer);
+					},
+					onClose: () => {
+						app.unmount();
+						root.remove();
+					},
+				});
+			},
 		});
-		form.append({
-			type: 'input',
-			name: 'reason',
-			label: '理由：',
-			size: 60,
-		});
-		const statusdiv = document.createElement('div');
-		statusdiv.style.padding = '15px'; // just so it doesn't look broken
-		Window.setContent(statusdiv);
-		Morebits.status.init(statusdiv);
-		Window.display();
+		app.mount(root);
+		const statusRoot = dialogInstance?.exposed?.getStatusRoot?.() ?? null;
+		if (statusRoot) {
+			Morebits.status.init(statusRoot);
+		}
 		const query = {
 			action: 'query',
 			generator: 'links',
@@ -66,13 +75,13 @@
 			(apiobj) => {
 				const xml = apiobj.responseXML;
 				const $pages = $(xml).find('page[missing]');
-				const list = [];
-				$pages.each((_index, page) => {
+				for (const page of $pages.toArray()) {
 					const $page = $(page);
 					const title = $page.attr('title');
 					const $editprot = $page.find('pr[type="create"][level="sysop"]');
 					const isProtected = $editprot.length > 0;
-					list[list.length] = {
+					list.push({
+						title,
 						label:
 							title +
 							(isProtected
@@ -84,67 +93,29 @@
 												)} (UTC)${window.wgULS('过期', '過期')}`
 									}）`
 								: ''),
-						value: title,
-						checked: true,
-						style: isProtected ? 'color: #f00' : '',
-					};
-				});
-				apiobj.params.form.append({
-					type: 'header',
-					label: window.wgULS('待恢复页面', '待恢復頁面'),
-				});
-				apiobj.params.form.append({
-					type: 'button',
-					label: window.wgULS('全选', '全選'),
-					event: (e) => {
-						$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', true);
-					},
-				});
-				apiobj.params.form.append({
-					type: 'button',
-					label: window.wgULS('全不选', '全不選'),
-					event: (e) => {
-						$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', false);
-					},
-				});
-				apiobj.params.form.append({
-					type: 'checkbox',
-					name: 'pages',
-					shiftClickSupport: true,
-					list,
-				});
-				apiobj.params.form.append({
-					type: 'submit',
-				});
-				const result = apiobj.params.form.render();
-				apiobj.params.Window.setContent(result);
+						isProtected,
+					});
+				}
 			},
 			statelem
 		);
-		ysarchives_api.params = {
-			form,
-			Window,
-		};
 		ysarchives_api.post();
 	};
-	Twinkle.batchundelete.callback.evaluate = (event) => {
+	Twinkle.batchundelete.callback.evaluate = (params, statusContainer) => {
 		Morebits.wiki.actionCompleted.notice = window.wgULS('反删除已完成', '反刪除已完成');
-		const numProtected = $(Morebits.quickForm.getElements(event.target, 'pages')).filter((_index, element) => {
-			return element.checked && element.nextElementSibling.style.color === 'red';
-		}).length;
 		if (
-			numProtected > 0 &&
+			params.protectedCount > 0 &&
 			!confirm(
 				window.wgULS('您正要反删除 ', '您正要反刪除 ') +
-					numProtected +
+					params.protectedCount +
 					window.wgULS(' 个全保护页面，您确定吗？', ' 個全保護頁面，您確定嗎？')
 			)
 		) {
 			return;
 		}
-		const pages = event.target.getChecked('pages');
-		const reason = event.target.reason.value;
-		const undel_talk = event.target.reason.value;
+		const {pages} = params;
+		const {reason} = params;
+		const {undel_talk} = params;
 		if (!reason) {
 			void mw.notify('您需要指定理由。', {
 				type: 'warn',
@@ -152,9 +123,8 @@
 			});
 			return;
 		}
-		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(event.target);
-		if (!pages) {
+		Morebits.status.init(statusContainer);
+		if (pages.length === 0) {
 			Morebits.status.error(
 				window.wgULS('错误', '錯誤'),
 				window.wgULS('没什么要反删除的，取消操作', '沒什麼要反刪除的，取消操作')
@@ -166,7 +136,7 @@
 		pageUndeleter.setOption('preserveIndividualStatusLines', true);
 		pageUndeleter.setPageList(pages);
 		pageUndeleter.run((pageName) => {
-			const params = {
+			const pageParams = {
 				page: pageName,
 				undel_talk,
 				reason,
@@ -176,7 +146,7 @@
 				pageName,
 				window.wgULS('反删除页面', '反刪除頁面') + pageName
 			);
-			ysarchives_page.setCallbackParameters(params);
+			ysarchives_page.setCallbackParameters(pageParams);
 			ysarchives_page.setEditSummary(`${reason} (批量)`);
 			ysarchives_page.setChangeTags(Twinkle.changeTags);
 			ysarchives_page.suppressProtectWarning();
