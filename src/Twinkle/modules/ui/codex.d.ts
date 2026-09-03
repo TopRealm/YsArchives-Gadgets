@@ -1,0 +1,104 @@
+/**
+ * Minimal type declarations for the `@wikimedia/codex` ResourceLoader module.
+ *
+ * Only the components used by Twinkle are declared here. MediaWiki bundles
+ * Codex since 1.39; these types follow the Codex 1.x API surface (Vue 3,
+ * `v-model` bindings). Extend this file when migrating more modules.
+ *
+ * @see {@link https://www.mediawiki.org/wiki/Codex}
+ */
+declare module '@wikimedia/codex' {
+	export interface ModalAction {
+		label: string;
+		actionType?: 'default' | 'progressive' | 'destructive' | undefined;
+		disabled?: boolean | undefined;
+	}
+
+	export interface MenuItemData {
+		value: string | number;
+		label?: string | undefined;
+		disabled?: boolean | undefined;
+		description?: string | undefined;
+		icon?: unknown;
+	}
+
+	export interface MenuGroupData {
+		label: string;
+		items: MenuItemData[];
+	}
+
+	export const CdxDialog: new () => {
+		$props: {
+			open: boolean;
+			title: string;
+			subtitle?: string | undefined;
+			hideTitle?: boolean | undefined;
+			useCloseButton?: boolean | undefined;
+			closeButtonLabel?: string | undefined;
+			primaryAction?: ModalAction | undefined;
+			defaultAction?: ModalAction | undefined;
+			stackedActions?: boolean | undefined;
+			fixedHeight?: boolean | number | undefined;
+		};
+		$emit: {
+			(event: 'update:open', value: boolean): void;
+			(event: 'primary'): void;
+			(event: 'default'): void;
+		};
+	};
+
+	export const CdxField: new () => {
+		$props: {
+			isFieldset?: boolean | undefined;
+			optionalFlag?: string | undefined;
+			optionalLabel?: string | undefined;
+		};
+	};
+
+	export const CdxTextInput: new () => {
+		$props: {
+			modelValue: string | number;
+			placeholder?: string | undefined;
+			disabled?: boolean | undefined;
+		};
+		$emit: {
+			(event: 'update:modelValue', value: string | number): void;
+		};
+	};
+
+	export const CdxCheckbox: new () => {
+		$props: {
+			modelValue: boolean;
+			disabled?: boolean | undefined;
+		};
+		$emit: {
+			(event: 'update:modelValue', value: boolean): void;
+		};
+	};
+
+	export const CdxSelect: new () => {
+		$props: {
+			modelValue: string | number | null;
+			menuItems: (MenuItemData | MenuGroupData)[];
+			defaultLabel?: string | undefined;
+			disabled?: boolean | undefined;
+		};
+		$emit: {
+			(event: 'update:modelValue', value: string | number | null): void;
+		};
+	};
+
+	export const CdxMessage: new () => {
+		$props: {
+			type?: 'notice' | 'warning' | 'error' | 'success' | undefined;
+			dismissButtonLabel?: string | undefined;
+		};
+	};
+
+	export const CdxProgressBar: new () => {
+		$props: {
+			ariaLabel?: string | undefined;
+			inline?: boolean | undefined;
+		};
+	};
+}

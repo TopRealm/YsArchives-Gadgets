@@ -3,6 +3,9 @@
 // @ts-nocheck
 
 /*! Twinkle.js - twinkleclose.js */
+import {createApp, h} from 'vue';
+import TwCloseDialog from './ui/TwCloseDialog.vue';
+
 (function twinkleclose() {
 	const $body = $('body');
 	/**
@@ -210,200 +213,63 @@
 		},
 	];
 	Twinkle.close.callback = (title, section, noop) => {
-		const Window = new Morebits.simpleWindow(410, 200);
-		Window.setTitle(`关闭存废讨论 \u00B7 ${title}`);
-		Window.setScriptName('Twinkle');
-		Window.addFooterLink('存废讨论设置', 'H:TW/PREF#关闭存废讨论');
-		Window.addFooterLink('Twinkle帮助', 'H:TW/DOC#关闭存废讨论');
-		const form = new Morebits.quickForm(Twinkle.close.callback.evaluate);
-		form.append({
-			type: 'select',
-			label: '处理结果：',
-			name: 'sub_group',
-			event: Twinkle.close.callback.change_code,
-		});
-		form.append({
-			type: 'input',
-			name: 'sdreason',
-			label: '速删理由：',
-			tooltip: '用于删除日志，使用{{delete}}的参数格式，例如 A1 或 A1|G1',
-			hidden: true,
-		});
-		form.append({
-			type: 'input',
-			name: 'remark',
-			label: '补充说明：',
-		});
-		form.append({
-			type: 'checkbox',
-			list: [
-				{
-					label: '只关闭讨论，不进行其他操作',
-					value: 'noop',
-					name: 'noop',
-					event: Twinkle.close.callback.change_operation,
-					checked: noop,
-				},
-			],
-		});
-		if (new mw.Title(title).namespace % 2 === 0 && new mw.Title(title).namespace !== 2) {
-			// hide option for user pages, to avoid accidentally deleting user talk page
-			form.append({
-				type: 'checkbox',
-				list: [
-					{
-						label: '删除关联的讨论页',
-						value: 'talkpage',
-						name: 'talkpage',
-						tooltip: '删除时附带删除此页面的讨论页。',
-						checked: true,
-						event: (e) => {
-							e.stopPropagation();
-						},
-					},
-				],
-			});
-		}
-		form.append({
-			type: 'checkbox',
-			list: [
-				{
-					label: '删除重定向页',
-					value: 'redirects',
-					name: 'redirects',
-					tooltip: '删除到此页的重定向。',
-					checked: true,
-					event: (e) => {
-						e.stopPropagation();
-					},
-				},
-			],
-		});
-		form.append({
-			type: 'submit',
-		});
-		const result = form.render();
-		Window.setContent(result);
-		Window.display();
-		const [sub_group] = result.querySelectorAll('select'); // hack
-		const resultData = {
-			title,
-			section: Number.parseInt(section, 10),
-			noop,
-		};
-		$(result).data('resultData', resultData);
-		// worker function to create the combo box entries
-		const createEntries = (contents, container) => {
-			for (const [itemKey, itemProperties] of Object.entries(contents)) {
-				const key = typeof itemKey === 'string' ? itemKey : itemProperties.value;
-				const elem = new Morebits.quickForm.element({
-					type: 'option',
-					label: `${key}：${itemProperties.label}`,
-					value: key,
-					selected: itemProperties.selected,
-					disabled:
-						(Twinkle.getPref('XfdClose') !== 'all' && itemProperties.adminonly) || itemProperties.disabled,
-				});
-				const elemRendered = container.appendChild(elem.render());
-				$(elemRendered).data('messageData', itemProperties);
-			}
-		};
-		for (const group of Twinkle.close.codes) {
-			let optgroup = new Morebits.quickForm.element({
-				type: 'optgroup',
+		const root = document.createElement('div');
+		document.body.append(root);
+		const groups = Twinkle.close.codes.map((group) => {
+			return {
 				label: group.key,
-			});
-			optgroup = optgroup.render();
-			sub_group.appendChild(optgroup);
-			// create the options
-			createEntries(group.value, optgroup);
-		}
-		const event = document.createEvent('Event');
-		event.initEvent('change', true, true);
-		result.sub_group.dispatchEvent(event);
+				items: Object.entries(group.value).map(([key, itemProperties]) => {
+					return {
+						value: key,
+						label: `${key}：${itemProperties.label}`,
+						action: itemProperties.action,
+						disabled:
+							(Twinkle.getPref('XfdClose') !== 'all' && itemProperties.adminonly) ||
+							itemProperties.disabled,
+						selected: itemProperties.selected,
+					};
+				}),
+			};
+		});
+		const options = groups.flatMap((group) => {
+			return group.items;
+		});
+		const defaultCode =
+			options.find((item) => {
+				return item.selected && !item.disabled;
+			})?.value ??
+			options.find((item) => {
+				return !item.disabled;
+			})?.value;
+		const showTalkpage = new mw.Title(title).namespace % 2 === 0 && new mw.Title(title).namespace !== 2;
+		const app = createApp({
+			render: () => {
+				return h(TwCloseDialog, {
+					title,
+					section,
+					groups,
+					defaultCode,
+					initialNoop: noop,
+					showTalkpage,
+					footerLinks: [
+						{text: '存废讨论设置', href: mw.util.getUrl('H:TW/PREF#关闭存废讨论')},
+						{text: 'Twinkle帮助', href: mw.util.getUrl('H:TW/DOC#关闭存废讨论')},
+					],
+					onSubmit: (params, statusContainer) => {
+						Twinkle.close.callback.evaluate(params, statusContainer);
+					},
+					onClose: () => {
+						app.unmount();
+						root.remove();
+					},
+				});
+			},
+		});
+		app.mount(root);
 	};
-	Twinkle.close.callback.change_operation = (e) => {
-		const noop = e.target.checked;
-		const code = e.target.form.sub_group.value;
-		const messageData = $(e.target.form.sub_group).find(`option[value="${code}"]`).data('messageData');
-		const {talkpage} = e.target.form;
-		const {redirects} = e.target.form;
-		if (noop || messageData.action === 'keep') {
-			if (talkpage) {
-				talkpage.checked = false;
-				talkpage.disabled = true;
-			}
-			redirects.checked = false;
-			redirects.disabled = true;
-		} else {
-			if (talkpage) {
-				talkpage.checked = true;
-				talkpage.disabled = false;
-			}
-			redirects.checked = true;
-			redirects.disabled = false;
-		}
-	};
-	Twinkle.close.callback.change_code = (e) => {
-		const resultData = $(e.target.form).data('resultData');
-		const messageData = $(e.target).find(`option[value="${e.target.value}"]`).data('messageData');
-		const {noop} = e.target.form;
-		const {talkpage} = e.target.form;
-		const {redirects} = e.target.form;
-		if (resultData.noop || messageData.action === 'noop') {
-			noop.checked = true;
-			noop.disabled = true;
-			if (talkpage) {
-				talkpage.checked = false;
-				talkpage.disabled = true;
-			}
-			redirects.checked = false;
-			redirects.disabled = true;
-		} else {
-			noop.checked = false;
-			noop.disabled = false;
-			if (messageData.action === 'keep') {
-				if (talkpage) {
-					talkpage.checked = false;
-					talkpage.disabled = true;
-				}
-				redirects.checked = false;
-				redirects.disabled = true;
-			} else {
-				if (talkpage) {
-					talkpage.checked = true;
-					talkpage.disabled = false;
-				}
-				redirects.checked = true;
-				redirects.disabled = false;
-			}
-			if (e.target.value === 'sd') {
-				e.target.form.sdreason.parentElement.removeAttribute('hidden');
-			} else {
-				e.target.form.sdreason.parentElement.setAttribute('hidden', '');
-			}
-		}
-	};
-	Twinkle.close.callback.evaluate = (e) => {
-		const code = e.target.sub_group.value;
-		const resultData = $(e.target).data('resultData');
-		const messageData = $(e.target.sub_group).find(`option[value="${code}"]`).data('messageData');
-		const noop = e.target.noop.checked;
-		const talkpage = e.target.talkpage && e.target.talkpage.checked;
-		const redirects = e.target.redirects.checked;
-		const params = {
-			title: resultData.title,
-			code,
-			remark: e.target.remark.value,
-			sdreason: e.target.sdreason.value,
-			section: resultData.section,
-			parentSection: resultData.parentSection,
-			messageData,
-			talkpage,
-			redirects,
-		};
-		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(e.target);
+	Twinkle.close.callback.evaluate = (params, statusContainer) => {
+		const {noop, messageData, code} = params;
+		Morebits.status.init(statusContainer);
 		Morebits.wiki.actionCompleted.notice = '操作完成';
 		if (noop || messageData.action === 'noop') {
 			Twinkle.close.callbacks.talkend(params);
