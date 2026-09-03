@@ -61,10 +61,10 @@ import TwXfdDialog from './ui/TwXfdDialog.vue';
 				localStorage.setItem('Twinkle_afdCategory', 'delete');
 			}
 		}
-		const fwdcsdReason = decodeURIComponent(document.querySelector('#delete-reason').textContent).replace(
-			/\+/g,
-			' '
-		);
+		const deleteReasonElement = document.querySelector('#delete-reason');
+		const fwdcsdReason = deleteReasonElement
+			? decodeURIComponent(deleteReasonElement.textContent).replace(/\+/g, ' ')
+			: '';
 		const app = createApp({
 			render: () => {
 				return h(TwXfdDialog, {
