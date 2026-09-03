@@ -45,7 +45,7 @@ const resolvedTitle = computed(() => (props.scriptName ? `${props.scriptName} \u
 	>
 		<template v-if="footerLinks && footerLinks.length > 0" #footer-text>
 			<span v-for="(link, index) in footerLinks" :key="link.href">
-				<span v-if="index > 0"> \u2022 </span>
+				<span v-if="index > 0"> • </span>
 				<a :href="link.href" target="_blank" rel="noopener noreferrer">{{ link.text }}</a>
 			</span>
 		</template>
