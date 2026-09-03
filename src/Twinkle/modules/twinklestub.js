@@ -1,5 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import {createApp, h} from 'vue';
+import TwStubDialog from './ui/TwStubDialog.vue';
 import {generateArray} from 'ext.gadget.Util';
 
 /*! Twinkle.js - twinklestub.js */
@@ -42,191 +44,67 @@ import {generateArray} from 'ext.gadget.Util';
 		}
 	};
 	Twinkle.stub.callback = () => {
-		const Window = new Morebits.simpleWindow(630, Twinkle.stub.mode === 'article' ? 450 : 400);
-		Window.setScriptName('Twinkle');
-		Window.addFooterLink(window.wgULS('小作品說明', '小作品说明'), 'LIB:小作品');
-		Window.addFooterLink(window.wgULS('小作品设置', '小作品設定'), 'H:TW/PREF#stub');
-		Window.addFooterLink(window.wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#stub');
-		const form = new Morebits.quickForm(Twinkle.stub.callback.evaluate);
-		if (document.querySelector('.patrollink')) {
-			form.append({
-				type: 'checkbox',
-				list: [
-					{
-						label: window.wgULS('标记页面为已巡查', '標記頁面為已巡查'),
-						value: 'patrolPage',
-						name: 'patrolPage',
-						checked: Twinkle.getPref('markStubbedPagesAsPatrolled'),
-					},
-				],
-			});
-		}
-		switch (Twinkle.stub.mode) {
-			case '條目':
-			case '条目':
-				Window.setTitle(window.wgULS('条目小作品标记', '條目小作品標記'));
-				form.append({
-					type: 'select',
-					name: 'sortorder',
-					label: window.wgULS('查看列表：', '檢視列表：'),
-					tooltip: window.wgULS(
-						'您可以在Twinkle参数设置（H:TW/PREF）中更改此项。',
-						'您可以在Twinkle偏好設定（H:TW/PREF）中更改此項。'
-					),
-					event: Twinkle.stub.updateSortOrder,
-					list: [
-						{
-							type: 'option',
-							value: 'cat',
-							label: window.wgULS('按类型', '按類別'),
-							selected: Twinkle.getPref('stubArticleSortOrder') === 'cat',
-						},
-						{
-							type: 'option',
-							value: 'alpha',
-							label: '按字母',
-							selected: Twinkle.getPref('stubArticleSortOrder') === 'alpha',
-						},
-					],
-				});
-				form.append({
-					type: 'div',
-					id: 'tagWorkArea',
-				});
-				break;
-			default:
-				void mw.notify(`Twinkle.stub：未知模式 ${Twinkle.stub.mode}`, {
-					type: 'warn',
-					tag: 'twinklestub',
-				});
-				break;
-		}
-		form.append({
-			type: 'submit',
-		});
-		const result = form.render();
-		Window.setContent(result);
-		Window.display();
-		if (['条目', '條目'].includes(Twinkle.stub.mode)) {
-			// fake a change event on the sort dropdown, to initialize the tag list
-			const evt = document.createEvent('Event');
-			evt.initEvent('change', true, true);
-			result.sortorder.dispatchEvent(evt);
-		}
-	};
-	Twinkle.stub.checkedTags = [];
-	Twinkle.stub.updateSortOrder = (e) => {
-		const sortorder = e.target.value;
-		Twinkle.stub.checkedTags = e.target.form.getChecked('articleTags');
-		Twinkle.stub.checkedTags ??= [];
-		const container = new Morebits.quickForm.element({
-			type: 'fragment',
-		});
-		// function to generate a checkbox, with appropriate subgroup if needed
-		const makeCheckbox = (tag, description) => {
-			const checkbox = {
-				value: tag,
-				label: `{{${tag}}}: ${description}`,
-			};
-			if (Twinkle.stub.checkedTags.includes(tag)) {
-				checkbox.checked = true;
-			}
-			return checkbox;
+		const root = document.createElement('div');
+		document.body.append(root);
+		const tagUrl = (tag) => {
+			return mw.util.getUrl(`Template:${Morebits.string.toUpperCaseFirstChar(tag)}`);
 		};
-		// append any custom tags
-		if (Twinkle.getPref('customStubList').length) {
-			container.append({
-				type: 'header',
-				label: window.wgULS('自定义模板', '自訂模板'),
+		const makeItems = (tags) => {
+			return tags.map((tag) => {
+				return {
+					value: tag,
+					label: `{{${tag}}}: ${Twinkle.stub.article.tags[tag]}`,
+					url: tagUrl(tag),
+				};
 			});
-			const customcheckboxes = [];
-			for (const item of Twinkle.getPref('customStubList')) {
-				customcheckboxes[customcheckboxes.length] = makeCheckbox(item.value, item.label);
-			}
-			container.append({
-				type: 'checkbox',
-				name: 'articleTags',
-				list: customcheckboxes,
-			});
-		}
-		// categorical sort order
-		if (sortorder === 'cat') {
-			// function to iterate through the tags and create a checkbox for each one
-			const doCategoryCheckboxes = (subdiv, array) => {
-				const checkboxes = [];
-				for (const tag of array) {
-					const description = Twinkle.stub.article.tags[tag];
-					checkboxes[checkboxes.length] = makeCheckbox(tag, description);
-				}
-				subdiv.append({
-					type: 'checkbox',
-					name: 'articleTags',
-					list: checkboxes,
-				});
+		};
+		const customTags = Twinkle.getPref('customStubList').map((item) => {
+			return {
+				value: item.value,
+				label: item.label,
+				url: tagUrl(item.value),
 			};
-			let i = 0;
-			// go through each category and sub-category and append lists of checkboxes
-			for (const [title, content] of Object.entries(Twinkle.stub.article.tagCategories)) {
-				const titleName = Twinkle.stub.article.tagCategoriesHeader[title];
-				container.append({
-					type: 'header',
-					id: `tagHeader${i}`,
-					label: titleName,
+		});
+		const catGroups = Object.entries(Twinkle.stub.article.tagCategories).map(([title, content]) => {
+			return {
+				header: Twinkle.stub.article.tagCategoriesHeader[title],
+				subgroups: Array.isArray(content)
+					? [{items: makeItems(content)}]
+					: Object.entries(content).map(([subtitle, subcontent]) => {
+							return {
+								title: subtitle,
+								items: makeItems(subcontent),
+							};
+						}),
+			};
+		});
+		const alphaTags = makeItems(Object.keys(Twinkle.stub.article.tags));
+		const app = createApp({
+			render: () => {
+				return h(TwStubDialog, {
+					title: window.wgULS('条目小作品标记', '條目小作品標記'),
+					initialSortOrder: Twinkle.getPref('stubArticleSortOrder') === 'alpha' ? 'alpha' : 'cat',
+					showPatrol: !!document.querySelector('.patrollink'),
+					initialPatrol: Twinkle.getPref('markStubbedPagesAsPatrolled'),
+					customTags,
+					catGroups,
+					alphaTags,
+					footerLinks: [
+						{text: window.wgULS('小作品說明', '小作品说明'), href: mw.util.getUrl('LIB:小作品')},
+						{text: window.wgULS('小作品设置', '小作品設定'), href: mw.util.getUrl('H:TW/PREF#stub')},
+						{text: window.wgULS('Twinkle帮助', 'Twinkle說明'), href: mw.util.getUrl('H:TW/DOC#stub')},
+					],
+					onSubmit: (params, statusContainer) => {
+						Twinkle.stub.callback.evaluate(params, statusContainer);
+					},
+					onClose: () => {
+						app.unmount();
+						root.remove();
+					},
 				});
-				const subdiv = container.append({
-					type: 'div',
-					id: `tagSubdiv${i++}`,
-				});
-				if (Array.isArray(content)) {
-					doCategoryCheckboxes(subdiv, content);
-				} else {
-					for (const [subtitle, subcontent] of Object.entries(content)) {
-						subdiv.append({
-							type: 'div',
-							label: [Morebits.htmlNode('b', subtitle)],
-						});
-						doCategoryCheckboxes(subdiv, subcontent);
-					}
-				}
-			}
-			// alphabetical sort order
-		} else {
-			const checkboxes = [];
-			for (const [tag, description] of Object.entries(Twinkle.stub.article.tags)) {
-				checkboxes[checkboxes.length] = makeCheckbox(tag, description);
-			}
-			container.append({
-				type: 'checkbox',
-				name: 'articleTags',
-				list: checkboxes,
-			});
-		}
-		const $workarea = $(e.target.form).find('div#tagWorkArea');
-		const rendered = container.render();
-		$workarea.empty().append(rendered);
-		// style adjustments
-		$workarea.find('h5').css({
-			'font-size': '110%',
+			},
 		});
-		$workarea.find('h5:not(:first-child)').css({
-			'margin-top': '1em',
-		});
-		$workarea.find('div').filter(':has(span.quickformDescription)').css({
-			'margin-top': '0.4em',
-		});
-		// add a link to each template's description page
-		for (const checkbox of Morebits.quickForm.getElements(e.target.form, 'articleTags')) {
-			const $checkbox = $(checkbox);
-			const link = Morebits.htmlNode('a', '>');
-			link.setAttribute('class', 'tag-template-link');
-			link.setAttribute(
-				'href',
-				mw.util.getUrl(`Template:${Morebits.string.toUpperCaseFirstChar(checkbox.values)}`)
-			);
-			link.setAttribute('target', '_blank');
-			link.setAttribute('rel', 'noopener noreferrer');
-			$checkbox.parent().append(['\u00A0', link]);
-		}
+		app.mount(root);
 	};
 	// Tags for ARTICLES start here
 	Twinkle.stub.article = {};
@@ -359,16 +237,10 @@ import {generateArray} from 'ext.gadget.Util';
 			}
 		},
 	};
-	Twinkle.stub.callback.evaluate = (e) => {
-		const form = e.target;
-		const params = {};
-		if (form.patrolPage) {
-			params.patrol = form.patrolPage.checked;
-		}
+	Twinkle.stub.callback.evaluate = (params, statusContainer) => {
 		switch (Twinkle.stub.mode) {
 			case '條目':
 			case '条目':
-				params.tags = form.getChecked('articleTags');
 				params.group = false;
 				break;
 			default:
@@ -385,8 +257,7 @@ import {generateArray} from 'ext.gadget.Util';
 			});
 			return;
 		}
-		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(form);
+		Morebits.status.init(statusContainer);
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 		Morebits.wiki.actionCompleted.notice = window.wgULS(
 			'标记完成，将在几秒内刷新页面',

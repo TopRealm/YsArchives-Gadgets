@@ -61,13 +61,25 @@ declare module '@wikimedia/codex' {
 		};
 	};
 
-	export const CdxCheckbox: new () => {
+	export const CdxButton: new () => {
 		$props: {
-			modelValue: boolean;
+			action?: 'default' | 'progressive' | 'destructive' | undefined;
+			weight?: 'normal' | 'primary' | 'quiet' | undefined;
+			size?: 'medium' | 'large' | undefined;
 			disabled?: boolean | undefined;
 		};
 		$emit: {
-			(event: 'update:modelValue', value: boolean): void;
+			(event: 'click'): void;
+		};
+	};
+
+	export const CdxCheckbox: new () => {
+		$props: {
+			modelValue: boolean | string[];
+			disabled?: boolean | undefined;
+		};
+		$emit: {
+			(event: 'update:modelValue', value: boolean | string[]): void;
 		};
 	};
 
