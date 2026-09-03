@@ -3,6 +3,9 @@
 // @ts-nocheck
 
 /*! Twinkle.js - twinklewarn.js */
+import {createApp, h, reactive} from 'vue';
+import TwWarnDialog from './ui/TwWarnDialog.vue';
+
 (function twinklewarn() {
 	const $body = $('body');
 	/**
@@ -69,6 +72,8 @@
 	};
 	// Used to close window when switching to ARV in autolevel
 	Twinkle.warn.dialog = null;
+	// Holds the Morebits preview instance for the current dialog
+	let previewer = null;
 	Twinkle.warn.callback = () => {
 		if (
 			relevantUserName === mw.config.get('wgUserName') &&
@@ -76,141 +81,121 @@
 		) {
 			return;
 		}
-		Twinkle.warn.dialog = new Morebits.simpleWindow(600, 440);
-		const {dialog} = Twinkle.warn;
-		dialog.setTitle(window.wgULS('警告、提醒用户', '警告、提醒使用者'));
-		dialog.setScriptName('Twinkle');
-		dialog.addFooterLink(window.wgULS('警告设置', '警告設定'), 'H:TW/PREF#warn');
-		dialog.addFooterLink(window.wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#warn');
-		const form = new Morebits.quickForm(Twinkle.warn.callback.evaluate);
-		const main_select = form.append({
-			type: 'field',
-			label: window.wgULS('选择要发送的警告或提醒类型', '選擇要傳送的警告或提醒類別'),
-			tooltip: window.wgULS('首先选择一组，再选择具体的警告模板。', '首先選擇一組，再選擇具體的警告模板。'),
+		const root = document.createElement('div');
+		document.body.append(root);
+		const notice = reactive({text: ''});
+		const autolevelInfo = reactive({
+			data: null,
 		});
-		const main_group = main_select.append({
-			type: 'select',
-			name: 'main_group',
-			tooltip: window.wgULS(
-				'您可在Twinkle参数设置中设置默认选择的选项',
-				'您可在Twinkle偏好設定中設定預設選擇的選項'
-			),
-			event: Twinkle.warn.callback.change_category,
+		const closeDialog = () => {
+			app.unmount();
+			root.remove();
+		};
+		const app = createApp({
+			render: () => {
+				// Assemble the main group options (mirrors the legacy quickForm)
+				const defaultGroup = Number.parseInt(Twinkle.getPref('defaultWarningGroup'), 6);
+				const mainGroupOptions = [
+					{
+						value: 'autolevel',
+						label: window.wgULS('自动选择层级', '自動選擇層級'),
+						selected: defaultGroup === 7,
+					},
+					{value: 'level1', label: '1：提醒', selected: defaultGroup === 1},
+					{value: 'level2', label: '2：警告', selected: defaultGroup === 2},
+				];
+				if (Twinkle.getPref('combinedSingletMenus')) {
+					mainGroupOptions.push({
+						value: 'singlecombined',
+						label: window.wgULS('单层级消息', '單層級訊息'),
+						selected: defaultGroup === 3 || defaultGroup === 4,
+					});
+				} else {
+					mainGroupOptions.push(
+						{
+							value: 'singlenotice',
+							label: window.wgULS('单层级提醒', '單層級提醒'),
+							selected: defaultGroup === 3,
+						},
+						{
+							value: 'singlewarn',
+							label: window.wgULS('单层级警告', '單層級警告'),
+							selected: defaultGroup === 4,
+						}
+					);
+				}
+				if (Twinkle.getPref('customWarningList').length) {
+					mainGroupOptions.push({
+						value: 'custom',
+						label: window.wgULS('自定义警告', '自訂警告'),
+						selected: defaultGroup === 5,
+					});
+				}
+				mainGroupOptions.push({
+					value: 'kitchensink',
+					label: '所有警告模板',
+					selected: defaultGroup === 6,
+				});
+				const initialMainGroup =
+					mainGroupOptions.find((option) => {
+						return option.selected;
+					})?.value ?? 'autolevel';
+				return h(TwWarnDialog, {
+					title: window.wgULS('警告、提醒用户', '警告、提醒使用者'),
+					mainGroupOptions,
+					initialMainGroup,
+					initialArticle: mw.util.getParamValue('vanarticle') || '',
+					messages: Twinkle.warn.messages,
+					customWarningList: Twinkle.getPref('customWarningList'),
+					notice,
+					autolevelInfo: autolevelInfo.data,
+					footerLinks: [
+						{text: window.wgULS('警告设置', '警告設定'), href: mw.util.getUrl('H:TW/PREF#warn')},
+						{text: window.wgULS('Twinkle帮助', 'Twinkle說明'), href: mw.util.getUrl('H:TW/DOC#warn')},
+					],
+					onSubmit: (params, statusContainer, restore) => {
+						Twinkle.warn.callback.evaluate(params, statusContainer, restore);
+					},
+					onPreview: (params, previewBox) => {
+						Twinkle.warn.callbacks.preview(params, previewBox);
+					},
+					onAutolevel: (oldSubValue) => {
+						const autolevelProc = () => {
+							const wikitext = Twinkle.warn.talkpageObj.getPageText();
+							const [latest] = Twinkle.warn.callbacks.dateProcessing(wikitext);
+							const pseudoParams = {
+								sub_group: oldSubValue,
+								article: mw.util.getParamValue('vanarticle') || '',
+							};
+							const parsed = Twinkle.warn.callbacks.autolevelParse(wikitext, pseudoParams, latest);
+							autolevelInfo.data = parsed ? parsed.notice : null;
+						};
+						if (Twinkle.warn.talkpageObj) {
+							autolevelProc();
+						} else {
+							const usertalk_page = new Morebits.wiki.page(
+								`User_talk:${relevantUserName}`,
+								window.wgULS('加载上次警告', '載入上次警告')
+							);
+							usertalk_page.setFollowRedirect(true, false);
+							usertalk_page.load((pageobj) => {
+								Twinkle.warn.talkpageObj = pageobj;
+								autolevelProc();
+							});
+						}
+					},
+					onOpenArv: () => {
+						Morebits.wiki.actionCompleted.redirect = null;
+						closeDialog();
+						Twinkle.arv.callback(relevantUserName);
+					},
+					onClose: () => {
+						closeDialog();
+					},
+				});
+			},
 		});
-		const defaultGroup = Number.parseInt(Twinkle.getPref('defaultWarningGroup'), 6);
-		main_group.append({
-			type: 'option',
-			label: window.wgULS('自动选择层级', '自動選擇層級'),
-			value: 'autolevel',
-			selected: defaultGroup === 7,
-		});
-		main_group.append({
-			type: 'option',
-			label: '1：提醒',
-			value: 'level1',
-			selected: defaultGroup === 1,
-		});
-		main_group.append({
-			type: 'option',
-			label: '2：警告',
-			value: 'level2',
-			selected: defaultGroup === 2,
-		});
-		if (Twinkle.getPref('combinedSingletMenus')) {
-			main_group.append({
-				type: 'option',
-				label: window.wgULS('单层级消息', '單層級訊息'),
-				value: 'singlecombined',
-				selected: defaultGroup === 3 || defaultGroup === 4,
-			});
-		} else {
-			main_group.append({
-				type: 'option',
-				label: window.wgULS('单层级提醒', '單層級提醒'),
-				value: 'singlenotice',
-				selected: defaultGroup === 3,
-			});
-			main_group.append({
-				type: 'option',
-				label: window.wgULS('单层级警告', '單層級警告'),
-				value: 'singlewarn',
-				selected: defaultGroup === 4,
-			});
-		}
-		if (Twinkle.getPref('customWarningList').length) {
-			main_group.append({
-				type: 'option',
-				label: window.wgULS('自定义警告', '自訂警告'),
-				value: 'custom',
-				selected: defaultGroup === 5,
-			});
-		}
-		main_group.append({
-			type: 'option',
-			label: '所有警告模板',
-			value: 'kitchensink',
-			selected: defaultGroup === 6,
-		});
-		main_select.append({
-			type: 'select',
-			name: 'sub_group',
-			event: Twinkle.warn.callback.change_subcategory,
-		}); // Will be empty to begin with.
-		form.append({
-			type: 'input',
-			name: 'article',
-			label: window.wgULS('页面链接', '頁面連結'),
-			value: mw.util.getParamValue('vanarticle') || '',
-			size: 50,
-			tooltip: window.wgULS('给模板中加入一页面链接，可留空。', '給模板中加入一頁面連結，可留空。'),
-			placeholder: window.wgULS(
-				'仅限一个，勿使用网址、[[ ]]，可使用Special:Diff',
-				'僅限一個，勿使用網址、[[ ]]，可使用Special:Diff'
-			),
-		});
-		form.append({
-			type: 'div',
-			label: '',
-			style: 'color: #f00',
-			id: 'twinkle-warn-warning-messages',
-		});
-		const more = form.append({
-			type: 'field',
-			name: 'reasonGroup',
-			label: window.wgULS('警告信息', '警告資訊'),
-		});
-		more.append({
-			type: 'textarea',
-			label: window.wgULS('可选信息：', '可選資訊：'),
-			name: 'reason',
-			tooltip: window.wgULS('理由或是附加信息', '理由或是附加資訊'),
-		});
-		const previewlink = document.createElement('a');
-		$(previewlink).on('click', () => {
-			Twinkle.warn.callbacks.preview(result); // |result| is defined below
-		});
-
-		previewlink.style.cursor = 'pointer';
-		previewlink.textContent = window.wgULS('预览', '預覽');
-		more.append({
-			type: 'div',
-			id: 'warningpreview',
-			label: [previewlink],
-		});
-		more.append({
-			type: 'div',
-			id: 'twinklewarn-previewbox',
-			style: 'display: none',
-		});
-		more.append({
-			type: 'submit',
-			label: '提交',
-		});
-		const result = form.render();
-		dialog.setContent(result);
-		dialog.display();
-		result.main_group.root = result;
-		result.previewer = new Morebits.wiki.preview($(result).find('div#twinklewarn-previewbox').last()[0]);
+		app.mount(root);
 		// Potential notices for staleness and missed reverts
 		let message = '';
 		let query = {};
@@ -238,7 +223,7 @@
 								'其他人回退了该页面，并可能已经警告该用户。',
 								'其他人回退了該頁面，並可能已經警告該使用者。'
 							);
-							$body.find('#twinkle-warn-warning-messages').text(`警告：${message}`);
+							notice.text = `警告：${message}`;
 						}
 					}
 				).post();
@@ -251,7 +236,7 @@
 						'这笔编辑是在24小时前做出的，现在警告可能已过时。',
 						'這筆編輯是在24小時前做出的，現在警告可能已過時。'
 					);
-					$body.find('#twinkle-warn-warning-messages').text(`警告：${message}`);
+					notice.text = `警告：${message}`;
 				}
 			};
 			let vantimestamp = mw.util.getParamValue('vantimestamp');
@@ -271,13 +256,6 @@
 				}).post();
 			}
 		}
-		const init = () => {
-			// We must init the first choice (General Note);
-			const evt = document.createEvent('Event');
-			evt.initEvent('change', true, true);
-			result.main_group.dispatchEvent(evt);
-		};
-		init();
 	};
 	// This is all the messages that might be dispatched by the code
 	// Each of the individual templates require the following information:
@@ -1016,55 +994,44 @@
 			text += '}}';
 			return text;
 		},
-		showPreview: (form, templatename) => {
-			const input = Morebits.quickForm.getInputData(form);
+		showPreview: (params, previewBox, templatename) => {
 			// Provided on autolevel, not otherwise
-			templatename ||= input.sub_group;
-			const linkedarticle = input.article;
+			templatename ||= params.sub_group;
+			const linkedarticle = params.article;
 			const templatetext = Twinkle.warn.callbacks.getWarningWikitext(
 				templatename,
 				linkedarticle,
-				input.reason,
-				input.main_group === 'custom'
+				params.reason,
+				params.main_group === 'custom'
 			);
-			form.previewer.beginRender(templatetext, `User_talk:${relevantUserName}`); // Force wikitext/correct username
+			if (previewer) {
+				previewer.closePreview();
+			}
+			previewer = new Morebits.wiki.preview(previewBox);
+			previewer.beginRender(templatetext, `User_talk:${relevantUserName}`); // Force wikitext/correct username
 		},
 
 		// Just a pass-through unless the autolevel option was selected
-		preview: (form) => {
-			if (form.main_group.value === 'autolevel') {
+		preview: (params, previewBox) => {
+			if (params.main_group === 'autolevel') {
 				// Always get a new, updated talkpage for autolevel processing
 				const usertalk_page = new Morebits.wiki.page(
 					`User_talk:${relevantUserName}`,
 					window.wgULS('加载上次警告', '載入上次警告')
 				);
 				usertalk_page.setFollowRedirect(true, false);
-				// Will fail silently if the talk page is a cross-ns redirect,
-				// removal of the preview box handled when loading the menu
 				usertalk_page.load((pageobj) => {
 					Twinkle.warn.talkpageObj = pageobj; // Update talkpageObj
 					const wikitext = pageobj.getPageText();
 					// history not needed for autolevel
 					const [latest] = Twinkle.warn.callbacks.dateProcessing(wikitext);
-					const params = {
-						sub_group: form.sub_group.value,
-						article: form.article.value,
-						messageData: $(form.sub_group)
-							.find(`option[value="${$(form.sub_group).val()}"]`)
-							.data('messageData'),
-					};
-					const [template] = Twinkle.warn.callbacks.autolevelParseWikitext(wikitext, params, latest);
-					Twinkle.warn.callbacks.showPreview(form, template);
-					// If the templates have diverged, fake a change event
-					// to reload the menu with the updated pageobj
-					if (form.sub_group.value !== template) {
-						const evt = document.createEvent('Event');
-						evt.initEvent('change', true, true);
-						form.main_group.dispatchEvent(evt);
+					const parsed = Twinkle.warn.callbacks.autolevelParse(wikitext, params, latest);
+					if (parsed) {
+						Twinkle.warn.callbacks.showPreview(params, previewBox, parsed.template);
 					}
 				});
 			} else {
-				Twinkle.warn.callbacks.showPreview(form);
+				Twinkle.warn.callbacks.showPreview(params, previewBox);
 			}
 		},
 		/**
@@ -1118,6 +1085,24 @@
 		 * @returns {Array} - Array that contains the full template and just the warning level
 		 */
 		autolevelParseWikitext: (wikitext, params, latest, date, statelem) => {
+			const parsed = Twinkle.warn.callbacks.autolevelParse(wikitext, params, latest, date, statelem);
+			if (parsed) {
+				return [parsed.template, parsed.level];
+			}
+		},
+		/**
+		 * Data-oriented version of autolevelParseWikitext. Returns an object
+		 * describing the resolved level/template and, when no status element
+		 * is provided, the notice data to be rendered by the Vue dialog.
+		 *
+		 * @param wikitext
+		 * @param params
+		 * @param latest
+		 * @param date
+		 * @param statelem
+		 */
+		autolevelParse: (wikitext, params, latest, date, statelem) => {
+			let noticeData = null;
 			let level; // undefined rather than '' means the isNaN below will return true
 			if (/\d?$/.test(latest.type)) {
 				// level1-2
@@ -1125,7 +1110,6 @@
 			} else if (latest.type) {
 				level = 1; // singlenotice or not found
 			}
-			const $autolevelMessage = $('<div>').attr('id', 'twinkle-warn-autolevel-message');
 			if (Number.isNaN(level)) {
 				// No prior warnings found, this is the first
 				level = 1;
@@ -1155,32 +1139,15 @@
 						level = 2;
 						// Basically indicates whether we're in the final Main evaluation or not,
 						// and thus whether we can continue or need to display the warning and link
-						if (!statelem) {
-							const $link = $('<a>')
-								.attr('href', '#')
-								.text(window.wgULS('单击此处打开告状工具', '點擊此處打開告狀工具'))
-								.css('font-weight', 'bold')
-								.on('click', () => {
-									Morebits.wiki.actionCompleted.redirect = null;
-									Twinkle.warn.dialog.close();
-									Twinkle.arv.callback(relevantUserName);
-									$body.find('input[name=page]').val(params.article); // Target page
-									$body.find('input[value=final]').prop('checked', true); // Vandalism after final
-								});
-
-							const statusNode = $('<div>')
-								.css('color', '#f00')
-								.text(
-									relevantUserName +
-										window.wgULS('最后收到了一个层级2警告（', '最後收到了一個層級2警告（') +
-										latest.type +
-										window.wgULS(
-											'），所以将其报告给管理人员会比较好；',
-											'），所以將其報告給管理人員會比較好；'
-										)
-								);
-							statusNode.append($link[0]);
-							$autolevelMessage.append(statusNode);
+						if (statelem) {
+							// no notice needed during final evaluation
+						} else {
+							noticeData = {
+								level,
+								latestType: latest.type,
+								showArv: true,
+								username: relevantUserName,
+							};
 						}
 					} else {
 						// Automatically increase severity
@@ -1191,17 +1158,6 @@
 					level = 1;
 				}
 			}
-			$autolevelMessage.prepend(
-				$(
-					`<div>${window.wgULS('将发送', '將發送')}<span style="font-weight: bold;">${window.wgULS(
-						'层级',
-						'層級'
-					)}${level}</span>警告模板。</div>`
-				)
-			);
-			// Place after the stale and other-user-reverted (text-only) messages
-			$body.find('#twinkle-warn-autolevel-message').remove(); // clean slate
-			$autolevelMessage.insertAfter($body.find('#twinkle-warn-warning-messages'));
 			let template = params.sub_group.replace(/(.*)\d$/, '$1');
 			// Validate warning level, falling back to the uw-generic series.
 			// Only a few items are missing a level, and in all but a handful
@@ -1210,7 +1166,40 @@
 				template = 'uw-generic';
 			}
 			template += level;
-			return [template, level];
+			if (!statelem) {
+				// Build the option groups for the resolved level
+				const groups = Twinkle.warn.messages.levels.map((levelGroup) => {
+					const entries = [];
+					const createLevelEntries = (contents, val) => {
+						for (const [itemKey, itemProperties] of Object.entries(contents)) {
+							if (!!val && !itemProperties[val]) {
+								continue;
+							}
+							const key = typeof itemKey === 'string' ? itemKey : itemProperties.value;
+							const subTemplate = key + val;
+							entries.push({
+								value: subTemplate,
+								label: `{{${subTemplate}}}: ${val ? itemProperties[val].label : itemProperties.label}`,
+								messageData: itemProperties,
+							});
+						}
+					};
+					createLevelEntries(levelGroup.list, `level${level}`);
+					return {key: levelGroup.category, entries};
+				});
+				return {
+					level,
+					template,
+					notice: {
+						level,
+						latestType: latest.type,
+						showArv: noticeData ? noticeData.showArv : false,
+						username: relevantUserName,
+						groups,
+					},
+				};
+			}
+			return {level, template, notice: null};
 		},
 		main: (pageobj) => {
 			const text = pageobj.getPageText();
@@ -1222,20 +1211,16 @@
 			const now = new Morebits.date(pageobj.getLoadTime());
 			Twinkle.warn.talkpageObj = pageobj; // Update talkpageObj, just in case
 			if (params.main_group === 'autolevel') {
-				// [template, level]
-				const templateAndLevel = Twinkle.warn.callbacks.autolevelParseWikitext(
-					text,
-					params,
-					latest,
-					now,
-					statelem
-				);
+				const parsed = Twinkle.warn.callbacks.autolevelParse(text, params, latest, now, statelem);
+				if (!parsed) {
+					return;
+				}
 				// Only if there's a change from the prior display/load
 				if (
-					params.sub_group !== templateAndLevel[0] &&
+					params.sub_group !== parsed.template &&
 					!confirm(
 						window.wgULS('将发送给用户{{', '將發送給使用者{{') +
-							templateAndLevel[0] +
+							parsed.template +
 							window.wgULS('}}模板，好吗？', '}}模板，好嗎？')
 					)
 				) {
@@ -1243,8 +1228,8 @@
 					return;
 				}
 				// Update params now that we've selected a warning
-				[params.sub_group] = templateAndLevel;
-				messageData = params.messageData[`level${templateAndLevel[1]}`];
+				params.sub_group = parsed.template;
+				messageData = params.messageData[`level${parsed.level}`];
 			} else if (
 				params.sub_group in history &&
 				new Morebits.date(history[params.sub_group]).add(1, 'day').isAfter(now) &&
@@ -1371,16 +1356,17 @@
 			}
 		},
 	};
-	Twinkle.warn.callback.evaluate = (e) => {
+	Twinkle.warn.callback.evaluate = (params, statusContainer, restore) => {
 		const userTalkPage = `User_talk:${relevantUserName}`;
-		// reason, main_group, sub_group, article
-		const params = Morebits.quickForm.getInputData(e.target);
 		if (params.article) {
 			if (/https?:\/\//.test(params.article)) {
 				void mw.notify(window.wgULS('“页面链接”不能使用网址。', '「頁面連結」不能使用網址。'), {
 					type: 'warn',
 					tag: 'warn',
 				});
+				if (restore) {
+					restore();
+				}
 				return;
 			}
 			try {
@@ -1396,6 +1382,9 @@
 						'「頁面連結」不合法，僅能輸入一個頁面名稱，勿使用網址、[[ ]]，可使用Special:Diff。'
 					)
 				);
+				if (restore) {
+					restore();
+				}
 				return;
 			}
 		}
@@ -1405,18 +1394,17 @@
 		// already ignored the bold red error above. Moreover, they probably
 		// *don't* want to actually issue a warning, so the error handling
 		// after the form is submitted is probably preferable
-		// Find the selected <option> element so we can fetch the data structure
-		const $selectedEl = $(e.target.sub_group).find(`option[value="${$(e.target.sub_group).val()}"]`);
-		params.messageData = $selectedEl.data('messageData');
 		if (params.messageData === undefined) {
 			void mw.notify(window.wgULS('请选择警告模板。', '請選擇警告模板。'), {
 				type: 'warn',
 				tag: 'warn',
 			});
+			if (restore) {
+				restore();
+			}
 			return;
 		}
-		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(e.target);
+		Morebits.status.init(statusContainer);
 		Morebits.wiki.actionCompleted.redirect = userTalkPage;
 		Morebits.wiki.actionCompleted.notice = window.wgULS('警告完成，将在几秒后刷新', '警告完成，將在幾秒後重新整理');
 		const ysarchives_page = new Morebits.wiki.page(

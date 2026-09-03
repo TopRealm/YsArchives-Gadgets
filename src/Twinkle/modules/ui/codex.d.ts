@@ -130,4 +130,25 @@ declare module '@wikimedia/codex' {
 			inline?: boolean | undefined;
 		};
 	};
+
+	export const CdxLookup: new () => {
+		$props: {
+			selected: string | number | null;
+			menuItems: MenuItemData[];
+			inputValue?: string | number | null | undefined;
+			initialInputValue?: string | number | undefined;
+			disabled?: boolean | undefined;
+			menuConfig?: Record<string, unknown> | undefined;
+			status?: 'default' | 'error' | undefined;
+		};
+		$emit: {
+			(event: 'update:selected', value: string | number | null): void;
+			(event: 'update:input-value', value: string | number | null): void;
+			(event: 'load-more'): void;
+			(event: 'input', value: string): void;
+			(event: 'change', value: unknown): void;
+			(event: 'focus', value: unknown): void;
+			(event: 'blur', value: unknown): void;
+		};
+	};
 }
