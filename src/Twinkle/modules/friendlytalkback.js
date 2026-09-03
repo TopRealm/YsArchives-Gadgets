@@ -1,10 +1,11 @@
-/* eslint-disable no-jquery/no-global-selector */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
 /*! Twinkle.js - friendlytalkback.js */
+import {createApp, h} from 'vue';
+import TwTalkbackDialog from './ui/TwTalkbackDialog.vue';
+
 (function friendlytalkback() {
-	const $body = $('body');
 	/**
 	 * friendlytalkback.js: Talkback module
 	 * Mode of invocation: Tab ("TB")
@@ -29,78 +30,64 @@
 		) {
 			return;
 		}
-		const Window = new Morebits.simpleWindow(600, 350);
-		Window.setTitle(window.wgULS('回复通告', '回覆通告'));
-		Window.setScriptName('Twinkle');
-		Window.addFooterLink(window.wgULS('关于{{talkback}}', '關於{{talkback}}'), 'Template:Talkback');
-		Window.addFooterLink(window.wgULS('通告设置', '通告設定'), 'H:TW/PREF#talkback');
-		Window.addFooterLink(window.wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#talkback');
-		const form = new Morebits.quickForm(Twinkle.talkback.evaluate);
-		form.append({
-			type: 'radio',
-			name: 'tbtarget',
-			list: [
-				{
-					label: window.wgULS('回复：我的讨论页', '回覆：我的討論頁'),
-					value: 'mytalk',
-					checked: 'true',
-				},
-				{
-					label: window.wgULS('回复：其他用户的讨论页', '回覆：其他使用者的討論頁'),
-					value: 'usertalk',
-				},
-				{
-					label: window.wgULS('回复：其它页面', '回覆：其它頁面'),
-					value: 'other',
-				},
-				{
-					label: window.wgULS('邀请讨论', '邀請討論'),
-					value: 'see',
-				},
-				{
-					label: '通告板通知',
-					value: 'notice',
-				},
-				{
-					label: window.wgULS('“有新邮件”', '「有新郵件」'),
-					value: 'mail',
-				},
-			],
-			event: Twinkle.talkback.changeTarget,
+		const root = document.createElement('div');
+		document.body.append(root);
+		const noticeboards = Object.entries(Twinkle.talkback.noticeboards).map(([value, data]) => {
+			return {
+				value,
+				label: data.label,
+			};
 		});
-		form.append({
-			type: 'field',
-			label: '工作区',
-			name: 'work_area',
+		const defaultNoticeboard = Object.entries(Twinkle.talkback.noticeboards).find(([, data]) => {
+			return data.defaultSelected;
+		})?.[0];
+		let previewer = null;
+		const app = createApp({
+			render: () => {
+				return h(TwTalkbackDialog, {
+					title: window.wgULS('回复通告', '回覆通告'),
+					noticeboards,
+					defaultNoticeboard,
+					footerLinks: [
+						{
+							text: window.wgULS('关于{{talkback}}', '關於{{talkback}}'),
+							href: mw.util.getUrl('Template:Talkback'),
+						},
+						{text: window.wgULS('通告设置', '通告設定'), href: mw.util.getUrl('H:TW/PREF#talkback')},
+						{text: window.wgULS('Twinkle帮助', 'Twinkle說明'), href: mw.util.getUrl('H:TW/DOC#talkback')},
+					],
+					onSubmit: (params, statusContainer) => {
+						Twinkle.talkback.evaluate(params, statusContainer);
+					},
+					onPreview: (params, previewBox) => {
+						if (previewer) {
+							previewer.closePreview();
+						}
+						previewer = new Morebits.wiki.preview(previewBox);
+						const [noticetext] = Twinkle.talkback.getNoticeWikitext(
+							params.tbtarget,
+							params.page,
+							params.section,
+							params.message
+						);
+						previewer.beginRender(
+							noticetext,
+							`User_talk:${mw.config.get('wgRelevantUserName')}` // Force wikitext/correct username
+						);
+					},
+					onTargetChanged: () => {
+						if (previewer) {
+							previewer.closePreview();
+						}
+					},
+					onClose: () => {
+						app.unmount();
+						root.remove();
+					},
+				});
+			},
 		});
-		const previewlink = document.createElement('a');
-		$(previewlink).on('click', () => {
-			Twinkle.talkback.preview(result); // |result| is defined below
-		});
-
-		previewlink.style.cursor = 'pointer';
-		previewlink.textContent = window.wgULS('预览', '預覽');
-		form.append({
-			type: 'div',
-			id: 'talkbackpreview',
-			label: [previewlink],
-		});
-		form.append({
-			type: 'div',
-			id: 'friendlytalkback-previewbox',
-			style: 'display: none',
-		});
-		form.append({
-			type: 'submit',
-		});
-		const result = form.render();
-		Window.setContent(result);
-		Window.display();
-		result.previewer = new Morebits.wiki.preview($(result).find('div#friendlytalkback-previewbox').last()[0]);
-		// We must init the
-		const evt = document.createEvent('Event');
-		evt.initEvent('change', true, true);
-		result.tbtarget[0].dispatchEvent(evt);
+		app.mount(root);
 		// Check whether the user has opted out from talkback
 		const query = {
 			action: 'query',
@@ -126,178 +113,10 @@
 			const reason = mw.util.getParamValue('reason', url);
 			Twinkle.talkback.optout += reason ? `：${Morebits.string.appendPunctuation(reason)}` : '。';
 		}
-		$body.find('#twinkle-talkback-optout-message').text(Twinkle.talkback.optout);
-	};
-	let prev_page = '';
-	let prev_section = '';
-	let prev_message = '';
-	Twinkle.talkback.changeTarget = (e) => {
-		const value = e.target.values;
-		const root = e.target.form;
-		const [old_area] = Morebits.quickForm.getElements(root, 'work_area');
-		if (root.section) {
-			prev_section = root.section.value;
+		const optoutMessage = document.querySelector('#twinkle-talkback-optout-message');
+		if (optoutMessage) {
+			optoutMessage.textContent = Twinkle.talkback.optout;
 		}
-		if (root.message) {
-			prev_message = root.message.value;
-		}
-		if (root.page) {
-			prev_page = root.page.value;
-		}
-		let work_area = new Morebits.quickForm.element({
-			type: 'field',
-			label: window.wgULS('回复通告信息', '回覆通告資訊'),
-			name: 'work_area',
-		});
-		root.previewer.closePreview();
-		switch (value) {
-			case 'usertalk':
-				work_area.append({
-					type: 'div',
-					label: '',
-					style: 'color: #f00',
-					id: 'twinkle-talkback-optout-message',
-				});
-				work_area.append({
-					type: 'input',
-					name: 'page',
-					label: window.wgULS('用户（必填）', '使用者（必填）'),
-					tooltip: window.wgULS('您留言页面的用户名，必填。', '您留言頁面的使用者名稱，必填。'),
-					value: prev_page,
-					required: true,
-				});
-				work_area.append({
-					type: 'input',
-					name: 'section',
-					label: window.wgULS('章节（可选）', '章節（可選）'),
-					tooltip: window.wgULS(
-						'您留言的章节标题，留空则不会产生章节链接。',
-						'您留言的章節標題，留空則不會產生章節連結。'
-					),
-					value: prev_section,
-				});
-				break;
-			case 'notice': {
-				const noticeboard = work_area.append({
-					type: 'select',
-					name: 'noticeboard',
-					label: '通告板：',
-				});
-				for (const [nbname, data] of Object.entries(Twinkle.talkback.noticeboards)) {
-					noticeboard.append({
-						type: 'option',
-						label: data.label,
-						value: nbname,
-						selected: !!data.defaultSelected,
-					});
-				}
-				work_area.append({
-					type: 'input',
-					name: 'section',
-					label: window.wgULS('章节（可选）', '章節（可選）'),
-					tooltip: window.wgULS('章节标题，留空则不会产生章节链接。', '章節標題，留空則不會產生章節連結。'),
-					value: prev_section,
-				});
-				break;
-			}
-			case 'other':
-				work_area.append({
-					type: 'div',
-					label: '',
-					style: 'color: #f00',
-					id: 'twinkle-talkback-optout-message',
-				});
-				work_area.append({
-					type: 'input',
-					name: 'page',
-					label: window.wgULS('完整页面名', '完整頁面名'),
-					tooltip: window.wgULS(
-						'您留下消息的完整页面名，例如“LIB_talk:首页”。',
-						'您留下訊息的完整頁面名，例如「LIB_talk:首頁」。'
-					),
-					value: prev_page,
-					required: true,
-				});
-				work_area.append({
-					type: 'input',
-					name: 'section',
-					label: window.wgULS('章节（可选）', '章節（可選）'),
-					tooltip: window.wgULS(
-						'您留言的章节标题，留空则不会产生章节链接。',
-						'您留言的章節標題，留空則不會產生章節連結。'
-					),
-					value: prev_section,
-				});
-				break;
-			case 'mail':
-				work_area.append({
-					type: 'input',
-					name: 'section',
-					label: window.wgULS('电子邮件主题（可选）', '電子郵件主題（可選）'),
-					tooltip: window.wgULS('您发出的电子邮件的主题。', '您發出的電子郵件的主題。'),
-				});
-				break;
-			case 'see':
-				work_area.append({
-					type: 'input',
-					name: 'page',
-					label: window.wgULS('完整页面名', '完整頁面名'),
-					tooltip: window.wgULS(
-						'您留下消息的完整页面名，例如“LIB_talk:首页”。',
-						'您留下訊息的完整頁面名，例如「LIB_talk:首頁」。'
-					),
-					value: prev_page,
-					required: true,
-				});
-				work_area.append({
-					type: 'input',
-					name: 'section',
-					label: window.wgULS('章节（可选）', '章節（可選）'),
-					tooltip: window.wgULS(
-						'您留言的章节标题，留空则不会产生章节链接。',
-						'您留言的章節標題，留空則不會產生章節連結。'
-					),
-					value: prev_section,
-				});
-				break;
-			/* case 'mytalk': */
-			/* falls through */
-			default:
-				work_area.append({
-					type: 'div',
-					label: '',
-					style: 'color: #f00',
-					id: 'twinkle-talkback-optout-message',
-				});
-				work_area.append({
-					type: 'input',
-					name: 'section',
-					label: window.wgULS('章节（可选）', '章節（可選）'),
-					tooltip: window.wgULS(
-						'您留言的章节标题，留空则不会产生章节链接。',
-						'您留言的章節標題，留空則不會產生章節連結。'
-					),
-					value: prev_section,
-				});
-				break;
-		}
-		if (value !== 'notice') {
-			work_area.append({
-				type: 'textarea',
-				label: window.wgULS('附加信息（可选）：', '附加資訊（可選）：'),
-				name: 'message',
-				tooltip: window.wgULS(
-					'会在回复通告模板下出现的消息，您的签名会被加在最后。',
-					'會在回覆通告模板下出現的訊息，您的簽名會被加在最後。'
-				),
-			});
-		}
-		work_area = work_area.render();
-		root.replaceChild(work_area, old_area);
-		if (root.message) {
-			root.message.value = prev_message;
-		}
-		$body.find('#twinkle-talkback-optout-message').text(Twinkle.talkback.optout);
 	};
 	Twinkle.talkback.noticeboards = {
 		affp: {
@@ -338,40 +157,40 @@
 			),
 		},
 	};
-	Twinkle.talkback.evaluate = (e) => {
-		const form = e.target;
-		const [tbtarget] = form.getChecked('tbtarget');
-		let page;
-		let message;
-		const section = form.section.value;
+	Twinkle.talkback.evaluate = (params, statusContainer) => {
+		const {tbtarget} = params;
+		const {page} = params;
+		const {section} = params;
+		const {message} = params;
 		let editSummary;
-		if (tbtarget === 'notice') {
-			page = form.noticeboard.value;
-			({editSummary} = Twinkle.talkback.noticeboards[page]);
-		} else {
-			// usertalk, other, see
-			page = form.page ? form.page.value : mw.config.get('wgUserName');
-			if (form.message) {
-				message = form.message.value.trim();
-			}
-			if (tbtarget === 'mail') {
+		switch (tbtarget) {
+			case 'notice':
+				({editSummary} = Twinkle.talkback.noticeboards[page]);
+
+				break;
+
+			case 'mail':
 				editSummary = window.wgULS('通知：有新邮件', '通知：有新郵件');
-			} else if (tbtarget === 'see') {
+
+				break;
+
+			case 'see':
 				editSummary = `${window.wgULS('请看看', '請看看')}[[:${page}${section ? `#${section}` : ''}]]${window.wgULS(
 					'上的讨论',
 					'上的討論'
 				)}`;
-			} else {
+
+				break;
+
+			default:
 				// tbtarget one of mytalk, usertalk, other
 				editSummary = `${window.wgULS('回复通告', '回覆通告')}（[[:`;
 				if (tbtarget !== 'other' && !new RegExp(`^\\s*${Morebits.namespaceRegex(3)}:`, 'i').test(page)) {
 					editSummary += 'User talk:';
 				}
 				editSummary += `${page + (section ? `#${section}` : '')}]])`;
-			}
 		}
-		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(form);
+		Morebits.status.init(statusContainer);
 		const fullUserTalkPageName = `${
 			mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').user_talk]
 		}:${mw.config.get('wgRelevantUserName')}`;
@@ -389,23 +208,6 @@
 		talkpage.setMinorEdit(Twinkle.getPref('markTalkbackAsMinor'));
 		talkpage.setFollowRedirect(true);
 		talkpage.append();
-	};
-	Twinkle.talkback.preview = (form) => {
-		const [tbtarget] = form.getChecked('tbtarget');
-		const section = form.section.value;
-		let page;
-		let message;
-		if (tbtarget === 'notice') {
-			page = form.noticeboard.value;
-		} else {
-			// usertalk, other, see
-			page = form.page ? form.page.value : mw.config.get('wgUserName');
-			if (form.message) {
-				message = form.message.value.trim();
-			}
-		}
-		const [noticetext] = Twinkle.talkback.getNoticeWikitext(tbtarget, page, section, message);
-		form.previewer.beginRender(noticetext, `User_talk:${mw.config.get('wgRelevantUserName')}`); // Force wikitext/correct username
 	};
 
 	Twinkle.talkback.getNoticeWikitext = (tbtarget, page, section, message) => {
