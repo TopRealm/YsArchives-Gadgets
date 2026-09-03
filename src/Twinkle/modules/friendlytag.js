@@ -2,6 +2,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /*! Twinkle.js - friendlytag.js */
+import {createApp, h, reactive} from 'vue';
+import TwTagDialog from './ui/TwTagDialog.vue';
+
 (function friendlytag() {
 	const $body = $('body');
 	/**
@@ -57,258 +60,190 @@
 		}
 	};
 	Twinkle.tag.checkedTags = [];
+	// Holds the tags already present on the article, filled asynchronously below
+	const alreadyPresent = reactive([]);
 	Twinkle.tag.callback = () => {
-		const Window = new Morebits.simpleWindow(630, Twinkle.tag.modeEn === 'article' ? 500 : 400);
-		Window.setScriptName('Twinkle');
-		Window.addFooterLink(window.wgULS('标记设置', '標記設定'), 'H:TW/PREF#tag');
-		Window.addFooterLink(window.wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#tag');
-		const form = new Morebits.quickForm(Twinkle.tag.callback.evaluate);
-		form.append({
-			type: 'input',
-			label: window.wgULS('筛选标记列表：', '篩選標記列表：'),
-			name: 'quickfilter',
-			size: '30',
-			event: function event() {
-				// flush the DOM of all existing underline spans
-				$allCheckboxDivs.find('.search-hit').each((_i, e) => {
-					const label_element = e.parentElement;
-					// This would convert <label>Hello <span class=search-hit>wo</span>rld</label>
-					// to <label>Hello world</label>
-					label_element.innerHTML = label_element.textContent;
-				});
-				if (this.value) {
-					$allCheckboxDivs.hide();
-					$allHeaders.hide();
-					const searchString = this.value;
-					const searchRegex = new RegExp(mw.util.escapeRegExp(searchString), 'i');
-					$allCheckboxDivs.find('label').each((_index, element) => {
-						const label_text = element.textContent;
-						const searchHit = searchRegex.exec(label_text);
-						if (searchHit) {
-							const range = document.createRange();
-							const [textnode] = element.childNodes;
-							range.selectNodeContents(textnode);
-							range.setStart(textnode, searchHit.index);
-							range.setEnd(textnode, searchHit.index + searchString.length);
-							const [underline_span] = $('<span>')
-								.addClass('search-hit')
-								.css('text-decoration', 'underline');
-							range.surroundContents(underline_span);
-							element.parentElement.style.display = 'block'; // show
-						}
-					});
+		const root = document.createElement('div');
+		document.body.append(root);
+		// Build sorting and lookup object flatObject, which is always
+		// needed but also used to generate the alphabetical list
+		Twinkle.tag.article.flatObject = {};
+		for (const group of Twinkle.tag.article.tagList) {
+			for (const subgroup of group.value) {
+				if (subgroup.value) {
+					for (const item of subgroup.value) {
+						Twinkle.tag.article.flatObject[item.tag] = {
+							description: item.description,
+							excludeMI: !!item.excludeMI,
+						};
+					}
 				} else {
-					$allCheckboxDivs.show();
-					$allHeaders.show();
+					Twinkle.tag.article.flatObject[subgroup.tag] = {
+						description: subgroup.description,
+						excludeMI: !!subgroup.excludeMI,
+					};
 				}
-			},
-		});
-		switch (Twinkle.tag.modeEn) {
-			case 'article':
-				Window.setTitle(window.wgULS('条目维护标记', '條目維護標記'));
-				// Build sorting and lookup object flatObject, which is always
-				// needed but also used to generate the alphabetical list
-				// Would be infinitely better with Object.values
-				Twinkle.tag.article.flatObject = {};
-				for (const group of Twinkle.tag.article.tagList) {
-					for (const subgroup of group.value) {
-						if (subgroup.value) {
-							for (const item of subgroup.value) {
-								Twinkle.tag.article.flatObject[item.tag] = {
-									description: item.description,
-									excludeMI: !!item.excludeMI,
-								};
-							}
-						} else {
-							Twinkle.tag.article.flatObject[subgroup.tag] = {
-								description: subgroup.description,
-								excludeMI: !!subgroup.excludeMI,
-							};
-						}
-					}
-				}
-				form.append({
-					type: 'select',
-					name: 'sortorder',
-					label: window.wgULS('查看列表：', '檢視列表：'),
-					tooltip: window.wgULS(
-						'您可以在Twinkle参数设置（H:TW/PREF）中更改此项。',
-						'您可以在Twinkle偏好設定（H:TW/PREF）中更改此項。'
-					),
-					event: Twinkle.tag.updateSortOrder,
-					list: [
-						{
-							type: 'option',
-							value: 'cat',
-							label: window.wgULS('按类型', '按類別'),
-							selected: Twinkle.getPref('tagArticleSortOrder') === 'cat',
-						},
-						{
-							type: 'option',
-							value: 'alpha',
-							label: '按字母',
-							selected: Twinkle.getPref('tagArticleSortOrder') === 'alpha',
-						},
-					],
+			}
+		}
+		Twinkle.tag.article.alphabeticalList ||= Object.keys(Twinkle.tag.article.flatObject).sort();
+		const articleGroups = Twinkle.tag.article.tagList.map((group) => {
+			const subgroups = [];
+			if (group.value[0].tag) {
+				subgroups.push({
+					key: null,
+					items: group.value.map((item) => {
+						return {
+							tag: item.tag,
+							description: item.description,
+						};
+					}),
 				});
-				if (!Twinkle.tag.canRemove) {
-					const divElement = document.createElement('div');
-					divElement.innerHTML = window.wgULS(
-						'要移除现有维护标记，请从当前条目版本中打开“标记”菜单',
-						'要移除現有維護標記，請從目前條目版本中打開「標記」選單'
-					);
-					form.append({
-						type: 'div',
-						name: 'untagnotice',
-						label: divElement,
-					});
-				}
-				form.append({
-					type: 'div',
-					id: 'tagWorkArea',
-					className: 'morebits-scrollbox',
-					style: 'max-height: 28em',
-				});
-				form.append({
-					type: 'checkbox',
-					list: [
-						{
-							label: window.wgULS(
-								'如可能，合并入{{multiple issues}}',
-								'如可能，合併入{{multiple issues}}'
-							),
-							value: 'group',
-							name: 'group',
-							tooltip: window.wgULS(
-								'若加入{{multiple issues}}支持的三个以上的模板，所有支持的模板都会被合并入{{multiple issues}}模板中。',
-								'若加入{{multiple issues}}支援的三個以上的模板，所有支援的模板都會被合併入{{multiple issues}}模板中。'
-							),
-							checked: Twinkle.getPref('groupByDefault'),
-						},
-					],
-				});
-				form.append({
-					type: 'input',
-					label: '理由：',
-					name: 'reason',
-					tooltip: window.wgULS(
-						'附加于编辑摘要的可选理由，例如指出条目内容的哪些部分有问题或移除模板的理由，但若理由很长则应该发表在讨论页。',
-						'附加於編輯摘要的可選理由，例如指出條目內容的哪些部分有問題或移除模板的理由，但若理由很長則應該發表在討論頁。'
-					),
-					size: '80',
-				});
-				break;
-			case 'file':
-				Window.setTitle(window.wgULS('文件维护标记', '檔案維護標記'));
-				for (const group of Twinkle.tag.fileList) {
-					if (group.buildFilename) {
-						for (const el of group.value) {
-							el.subgroup = {
-								type: 'input',
-								label: window.wgULS('替换的文件：', '替換的檔案：'),
-								tooltip: window.wgULS(
-									'输入替换此文件的文件名称（必填）',
-									'輸入替換此檔案的檔案名稱（必填）'
-								),
-								name: `${el.value.replace(/ /g, '_')}File`,
-							};
-						}
-					}
-					form.append({
-						type: 'header',
-						label: group.key,
-					});
-					form.append({
-						type: 'checkbox',
-						name: 'tags',
-						list: group.value,
-					});
-				}
-				if (Twinkle.getPref('customFileTagList').length) {
-					form.append({
-						type: 'header',
-						label: window.wgULS('自定义模板', '自訂模板'),
-					});
-					form.append({
-						type: 'checkbox',
-						name: 'tags',
-						list: Twinkle.getPref('customFileTagList'),
-					});
-				}
-				break;
-			case 'redirect': {
-				Window.setTitle(window.wgULS('重定向标记', '重新導向標記'));
-				const i = 1;
-				for (const group of Twinkle.tag.redirectList) {
-					form.append({
-						type: 'header',
-						id: `tagHeader${i}`,
-						label: group.key,
-					});
-					form.append({
-						type: 'checkbox',
-						name: 'tags',
-						list: group.value.map((item) => {
+			} else {
+				for (const subgroup of group.value) {
+					subgroups.push({
+						key: subgroup.key,
+						items: subgroup.value.map((item) => {
 							return {
-								value: item.tag,
-								label: `{{${item.tag}}}：${item.description}`,
-								subgroup: item.subgroup,
+								tag: item.tag,
+								description: item.description,
 							};
 						}),
 					});
 				}
-				if (Twinkle.getPref('customRedirectTagList').length) {
-					form.append({
-						type: 'header',
-						label: window.wgULS('自定义模板', '自訂模板'),
-					});
-					form.append({
-						type: 'checkbox',
-						name: 'tags',
-						list: Twinkle.getPref('customRedirectTagList'),
-					});
-				}
-				break;
 			}
+			return {key: group.key, subgroups};
+		});
+		const alphaTags = Twinkle.tag.article.alphabeticalList.map((tag) => {
+			return {
+				tag,
+				description: Twinkle.tag.article.flatObject[tag].description,
+			};
+		});
+		const fileGroups = Twinkle.tag.fileList.map((group) => {
+			return {
+				key: group.key,
+				items: group.value.map((item) => {
+					return {
+						tag: item.value,
+						label: item.label,
+						subgroup: item.subgroup,
+						buildFilename: !!group.buildFilename,
+					};
+				}),
+			};
+		});
+		const redirectGroups = Twinkle.tag.redirectList.map((group) => {
+			return {
+				key: group.key,
+				items: group.value.map((item) => {
+					return {
+						tag: item.tag,
+						label: `{{${item.tag}}}：${item.description}`,
+						subgroup: item.subgroup,
+					};
+				}),
+			};
+		});
+		let customGroups;
+		switch (Twinkle.tag.modeEn) {
+			case 'article':
+				customGroups = Twinkle.getPref('customTagList').length
+					? [
+							{
+								key: window.wgULS('自定义模板', '自訂模板'),
+								items: Twinkle.getPref('customTagList').map((el) => {
+									return {
+										tag: el.value,
+										label: el.label,
+										subgroup: el.subgroup,
+									};
+								}),
+							},
+						]
+					: [];
+				break;
+			case 'file':
+				customGroups = Twinkle.getPref('customFileTagList').length
+					? [
+							{
+								key: window.wgULS('自定义模板', '自訂模板'),
+								items: Twinkle.getPref('customFileTagList').map((el) => {
+									return {
+										tag: el.value,
+										label: el.label,
+										subgroup: el.subgroup,
+									};
+								}),
+							},
+						]
+					: [];
+				break;
 			default:
-				void mw.notify(`Twinkle.tag：未知模式 ${Twinkle.tag.mode}`, {
-					type: 'warn',
-					tag: 'friendlytag',
-				});
+				customGroups = Twinkle.getPref('customRedirectTagList').length
+					? [
+							{
+								key: window.wgULS('自定义模板', '自訂模板'),
+								items: Twinkle.getPref('customRedirectTagList').map((el) => {
+									return {
+										tag: el.value,
+										label: el.label,
+										subgroup: el.subgroup,
+									};
+								}),
+							},
+						]
+					: [];
 				break;
 		}
-		if (document.querySelector('.patrollink')) {
-			form.append({
-				type: 'checkbox',
-				list: [
-					{
-						label: window.wgULS('标记页面为已巡查', '標記頁面為已巡查'),
-						value: 'patrol',
-						name: 'patrol',
-						checked: Twinkle.getPref('markTaggedPagesAsPatrolled'),
-					},
-				],
-			});
+		let title;
+		switch (Twinkle.tag.modeEn) {
+			case 'article':
+				title = window.wgULS('条目维护标记', '條目維護標記');
+				break;
+			case 'file':
+				title = window.wgULS('文件维护标记', '檔案維護標記');
+				break;
+			default:
+				title = window.wgULS('重定向标记', '重新導向標記');
+				break;
 		}
-		form.append({
-			type: 'submit',
-			className: 'tw-tag-submit',
+		const app = createApp({
+			render: () => {
+				return h(TwTagDialog, {
+					mode: Twinkle.tag.modeEn,
+					title,
+					canRemove: Twinkle.tag.canRemove,
+					isMainspace: mw.config.get('wgNamespaceNumber') === 0,
+					initialSortOrder: Twinkle.getPref('tagArticleSortOrder') === 'alpha' ? 'alpha' : 'cat',
+					initialGroup: Twinkle.getPref('groupByDefault'),
+					showPatrol: !!document.querySelector('.patrollink'),
+					initialPatrol: Twinkle.getPref('markTaggedPagesAsPatrolled'),
+					articleGroups,
+					alphaTags,
+					alreadyPresentTags: alreadyPresent,
+					flatDescriptions: Object.fromEntries(
+						Object.entries(Twinkle.tag.article.flatObject).map(([tag, info]) => {
+							return [tag, info.description];
+						})
+					),
+					fileGroups,
+					redirectGroups,
+					customGroups,
+					footerLinks: [
+						{text: window.wgULS('标记设置', '標記設定'), href: mw.util.getUrl('H:TW/PREF#tag')},
+						{text: window.wgULS('Twinkle帮助', 'Twinkle說明'), href: mw.util.getUrl('H:TW/DOC#tag')},
+					],
+					onSubmit: (params, statusContainer, restore) => {
+						Twinkle.tag.callback.evaluate(params, statusContainer, restore);
+					},
+					onClose: () => {
+						app.unmount();
+						root.remove();
+					},
+				});
+			},
 		});
-		const result = form.render();
-		Window.setContent(result);
-		Window.display();
-		// for quick filter:
-		$allCheckboxDivs = $(result).find('[name$=tags]').parent();
-		$allHeaders = $(result).find('h5');
-		result.quickfilter.focus(); // place cursor in the quick filter field as soon as window is opened
-		result.quickfilter.autocomplete = 'off'; // disable browser suggestions
-		result.quickfilter.addEventListener('keypress', (e) => {
-			if (e.key === 'Enter') {
-				// prevent enter key from accidentally submitting the form
-				e.preventDefault();
-				return false;
-			}
-		});
+		app.mount(root);
 		if (Twinkle.tag.modeEn === 'article') {
 			Twinkle.tag.alreadyPresentTags = [];
 			if (Twinkle.tag.canRemove) {
@@ -354,31 +289,15 @@
 					Twinkle.tag.alreadyPresentTags[Twinkle.tag.alreadyPresentTags.length] = 'Improve categories';
 				}
 			}
-			// Add status text node after Submit button
-			const statusNode = document.createElement('span');
-			statusNode.style.fontSize = '90%';
-			statusNode.id = 'tw-tag-status';
-			Twinkle.tag.status = {
-				// initial state; defined like this because these need to be available for reference
-				// in the click event handler
-				numAdded: 0,
-				numRemoved: 0,
-			};
-			$body.find('button.tw-tag-submit').after(statusNode);
-			// fake a change event on the sort dropdown, to initialize the tag list
-			const evt = document.createEvent('Event');
-			evt.initEvent('change', true, true);
-			result.sortorder.dispatchEvent(evt);
-		} else {
-			// Redirects and files: Add a link to each template's description page
-			for (const checkbox of Morebits.quickForm.getElements(result, 'tags')) {
-				generateLinks(checkbox);
-			}
+			// Re-render the dialog with the discovered existing tags
+			alreadyPresent.splice(0, alreadyPresent.length, ...Twinkle.tag.alreadyPresentTags);
 		}
 	};
-	// $allCheckboxDivs and $allHeaders are defined globally, rather than in the
-	// quickfilter event function, to avoid having to recompute them on every keydown
+	// $allCheckboxDivs and $allHeaders are referenced by the legacy
+	// Twinkle.tag.updateSortOrder below; keep the declarations in place.
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	let $allCheckboxDivs;
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	let $allHeaders;
 	Twinkle.tag.updateSortOrder = (e) => {
 		const {form} = e.target;
@@ -2173,9 +2092,7 @@
 			}
 		},
 	};
-	Twinkle.tag.callback.evaluate = (e) => {
-		const form = e.target;
-		const params = Morebits.quickForm.getInputData(form);
+	Twinkle.tag.callback.evaluate = (params, statusContainer, restore) => {
 		// Validation
 		// Given an array of incompatible tags, check if we have two or more selected
 		const checkIncompatible = (conflicts, extra) => {
@@ -2197,7 +2114,7 @@
 		// Given a tag, ensure an associate parameter is present
 		// Maybe just sock this away in each function???
 		const checkParameter = (tag, parameter, description = '理由') => {
-			if (params.tags.includes(tag) && params[parameter].trim() === '') {
+			if (params.tags.includes(tag) && (params[parameter] ?? '').trim() === '') {
 				void mw.notify(`${window.wgULS('您必须指定', '您必須指定')}{{${tag}}}的${description}。`, {
 					type: 'warn',
 					tag: 'friendlytag',
@@ -2211,7 +2128,6 @@
 		// calls could be in one if, but could be similarly confusing.
 		switch (Twinkle.tag.modeEn) {
 			case 'article':
-				params.tagsToRemove = form.getUnchecked('existingTags'); // not in `input`
 				params.tagsToRemain = params.existingTags || []; // container not created if none present
 				if (
 					params.tags.includes('Merge') ||
@@ -2227,6 +2143,9 @@
 							)
 						)
 					) {
+						if (restore) {
+							restore();
+						}
 						return;
 					}
 					if (!params.mergeTarget) {
@@ -2240,6 +2159,9 @@
 								tag: 'friendlytag',
 							}
 						);
+						if (restore) {
+							restore();
+						}
 						return;
 					}
 					if ((params.mergeTagOther || params.mergeReason) && params.mergeTarget.includes('|')) {
@@ -2253,6 +2175,9 @@
 								tag: 'friendlytag',
 							}
 						);
+						if (restore) {
+							restore();
+						}
 						return;
 					}
 				}
@@ -2263,9 +2188,15 @@
 						window.wgULS('缺少的内容', '缺少的內容')
 					)
 				) {
+					if (restore) {
+						restore();
+					}
 					return;
 				}
 				if (checkParameter('Expert needed', 'expert', window.wgULS('专家领域', '專家領域'))) {
+					if (restore) {
+						restore();
+					}
 					return;
 				}
 				break;
@@ -2279,9 +2210,15 @@
 						window.wgULS('替换的文件名称', '替換的檔案名稱')
 					)
 				) {
+					if (restore) {
+						restore();
+					}
 					return;
 				}
 				if (checkParameter('Do not move to Commons', 'DoNotMoveToCommons_reason')) {
+					if (restore) {
+						restore();
+					}
 					return;
 				}
 				break;
@@ -2301,10 +2238,12 @@
 				type: 'warn',
 				tag: 'friendlytag',
 			});
+			if (restore) {
+				restore();
+			}
 			return;
 		}
-		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(form);
+		Morebits.status.init(statusContainer);
 		Morebits.wiki.actionCompleted.redirect = Morebits.pageNameNorm;
 		Morebits.wiki.actionCompleted.notice = window.wgULS(
 			'标记完成，将在几秒内刷新页面',
