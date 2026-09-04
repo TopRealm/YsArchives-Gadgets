@@ -1,6 +1,8 @@
 /* eslint-disable no-jquery/no-global-selector */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import {createApp, h, reactive} from 'vue';
+import TwBlockDialog from './ui/TwBlockDialog.vue';
 import {api} from './api';
 import {generateArray} from 'ext.gadget.Util';
 
@@ -41,6 +43,130 @@ import {generateArray} from 'ext.gadget.Util';
 			);
 		}
 	};
+	// Holds data derived from the fetched user/block info, rendered by the dialog
+	let dialogData = null;
+	let dialogEpoch = 0;
+	// Holds the Morebits preview instance for the current dialog
+	let previewer = null;
+	// Builds the notice strings shown above the block options
+	const buildNotices = () => {
+		const notices = {
+			currentBlock: null,
+			currentInfo: null,
+			blockLog: null,
+			blockLogLink: mw.util.getUrl('Special:Log', {
+				action: 'view',
+				page: relevantUserName,
+				type: 'block',
+			}),
+		};
+		if (Twinkle.block.currentBlockInfo) {
+			const sameUser = blockedUserName === relevantUserName;
+			let statusStr = `${relevantUserName}已被${
+				Twinkle.block.currentBlockInfo.partial === ''
+					? window.wgULS('部分封禁', '部分封鎖')
+					: window.wgULS('全站封禁', '全站封鎖')
+			}`;
+			if (Twinkle.block.currentBlockInfo.rangestart !== Twinkle.block.currentBlockInfo.rangeend) {
+				if (sameUser) {
+					statusStr += window.wgULS('（段封禁）', '（段封鎖）');
+				} else {
+					const rangeLabel =
+						Morebits.ip.get64(relevantUserName) === blockedUserName ? '/64' : blockedUserName;
+					statusStr +=
+						window.wgULS('（位于', '（位於') + rangeLabel + window.wgULS('段封禁内）', '段封鎖內）');
+				}
+			}
+			if (Twinkle.block.currentBlockInfo.expiry === 'infinity') {
+				statusStr += window.wgULS('（无限期）', '（無限期）');
+			} else if (new Morebits.date(Twinkle.block.currentBlockInfo.expiry).isValid()) {
+				statusStr += `${
+					window.wgULS('（终止于', '（終止於') +
+					new Morebits.date(Twinkle.block.currentBlockInfo.expiry).calendar('utc')
+				}）`;
+			}
+			let infoStr = window.wgULS('此表单将', '此表單將');
+			if (sameUser) {
+				infoStr += window.wgULS('更改封禁', '變更封鎖');
+				infoStr += '。';
+			} else {
+				infoStr += window.wgULS('加上额外的', '加上額外的') + window.wgULS('封禁。', '封鎖。');
+			}
+			notices.currentBlock = statusStr;
+			notices.currentInfo = infoStr;
+		}
+		if (Twinkle.block.hasBlockLog) {
+			if (Twinkle.block.currentBlockInfo) {
+				notices.blockLog = window.wgULS('封禁详情', '封鎖詳情');
+			} else {
+				const [lastBlockAction] = Twinkle.block.blockLog;
+				const blockAction = lastBlockAction.action === 'unblock' ? Twinkle.block.blockLog[1] : lastBlockAction;
+				let logText =
+					`此${
+						Morebits.ip.isRange(relevantUserName)
+							? window.wgULS('IP范围', 'IP範圍')
+							: window.wgULS('用户', '使用者')
+					}曾在` +
+					`${new Morebits.date(blockAction.timestamp).calendar('utc')}` +
+					`被${blockAction.user}${window.wgULS('封禁', '封鎖')}` +
+					`${Morebits.string.formatTime(blockAction.params.duration)}`;
+				if (lastBlockAction.action === 'unblock') {
+					logText += `，${new Morebits.date(lastBlockAction.timestamp).calendar('utc')}解封`;
+				} else {
+					logText += `，${new Morebits.date(blockAction.params.expiry).calendar('utc')}${window.wgULS('过期', '過期')}`;
+				}
+				notices.blockLog = logText;
+			}
+		}
+		return notices;
+	};
+	const buildPresetGroups = (partialBox) => {
+		// Add current block parameters as default preset
+		let blockGroup = partialBox ? Twinkle.block.blockGroupsPartial : Twinkle.block.blockGroups;
+		const prior = {
+			label: window.wgULS('当前封禁', '目前封鎖'),
+		};
+		if (blockedUserName === relevantUserName && Twinkle.block.currentBlockInfo) {
+			Twinkle.block.blockPresetsInfo.prior = Twinkle.block.currentBlockInfo;
+			prior.list = [
+				{
+					label: window.wgULS('当前封禁设置', '目前封鎖設定'),
+					value: 'prior',
+					selected: true,
+				},
+			];
+			if (
+				!blockGroup.some((bg) => {
+					return bg.label === prior.label;
+				})
+			) {
+				blockGroup = [...blockGroup, prior];
+			}
+			if (partialBox) {
+				Twinkle.block.blockPresetsInfo.prior.templateName = Morebits.string.isInfinity(
+					Twinkle.block.currentBlockInfo.expiry
+				)
+					? 'uw-pblockindef'
+					: 'uw-pblock';
+			} else if (Twinkle.block.isRegistered) {
+				Twinkle.block.blockPresetsInfo.prior.templateName = Morebits.string.isInfinity(
+					Twinkle.block.currentBlockInfo.expiry
+				)
+					? 'uw-blockindef'
+					: 'uw-block';
+			} else {
+				Twinkle.block.blockPresetsInfo.prior.templateName = 'uw-ablock';
+			}
+		} else {
+			blockGroup = blockGroup.filter((bg) => {
+				return bg.label !== prior.label;
+			});
+		}
+		return {
+			presetGroups: Twinkle.block.callback.filtered_block_groups(blockGroup),
+			templateGroups: Twinkle.block.callback.filtered_block_groups(blockGroup, true),
+		};
+	};
 	Twinkle.block.callback = () => {
 		if (
 			relevantUserName === mw.config.get('wgUserName') &&
@@ -56,182 +182,99 @@ import {generateArray} from 'ext.gadget.Util';
 		Twinkle.block.currentBlockInfo = undefined;
 		Twinkle.block.field_block_options = {};
 		Twinkle.block.field_template_options = {};
-		const Window = new Morebits.simpleWindow(650, 530);
-		// need to be verbose about who we're blocking
-		Window.setTitle(
-			window.wgULS('封禁或向', '封鎖或向') + relevantUserName + window.wgULS('发出封禁模板', '發出封鎖模板')
-		);
-		Window.setScriptName('Twinkle');
-		Window.addFooterLink(window.wgULS('封禁条例', '封鎖條例'), 'LIB:BLOCK');
-		Window.addFooterLink(window.wgULS('封禁设置', '封鎖設定'), 'H:TW/PREF#block');
-		Window.addFooterLink(window.wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#block');
-		const form = new Morebits.quickForm(Twinkle.block.callback.evaluate);
-		const actionfield = form.append({
-			type: 'field',
-			label: window.wgULS('操作类型', '操作類別'),
-		});
-		actionfield.append({
-			type: 'checkbox',
-			name: 'actiontype',
-			event: Twinkle.block.callback.change_action,
-			list: [
-				{
-					label: window.wgULS('封禁用户', '封鎖使用者'),
-					value: 'block',
-					tooltip: window.wgULS(
-						'用选择的选项全站封禁相关用户，若未勾选部分封禁则为全站封禁。',
-						'用選擇的選項全站封鎖相關使用者，若未勾選部分封鎖則為全站封鎖。'
-					),
-					hidden: !Morebits.userIsSysop,
-					checked: Morebits.userIsSysop,
-				},
-				{
-					label: window.wgULS('部分封禁', '部分封鎖'),
-					value: 'partial',
-					tooltip: window.wgULS('启用部分封禁及部分封禁模板。', '啟用部分封鎖及部分封鎖模板。'),
-					hidden: !Morebits.userIsSysop,
-					checked: Twinkle.getPref('defaultToPartialBlocks'), // Overridden if already blocked
-				},
-				{
-					label: window.wgULS('加入封禁模板到用户讨论页', '加入封鎖模板到使用者討論頁'),
-					value: 'template',
-					tooltip: window.wgULS(
-						'若执行封禁的管理员忘记发出封禁模板，或你封禁了用户而没有给其发出模板，则你可以用此来发出合适的模板。勾选部分封禁以使用部分封禁模板。',
-						'若執行封鎖的管理員忘記發出封鎖模板，或你封鎖了使用者而沒有給其發出模板，則你可以用此來發出合適的模板。勾選部分封鎖以使用部分封鎖模板。'
-					),
-					// Disallow when viewing the block dialog on an IP range
-					hidden: !Morebits.userIsSysop,
-					checked: Morebits.userIsSysop && !Morebits.ip.isRange(relevantUserName),
-					disabled: Morebits.ip.isRange(relevantUserName),
-				},
-				{
-					label: window.wgULS('标记用户页', '標記使用者頁面'),
-					value: 'tag',
-					tooltip: window.wgULS(
-						'将用户页替换成相关的标记模板，仅限永久封禁使用。',
-						'將使用者頁面替換成相關的標記模板，僅限永久封鎖使用。'
-					),
-					hidden: true,
-					checked: !Morebits.userIsSysop,
-				},
-				{
-					label: window.wgULS('保护用户页', '保護使用者頁面'),
-					value: 'protect',
-					tooltip: window.wgULS('全保护用户页，仅限永久封禁使用。', '全保護使用者頁面，僅限永久封鎖使用。'),
-					hidden: true,
-				},
-				{
-					label: window.wgULS('解除封禁用户', '解除封鎖使用者'),
-					value: 'unblock',
-					tooltip: window.wgULS('解除封禁相关用户。', '解除封鎖相關使用者。'),
-					hidden: !Morebits.userIsSysop,
-				},
-			],
-		});
-		/**
-		 * Add option for IPv6 ranges smaller than /64 to upgrade to the 64
-		 * CIDR. This is one of the few places where we want
-		 * wgRelevantUserName since this depends entirely on the original user.
-		 * In theory, we shouldn't use Morebits.ip.get64 here since since we want
-		 * to exclude functionally-equivalent /64s.  That'd be:
-		 * // if (mw.util.isIPv6Address(mw.config.get('wgRelevantUserName'), true) &&
-		 * // (mw.util.isIPv6Address(mw.config.get('wgRelevantUserName')) || parseInt(mw.config.get('wgRelevantUserName').replace(/^(.+?)\/?(\d{1,3})?$/, '$2'), 10) > 64)) {
-		 * In practice, though, since functionally-equivalent ranges are
-		 * (mis)treated as separate by MediaWiki's logging,
-		 * using Morebits.ip.get64 provides a modicum of relief in thise case.
-		 */
-		const sixtyFour = Morebits.ip.get64(mw.config.get('wgRelevantUserName'));
-		if (sixtyFour && sixtyFour !== mw.config.get('wgRelevantUserName')) {
-			const block64field = form.append({
-				type: 'field',
-				label: window.wgULS('转换为/64段封禁', '轉換為/64段封鎖'),
-				name: 'field_64',
-			});
-			block64field.append({
-				type: 'div',
-				style: 'margin-bottom: 0.5em',
-				label: [wgULS('直接封禁/64段有益无害。', '直接封鎖/64段有益無害。')],
-			});
-			block64field.append({
-				type: 'checkbox',
-				name: 'block64',
-				event: Twinkle.block.callback.change_block64,
-				list: [
-					{
-						checked: Twinkle.getPref('defaultToBlock64'),
-						label: window.wgULS('改成封禁/64', '改成封鎖/64'),
-						value: 'block64',
-						tooltip: Morebits.ip.isRange(mw.config.get('wgRelevantUserName'))
-							? window.wgULS('将不会发送模板通知。', '將不會發送模板通知。')
-							: window.wgULS('任何模板将会发送给原始IP：', '任何模板將會發送給原始IP：') +
-								mw.config.get('wgRelevantUserName'),
-					},
-				],
-			});
-		}
-		form.append({
-			type: 'field',
-			label: window.wgULS('默认', '預設'),
-			name: 'field_preset',
-		});
-		form.append({
-			type: 'field',
-			label: window.wgULS('模板选项', '模板選項'),
-			name: 'field_template_options',
-		});
-		form.append({
-			type: 'field',
-			label: window.wgULS('封禁选项', '封鎖選項'),
-			name: 'field_block_options',
-		});
-		form.append({
-			type: 'field',
-			label: window.wgULS('标记用户页', '標記使用者頁面'),
-			name: 'field_tag_options',
-		});
-		form.append({
-			type: 'field',
-			label: window.wgULS('解除封禁选项', '解除封鎖選項'),
-			name: 'field_unblock_options',
-		});
-		form.append({
-			type: 'submit',
-			label: '提交',
-		});
-		const result = form.render();
-		Window.setContent(result);
-		Window.display();
-		result.root = result;
-		Twinkle.block.fetchUserInfo(() => {
-			if (Twinkle.block.isRegistered) {
-				const $form = $(result);
-				Morebits.quickForm.setElementVisibility($form.find('[name=actiontype][value=tag]').parent(), true);
-				if (Morebits.userIsSysop) {
-					Morebits.quickForm.setElementVisibility(
-						$form.find('[name=actiontype][value=protect]').parent(),
-						true
-					);
-				}
-			}
-			// Toggle initial partial state depending on prior block type,
-			// will override the defaultToPartialBlocks pref
-			if (blockedUserName === relevantUserName) {
-				$(result)
-					.find('[name=actiontype][value=partial]')
-					.prop('checked', Twinkle.block.currentBlockInfo.partial === '');
-			}
-			// clean up preset data (defaults, etc.), done exactly once, must be before Twinkle.block.callback.change_action is called
+		let app = null;
+		let root = null;
+		const mountDialog = () => {
+			// Clean up preset data (defaults, etc.), done exactly once
 			Twinkle.block.transformBlockPresets();
-			// init the controls after user and block info have been fetched
-			const evt = document.createEvent('Event');
-			evt.initEvent('change', true, true);
-			if (result.block64 && result.block64.checked) {
-				// Calls the same change_action event once finished
-				result.block64.dispatchEvent(evt);
-			} else {
-				result.actiontype[0].dispatchEvent(evt);
+			if (root) {
+				app.unmount();
+				root.remove();
 			}
-		});
+			root = document.createElement('div');
+			document.body.append(root);
+			const partialChecked =
+				blockedUserName === relevantUserName && Twinkle.block.currentBlockInfo
+					? Twinkle.block.currentBlockInfo.partial === ''
+					: Twinkle.getPref('defaultToPartialBlocks');
+			const groups = buildPresetGroups(partialChecked);
+			dialogData = reactive({
+				isRegistered: Twinkle.block.isRegistered,
+				userIsBot: Twinkle.block.userIsBot,
+				partialChecked,
+				presetGroups: groups.presetGroups,
+				templateGroups: groups.templateGroups,
+				notices: buildNotices(),
+			});
+			const sixtyFour = Morebits.ip.get64(mw.config.get('wgRelevantUserName'));
+			const sixtyFourAvailable = !!sixtyFour && sixtyFour !== mw.config.get('wgRelevantUserName');
+			app = createApp({
+				render: () => {
+					return h(TwBlockDialog, {
+						key: dialogEpoch,
+						title:
+							window.wgULS('封禁或向', '封鎖或向') +
+							relevantUserName +
+							window.wgULS('发出封禁模板', '發出封鎖模板'),
+						showBlock: Morebits.userIsSysop,
+						showTemplate: Morebits.userIsSysop,
+						showTag: Twinkle.block.isRegistered,
+						showProtect: Twinkle.block.isRegistered && Morebits.userIsSysop,
+						showUnblock: Morebits.userIsSysop,
+						initialBlock: Morebits.userIsSysop,
+						initialTemplate: Morebits.userIsSysop && !Morebits.ip.isRange(relevantUserName),
+						initialPartial: partialChecked,
+						initialUnblock: false,
+						sixtyFourAvailable,
+						initialBlock64: Twinkle.getPref('defaultToBlock64'),
+						presetGroups: dialogData.presetGroups,
+						templateGroups: dialogData.templateGroups,
+						presetsInfo: Twinkle.block.blockPresetsInfo,
+						expiryPresetOptions: Twinkle.block.expiryPresetOptions,
+						namespaces: Twinkle.block.namespaceOptions,
+						isRegistered: dialogData.isRegistered,
+						userIsBot: dialogData.userIsBot,
+						notices: dialogData.notices,
+						footerLinks: [
+							{text: window.wgULS('封禁条例', '封鎖條例'), href: mw.util.getUrl('LIB:BLOCK')},
+							{text: window.wgULS('封禁设置', '封鎖設定'), href: mw.util.getUrl('H:TW/PREF#block')},
+							{text: window.wgULS('Twinkle帮助', 'Twinkle說明'), href: mw.util.getUrl('H:TW/DOC#block')},
+						],
+						onSubmit: (params, statusContainer, restore) => {
+							Twinkle.block.callback.evaluate(params, statusContainer, restore);
+						},
+						onPreview: (params, previewBox) => {
+							Twinkle.block.callback.preview(params, previewBox);
+						},
+						onBlock64Changed: (checked) => {
+							// Faithful port of Twinkle.block.callback.change_block64
+							const originalIsRange = Morebits.ip.isRange(mw.config.get('wgRelevantUserName'));
+							relevantUserName = checked
+								? Morebits.ip.get64(mw.config.get('wgRelevantUserName'))
+								: mw.config.get('wgRelevantUserName');
+							const regenerate = () => {
+								dialogEpoch += 1;
+								mountDialog();
+							};
+							if (Twinkle.block.fetchedData[relevantUserName]) {
+								Twinkle.block.processUserInfo(Twinkle.block.fetchedData[relevantUserName], regenerate);
+							} else {
+								Twinkle.block.fetchUserInfo(regenerate);
+							}
+							if (!checked) {
+								dialogData.templateCheck = originalIsRange;
+							}
+						},
+						onClose: () => {
+							app.unmount();
+							root.remove();
+						},
+					});
+				},
+			});
+			app.mount(root);
+		};
+		Twinkle.block.fetchUserInfo(mountDialog);
 	};
 	// Store fetched user data, only relevant if switching IPv6 to a /64
 	Twinkle.block.fetchedData = {};
@@ -312,6 +355,36 @@ import {generateArray} from 'ext.gadget.Util';
 			}
 		);
 	};
+	// Expiry preset options for the block options field
+	Twinkle.block.expiryPresetOptions = [
+		{label: window.wgULS('自定义', '自訂'), value: 'custom'},
+		{label: window.wgULS('无限期', '無限期'), value: 'infinity'},
+		{label: window.wgULS('3小时', '3小時'), value: '3 hours'},
+		{label: window.wgULS('12小时', '12小時'), value: '12 hours'},
+		{label: '1天', value: '1 day'},
+		{label: window.wgULS('31小时', '31小時'), value: '31 hours'},
+		{label: '2天', value: '2 days'},
+		{label: '3天', value: '3 days'},
+		{label: window.wgULS('1周', '1週'), value: '1 week'},
+		{label: window.wgULS('2周', '2週'), value: '2 weeks'},
+		{label: window.wgULS('1个月', '1個月'), value: '1 month'},
+		{label: window.wgULS('3个月', '3個月'), value: '3 months'},
+		{label: window.wgULS('6个月', '6個月'), value: '6 months'},
+		{label: '1年', value: '1 year'},
+		{label: '2年', value: '2 years'},
+		{label: '3年', value: '3 years'},
+	];
+	// Namespace options for partial blocks
+	Twinkle.block.namespaceOptions = Object.entries(menuFormattedNamespaces)
+		.filter(([number]) => {
+			return Number(number) >= 0 && Number(number) < 830;
+		})
+		.map(([number, name]) => {
+			return {
+				value: Number(number),
+				label: name,
+			};
+		});
 	Twinkle.block.callback.saveFieldset = (fieldset) => {
 		Twinkle.block[$(fieldset).prop('name')] = {};
 		for (const el of $(fieldset).serializeArray()) {
@@ -1888,63 +1961,87 @@ import {generateArray} from 'ext.gadget.Util';
 		form.root.previewer.closePreview();
 	};
 	Twinkle.block.prev_template_expiry = null;
-	Twinkle.block.callback.preview = (form) => {
-		const params = {
-			article: form.article.value,
-			blank_duration: form.blank_duration ? form.blank_duration.checked : false,
-			disabletalk: form.disabletalk.checked || (form.notalk ? form.notalk.checked : false),
-			expiry: form.template_expiry ? form.template_expiry.value : form.expiry.value,
-			hardblock: Twinkle.block.isRegistered ? form.autoblock.checked : form.hardblock.checked,
-			indefinite: Morebits.string.isInfinity(
-				form.template_expiry ? form.template_expiry.value : form.expiry.value
-			),
-			reason: form.block_reason.value,
-			template: form.template.value,
-			partial: $(form).find('[name=actiontype][value=partial]').is(':checked'),
-			pagerestrictions: $(form.pagerestrictions).val() || [],
-			namespacerestrictions: $(form.namespacerestrictions).val() || [],
-			noemail: form.noemail.checked || (form.noemail_template ? form.noemail_template.checked : false),
-			nocreate: form.nocreate.checked || (form.nocreate_template ? form.nocreate_template.checked : false),
-			area: form.area.value,
+	Twinkle.block.callback.preview = (params, previewBox) => {
+		const pageRestrictions = params.pagerestrictions
+			.split(/[、,，\n]/)
+			.map((item) => {
+				return item.trim();
+			})
+			.filter(Boolean);
+		const templateParams = {
+			article: params.article,
+			blank_duration: params.blank_duration,
+			disabletalk: params.disabletalk || params.notalk,
+			expiry: params.template_expiry || params.expiry,
+			hardblock: Twinkle.block.isRegistered ? params.autoblock : params.hardblock,
+			indefinite: Morebits.string.isInfinity(params.template_expiry || params.expiry),
+			reason: params.block_reason,
+			template: params.template,
+			partial: params.actiontype.includes('partial'),
+			pagerestrictions: pageRestrictions,
+			namespacerestrictions: params.namespacerestrictions,
+			noemail: params.noemail || params.noemail_template,
+			nocreate: params.nocreate || params.nocreate_template,
+			area: params.area,
 		};
-		const templateText = Twinkle.block.callback.getBlockNoticeWikitext(params);
-		form.previewer.beginRender(templateText, `User_talk:${relevantUserName}/Wikitext`); // Force wikitext/correct username
-	};
-	Twinkle.block.callback.evaluate = (e) => {
-		const params = Morebits.quickForm.getInputData(e.target);
-		const $form = $(e.target);
-		const toBlock = $form.find('[name=actiontype][value=block]').is(':checked');
-		const toWarn = $form.find('[name=actiontype][value=template]').is(':checked');
-		const toPartial = $form.find('[name=actiontype][value=partial]').is(':checked');
-		const toTag = $form.find('[name=actiontype][value=tag]').is(':checked');
-		const toProtect = $form.find('[name=actiontype][value=protect]').is(':checked');
-		const toUnblock = $form.find('[name=actiontype][value=unblock]').is(':checked');
-		let blockoptions = {};
-		let templateoptions = {};
-		let unblockoptions = {};
-		Twinkle.block.callback.saveFieldset($form.find('[name=field_block_options]'));
-		Twinkle.block.callback.saveFieldset($form.find('[name=field_template_options]'));
-		Twinkle.block.callback.saveFieldset($form.find('[name=field_tag_options]'));
-		Twinkle.block.callback.saveFieldset($form.find('[name=field_unblock_options]'));
-		blockoptions = Twinkle.block.field_block_options;
-		unblockoptions = Twinkle.block.field_unblock_options;
-		const toClosevip = !!blockoptions.closevip;
-		templateoptions = Twinkle.block.field_template_options;
-		templateoptions.disabletalk = !!(templateoptions.disabletalk || blockoptions.disabletalk);
-		templateoptions.hardblock = !!blockoptions.hardblock;
-		// remove extraneous
-		delete blockoptions.expiry_preset;
-		delete blockoptions.closevip;
-		// Partial API requires this to be gone, not false or 0
-		if (toPartial) {
-			blockoptions.partial = true;
-			templateoptions.partial = true;
+		const templateText = Twinkle.block.callback.getBlockNoticeWikitext(templateParams);
+		if (previewer) {
+			previewer.closePreview();
 		}
-		templateoptions.pagerestrictions = $form.find('[name=pagerestrictions]').val() || [];
-		templateoptions.namespacerestrictions = $form.find('[name=namespacerestrictions]').val() || [];
-		// Format for API here rather than in saveFieldset
-		blockoptions.pagerestrictions = templateoptions.pagerestrictions.join('|');
-		blockoptions.namespacerestrictions = templateoptions.namespacerestrictions.join('|');
+		previewer = new Morebits.wiki.preview(previewBox);
+		previewer.beginRender(templateText, `User_talk:${relevantUserName}/Wikitext`); // Force wikitext/correct username
+	};
+	Twinkle.block.callback.evaluate = (params, statusContainer, restore) => {
+		// Apply the /64 upgrade if requested
+		relevantUserName = params.block64
+			? Morebits.ip.get64(mw.config.get('wgRelevantUserName'))
+			: mw.config.get('wgRelevantUserName');
+		const toBlock = params.actiontype.includes('block');
+		const toWarn = params.actiontype.includes('template');
+		const toPartial = params.actiontype.includes('partial');
+		const toTag = params.actiontype.includes('tag');
+		const toProtect = params.actiontype.includes('protect');
+		const toUnblock = params.actiontype.includes('unblock');
+		const pageRestrictions = params.pagerestrictions
+			.split(/[、,，\n]/)
+			.map((item) => {
+				return item.trim();
+			})
+			.filter(Boolean);
+		const blockoptions = {
+			partial: toPartial,
+			nocreate: params.nocreate,
+			noemail: params.noemail,
+			disabletalk: params.disabletalk,
+			autoblock: params.autoblock,
+			hardblock: params.hardblock,
+			watchuser: params.watchuser,
+			expiry: params.expiry,
+			reason: params.reason,
+		};
+		const templateoptions = {
+			template: params.template,
+			article: params.article,
+			area: params.area,
+			template_expiry: params.template_expiry,
+			block_reason: params.block_reason,
+			blank_duration: params.blank_duration,
+			notalk: params.notalk,
+			noemail_template: params.noemail_template,
+			nocreate_template: params.nocreate_template,
+			partial: toPartial,
+			disabletalk: !!(params.notalk || params.disabletalk),
+			hardblock: !!params.hardblock,
+		};
+		const unblockoptions = {
+			reason: params.unblock_reason,
+		};
+		const toClosevip = !!params.closevip;
+		templateoptions.pagerestrictions = pageRestrictions;
+		templateoptions.namespacerestrictions = params.namespacerestrictions;
+		// Format for API
+		blockoptions.pagerestrictions = pageRestrictions.join('|');
+		blockoptions.namespacerestrictions = params.namespacerestrictions.join('|');
 		// use block settings as warn options where not supplied
 		templateoptions.summary ||= blockoptions.reason;
 		templateoptions.expiry = templateoptions.template_expiry || blockoptions.expiry;
@@ -1973,6 +2070,9 @@ import {generateArray} from 'ext.gadget.Util';
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
+				if (restore) {
+					restore();
+				}
 				return;
 			}
 			if (
@@ -1984,6 +2084,9 @@ import {generateArray} from 'ext.gadget.Util';
 					)
 				)
 			) {
+				if (restore) {
+					restore();
+				}
 				return;
 			}
 			if (
@@ -1995,6 +2098,9 @@ import {generateArray} from 'ext.gadget.Util';
 					)
 				)
 			) {
+				if (restore) {
+					restore();
+				}
 				return;
 			}
 			if (
@@ -2003,6 +2109,9 @@ import {generateArray} from 'ext.gadget.Util';
 					window.wgULS('请从主账号和分身账号中选择一个。', '請從主賬號和分身賬號中選擇一個。')
 				)
 			) {
+				if (restore) {
+					restore();
+				}
 				return;
 			}
 			if (params.tag.includes('Sockpuppet') && params.sppUsername.trim() === '') {
@@ -2010,6 +2119,9 @@ import {generateArray} from 'ext.gadget.Util';
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
+				if (restore) {
+					restore();
+				}
 				return;
 			}
 		}
@@ -2026,6 +2138,9 @@ import {generateArray} from 'ext.gadget.Util';
 							tag: 'twinkleblock',
 						}
 					);
+					if (restore) {
+						restore();
+					}
 					return;
 				}
 				if (!blockoptions.namespacerestrictions && !blockoptions.pagerestrictions) {
@@ -2041,6 +2156,9 @@ import {generateArray} from 'ext.gadget.Util';
 								tag: 'twinkleblock',
 							}
 						);
+						if (restore) {
+							restore();
+						}
 						return;
 					} else if (
 						!confirm(
@@ -2059,12 +2177,18 @@ import {generateArray} from 'ext.gadget.Util';
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
+				if (restore) {
+					restore();
+				}
 				return;
 			} else if (Morebits.string.isInfinity(blockoptions.expiry) && !Twinkle.block.isRegistered) {
 				void mw.notify(window.wgULS('禁止无限期封禁IP地址！', '禁止無限期封鎖IP位址！'), {
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
+				if (restore) {
+					restore();
+				}
 				return;
 			}
 			if (!blockoptions.reason) {
@@ -2072,10 +2196,12 @@ import {generateArray} from 'ext.gadget.Util';
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
+				if (restore) {
+					restore();
+				}
 				return;
 			}
-			Morebits.simpleWindow.setButtonsEnabled(false);
-			Morebits.status.init(e.target);
+			Morebits.status.init(statusContainer);
 			const statusElement = new Morebits.status(window.wgULS('执行封禁', '執行封鎖'));
 			blockoptions.action = 'block';
 			blockoptions.user = relevantUserName;
@@ -2237,13 +2363,11 @@ import {generateArray} from 'ext.gadget.Util';
 				mbApi.post();
 			});
 		} else if (toWarn) {
-			Morebits.simpleWindow.setButtonsEnabled(false);
-			Morebits.status.init(e.target);
+			Morebits.status.init(statusContainer);
 			Twinkle.block.callback.issue_template(templateoptions);
 		}
 		if (toTag || toProtect) {
-			Morebits.simpleWindow.setButtonsEnabled(false);
-			Morebits.status.init(e.target);
+			Morebits.status.init(statusContainer);
 			const userPage = `User:${mw.config.get('wgRelevantUserName')}`;
 			const ysarchives_page = new Morebits.wiki.page(
 				userPage,
@@ -2258,10 +2382,12 @@ import {generateArray} from 'ext.gadget.Util';
 					type: 'warn',
 					tag: 'twinkleblock',
 				});
+				if (restore) {
+					restore();
+				}
 				return;
 			}
-			Morebits.simpleWindow.setButtonsEnabled(false);
-			Morebits.status.init(e.target);
+			Morebits.status.init(statusContainer);
 			const unblockStatusElement = new Morebits.status(window.wgULS('执行解除封禁', '執行解除封鎖'));
 			unblockoptions.action = 'unblock';
 			unblockoptions.user = mw.config.get('wgRelevantUserName');
@@ -2282,6 +2408,9 @@ import {generateArray} from 'ext.gadget.Util';
 				type: 'warn',
 				tag: 'twinkleblock',
 			});
+			if (restore) {
+				restore();
+			}
 		}
 	};
 	Twinkle.block.callback.taguserpage = (pageobj) => {
@@ -2366,10 +2495,10 @@ import {generateArray} from 'ext.gadget.Util';
 			...formData,
 			messageData: Twinkle.block.blockPresetsInfo[formData.template],
 			usertalk_summary: Twinkle.block.blockPresetsInfo[formData.preset || formData.template].summary,
-			reason: Twinkle.block.field_template_options.block_reason,
-			disabletalk: Twinkle.block.field_template_options.notalk,
-			noemail: Twinkle.block.field_template_options.noemail_template,
-			nocreate: Twinkle.block.field_template_options.nocreate_template,
+			reason: formData.block_reason,
+			disabletalk: formData.notalk,
+			noemail: formData.noemail_template,
+			nocreate: formData.nocreate_template,
 		};
 		Morebits.wiki.actionCompleted.redirect = userTalkPage;
 		Morebits.wiki.actionCompleted.notice = window.wgULS(
