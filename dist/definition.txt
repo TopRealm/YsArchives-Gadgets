@@ -72,7 +72,6 @@
 * NoteTA[ResourceLoader|default|dependencies=ext.gadget.i18n,ext.gadget.JSX,ext.gadget.Util,jquery.makeCollapsible,mediawiki.api,mediawiki.util,oojs-ui-core,oojs-ui-windows|hidden|peers=NoteTA-pagestyles|requiresES6]|NoteTA.js
 * NoteTA-pagestyles[ResourceLoader|hidden|requiresES6]|NoteTA-pagestyles.css
 * PrintOptions[ResourceLoader|dependencies=ext.gadget.i18n,ext.gadget.Util,oojs-ui-core,oojs-ui-widgets,oojs-ui-windows|requiresES6]|PrintOptions.js
-* select2[ResourceLoader|dependencies=jquery|hidden|requiresES6]|select2.js|select2.css
 * SiteCommon[ResourceLoader|default|hidden|requiresES6]|SiteCommon.css
 * SiteCommon_Filepage[ResourceLoader|default|hidden|requiresES6]|SiteCommon_Filepage.css
 * SiteCommon_JS[ResourceLoader|default|dependencies=ext.gadget.i18n,ext.gadget.JSX,ext.gadget.Tippy,ext.gadget.Util,mediawiki.Title,mediawiki.util|hidden|peers=SiteCommon|requiresES6]|SiteCommon_JS.js
