@@ -11,11 +11,13 @@ const props = defineProps<{
 		text: string;
 		href: string;
 	}[];
-	primaryAction?: {
-		label: string;
-		actionType?: 'progressive' | 'destructive';
-		disabled?: boolean;
-	};
+	primaryAction?:
+		| {
+				label: string;
+				actionType?: 'progressive' | 'destructive';
+				disabled?: boolean;
+		  }
+		| undefined;
 	defaultAction?: {
 		label: string;
 		disabled?: boolean;

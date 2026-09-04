@@ -275,23 +275,21 @@
 				oldTitle.insertBefore(revertToRevision, oldTitle.firstChild);
 				if (Twinkle.getPref('customRevertSummary').length > 0) {
 					revertToRevision.appendChild(document.createTextNode(' || '));
-					const revertsummary = new Morebits.quickForm.element({
-						type: 'select',
-						name: 'revertsummary',
-					});
-					revertsummary.append({
-						type: 'option',
-						label: window.wgULS('选择回退理由', '選擇回退理由'),
-						value: '',
-					});
-					$(Twinkle.getPref('customRevertSummary')).each((_, e) => {
-						revertsummary.append({
-							type: 'option',
-							label: e.label,
-							value: e.value,
-						});
-					});
-					revertToRevision.appendChild(revertsummary.render().childNodes[0]);
+					// Inline select for a custom revert summary (native element,
+					// no dialog involved)
+					const revertsummary = document.createElement('select');
+					revertsummary.setAttribute('name', 'revertsummary');
+					const defaultOption = document.createElement('option');
+					defaultOption.value = '';
+					defaultOption.textContent = window.wgULS('选择回退理由', '選擇回退理由');
+					revertsummary.appendChild(defaultOption);
+					for (const item of Twinkle.getPref('customRevertSummary')) {
+						const option = document.createElement('option');
+						option.value = item.value;
+						option.textContent = item.label;
+						revertsummary.appendChild(option);
+					}
+					revertToRevision.appendChild(revertsummary);
 				}
 			}
 			// Newer revision
