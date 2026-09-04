@@ -310,7 +310,7 @@ import TwSpeedyDialog from './ui/TwSpeedyDialog.vue';
 					},
 					{
 						label: '其他理由（请勾选上方“应用多个理由”，并填写自定义理由）',
-						value: '',
+						value: 'other',
 					},
 				],
 			},
@@ -347,7 +347,7 @@ import TwSpeedyDialog from './ui/TwSpeedyDialog.vue';
 					},
 					{
 						label: '其他理由（请勾选上方“应用多个理由”，并填写自定义理由）',
-						value: '',
+						value: 'other',
 					},
 				],
 			},
@@ -1036,27 +1036,29 @@ import TwSpeedyDialog from './ui/TwSpeedyDialog.vue';
 				case 'r1':
 					if (subgroups.r1_type !== undefined) {
 						const redirtype = subgroups.r1_type;
-						if (!redirtype) {
+						if (redirtype && redirtype !== 'other') {
+							currentParams['1'] = redirtype;
+						} else if (!(subgroups.reason_1 && String(subgroups.reason_1).trim())) {
 							void mw.notify(window.wgULS('CSD R1：请选择适用类型。', 'CSD R1：請選擇適用類別。'), {
 								type: 'warn',
 								tag: 'twinklespeedy',
 							});
 							return null;
 						}
-						currentParams['1'] = redirtype;
 					}
 					break;
 				case 'r2':
 					if (subgroups.r2_type !== undefined) {
 						const redirtype = subgroups.r2_type;
-						if (!redirtype) {
+						if (redirtype && redirtype !== 'other') {
+							currentParams['1'] = redirtype;
+						} else if (!(subgroups.reason_1 && String(subgroups.reason_1).trim())) {
 							void mw.notify(window.wgULS('CSD R2：请选择适用类型。', 'CSD R2：請選擇適用類別。'), {
 								type: 'warn',
 								tag: 'twinklespeedy',
 							});
 							return null;
 						}
-						currentParams['1'] = redirtype;
 					}
 					break;
 				default:
