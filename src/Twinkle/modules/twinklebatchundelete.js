@@ -3,6 +3,7 @@
 /*! Twinkle.js - twinklebatchundelete.js */
 import {createApp, h, reactive} from 'vue';
 import TwBatchUndeleteDialog from './ui/TwBatchUndeleteDialog.vue';
+import {UTC8_OFFSET_MINUTES} from './utc8';
 
 (function twinklebatchundelete() {
 	/**
@@ -89,8 +90,8 @@ import TwBatchUndeleteDialog from './ui/TwBatchUndeleteDialog.vue';
 										$editprot.attr('expiry') === 'infinity'
 											? window.wgULS('无限期', '無限期')
 											: `${new Morebits.date($editprot.attr('expiry')).calendar(
-													'utc'
-												)} (UTC)${window.wgULS('过期', '過期')}`
+													UTC8_OFFSET_MINUTES
+												)} (UTC+8)${window.wgULS('过期', '過期')}`
 									}）`
 								: ''),
 						isProtected,

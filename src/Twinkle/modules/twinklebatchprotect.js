@@ -2,6 +2,7 @@
 // @ts-nocheck
 
 /*! Twinkle.js - twinklebatchprotect.js */
+import {UTC8_OFFSET_MINUTES, normalizeExpiry} from './utc8';
 import {createApp, h, reactive} from 'vue';
 import TwBatchProtectDialog from './ui/TwBatchProtectDialog.vue';
 
@@ -123,7 +124,7 @@ import TwBatchProtectDialog from './ui/TwBatchProtectDialog.vue';
 						metadata[metadata.length] = `${missing ? '白纸' : ''}全保护${
 							editProt.expiry === 'infinity'
 								? '（永久）'
-								: `（${new Morebits.date(editProt.expiry).calendar('utc')} (UTC)过期）`
+								: `（${new Morebits.date(editProt.expiry).calendar(UTC8_OFFSET_MINUTES)} (UTC+8)过期）`
 						}`;
 					}
 					const {title} = page;
@@ -143,6 +144,10 @@ import TwBatchProtectDialog from './ui/TwBatchProtectDialog.vue';
 	Twinkle.batchprotect.currentprotector = 0;
 	Twinkle.batchprotect.callback.evaluate = (params, statusContainer) => {
 		Morebits.wiki.actionCompleted.notice = '批量保护完成';
+		// Interpret absolute custom expiries (yyyymmddhhmm) as Beijing time (UTC+8)
+		params.editexpiry = normalizeExpiry(params.editexpiry ?? '');
+		params.moveexpiry = normalizeExpiry(params.moveexpiry ?? '');
+		params.createexpiry = normalizeExpiry(params.createexpiry ?? '');
 		if (
 			params.protectedCount > 0 &&
 			!confirm(`您即将对${mw.language.convertNumber(params.protectedCount)}个全保护页面进行操作。您确定吗？`)

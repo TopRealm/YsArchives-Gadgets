@@ -231,6 +231,19 @@ const lookupMenuItems = computed<MenuItemData[]>(() => {
 	return items;
 });
 
+// CdxLookup on this Codex version does not filter its menu itself; filter
+// here so fuzzy search works. Disabled group headers are dropped while a
+// query is active.
+const filteredLookupItems = computed<MenuItemData[]>(() => {
+	const query = lookupInput.value.trim().toLowerCase();
+	if (!query) {
+		return lookupMenuItems.value;
+	}
+	return lookupMenuItems.value.filter((item) => {
+		return !item.disabled && String(item.label).toLowerCase().includes(query);
+	});
+});
+
 // Faithful port of Twinkle.warn.callback.change_subcategory's article-label switching
 watch(subGroup, (value) => {
 	if (!['singlenotice', 'singlewarn', 'singlecombined', 'kitchensink'].includes(mainGroup.value)) {
@@ -320,7 +333,7 @@ watch(open, (value) => {
 			<cdx-lookup
 				v-model:selected="subGroup"
 				v-model:input-value="lookupInput"
-				:menu-items="lookupMenuItems"
+				:menu-items="filteredLookupItems"
 				:disabled="submitting"
 			/>
 		</cdx-field>

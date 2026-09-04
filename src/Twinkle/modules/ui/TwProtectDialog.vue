@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {CdxCheckbox, CdxField, CdxRadio, CdxSelect, CdxTextArea, type MenuItemData} from '@wikimedia/codex';
+import {UTC8_OFFSET_MINUTES, beijingDateToISO} from '../utc8';
 import {computed, ref, watch} from 'vue';
 import TwDialog from './TwDialog.vue';
 import TwStatus from './TwStatus.vue';
@@ -113,6 +114,11 @@ const customEditExpiries = ref<string[]>([]);
 const customMoveExpiries = ref<string[]>([]);
 const customCreateExpiries = ref<string[]>([]);
 
+// Date picker values shown while "custom" is selected (YYYY-MM-DD, Beijing time)
+const customEditDate = ref('');
+const customMoveDate = ref('');
+const customCreateDate = ref('');
+
 const tagRadioDisabled = computed(() => !props.pageExists || props.isScribunto);
 
 const showPresetField = computed(() => actiontype.value !== 'tag');
@@ -206,19 +212,31 @@ const baseExpiryItems = computed<MenuItemData[]>(() =>
 	props.protectionLengths.map((item) => ({value: item.value, label: item.label}))
 );
 
+// Custom expiry values are stored as UTC ISO strings; render them as
+// Beijing wall-clock time for the dropdown label.
+const customExpiryLabel = (item: string): string => {
+	const match = /^(\d{4}-\d{2}-\d{2})T\d{2}:\d{2}:/.exec(item);
+	if (!match) {
+		return item;
+	}
+	const beijing = new Date(new Date(item).getTime() + UTC8_OFFSET_MINUTES * 60_000);
+	const pad = (num: number) => String(num).padStart(2, '0');
+	return `${match[1]} ${pad(beijing.getUTCHours())}:${pad(beijing.getUTCMinutes())} (UTC+8)`;
+};
+
 const editExpiryItems = computed<MenuItemData[]>(() => [
 	...baseExpiryItems.value,
-	...customEditExpiries.value.map((item) => ({value: item, label: item})),
+	...customEditExpiries.value.map((item) => ({value: item, label: customExpiryLabel(item)})),
 ]);
 
 const moveExpiryItems = computed<MenuItemData[]>(() => [
 	...baseExpiryItems.value,
-	...customMoveExpiries.value.map((item) => ({value: item, label: item})),
+	...customMoveExpiries.value.map((item) => ({value: item, label: customExpiryLabel(item)})),
 ]);
 
 const createExpiryItems = computed<MenuItemData[]>(() => [
 	...baseExpiryItems.value,
-	...customCreateExpiries.value.map((item) => ({value: item, label: item})),
+	...customCreateExpiries.value.map((item) => ({value: item, label: customExpiryLabel(item)})),
 ]);
 
 // Faithful port of Twinkle.protect.formevents
@@ -232,40 +250,42 @@ const requestExpiryDisabled = computed(() => category.value === 'unprotect');
 
 const firstProtectionLength = computed(() => props.protectionLengths[0]?.value ?? '1 day');
 
-// Faithful port of Twinkle.protect.doCustomExpiry
-const doCustomExpiry = (items: string[], target: 'edit' | 'move' | 'create') => {
-	const custom = window.prompt(
-		uls(
-			'输入自定义终止时间。\n您可以使用相对时间，如“1 minute”或“19 days”，或绝对时间“yyyymmddhhmm”（如“200602011405”是2006年02月01日14：05（UTC））',
-			'輸入自訂終止時間。\n您可以使用相對時間，如「1 minute」或「19 days」，或絕對時間「yyyymmddhhmm」（如「200602011405」是2006年02月01日14：05（UTC））'
-		),
-		''
-	);
-	if (custom) {
-		items.push(custom);
-		if (target === 'edit') {
-			editexpiry.value = custom;
-			small.value = true;
-		} else if (target === 'move') {
-			moveexpiry.value = custom;
-		} else {
-			createexpiry.value = custom;
+// Today in Beijing wall-clock time, for the date picker's min attribute
+const beijingToday = computed(() => new Date(Date.now() + UTC8_OFFSET_MINUTES * 60_000).toISOString().slice(0, 10));
+
+// Faithful port of Twinkle.protect.doCustomExpiry, using a date picker
+// instead of a prompt. Dates are interpreted as Beijing time (UTC+8).
+const applyCustomDate = (target: 'edit' | 'move' | 'create', value: string) => {
+	const iso = beijingDateToISO(value);
+	if (target === 'edit') {
+		if (iso !== value && !customEditExpiries.value.includes(iso)) {
+			customEditExpiries.value.push(iso);
 		}
-	} else if (target === 'edit') {
-		editexpiry.value = firstProtectionLength.value;
-		small.value = false;
+		if (iso === value) {
+			editexpiry.value = firstProtectionLength.value;
+			small.value = false;
+		} else {
+			editexpiry.value = iso;
+			small.value = true;
+		}
 	} else if (target === 'move') {
-		moveexpiry.value = firstProtectionLength.value;
+		if (iso !== value && !customMoveExpiries.value.includes(iso)) {
+			customMoveExpiries.value.push(iso);
+		}
+		moveexpiry.value = iso === value ? firstProtectionLength.value : iso;
 	} else {
-		createexpiry.value = firstProtectionLength.value;
+		if (iso !== value && !customCreateExpiries.value.includes(iso)) {
+			customCreateExpiries.value.push(iso);
+		}
+		createexpiry.value = iso === value ? firstProtectionLength.value : iso;
 	}
 };
 
 watch(editexpiry, (value) => {
 	if (value === 'custom') {
-		doCustomExpiry(customEditExpiries.value, 'edit');
 		return;
 	}
+	customEditDate.value = '';
 	// Faithful port of the small-checkbox linkage in the original expiry event
 	const index = props.protectionLengths.findIndex((item) => item.value === value);
 	if (index !== -1) {
@@ -274,14 +294,14 @@ watch(editexpiry, (value) => {
 });
 
 watch(moveexpiry, (value) => {
-	if (value === 'custom') {
-		doCustomExpiry(customMoveExpiries.value, 'move');
+	if (value !== 'custom') {
+		customMoveDate.value = '';
 	}
 });
 
 watch(createexpiry, (value) => {
-	if (value === 'custom') {
-		doCustomExpiry(customCreateExpiries.value, 'create');
+	if (value !== 'custom') {
+		customCreateDate.value = '';
 	}
 });
 
@@ -480,6 +500,15 @@ watch(open, (value) => {
 						:menu-items="editExpiryItems"
 						:disabled="submitting || editexpiryDisabled"
 					/>
+					<input
+						v-if="editexpiry === 'custom'"
+						v-model="customEditDate"
+						type="date"
+						class="tw-protect-custom-date"
+						:min="beijingToday"
+						:disabled="submitting"
+						@change="applyCustomDate('edit', customEditDate)"
+					/>
 				</cdx-field>
 				<cdx-checkbox
 					v-model="movemodify"
@@ -502,6 +531,15 @@ watch(open, (value) => {
 						v-model:selected="moveexpiry"
 						:menu-items="moveExpiryItems"
 						:disabled="submitting || moveexpiryDisabled"
+					/>
+					<input
+						v-if="moveexpiry === 'custom'"
+						v-model="customMoveDate"
+						type="date"
+						class="tw-protect-custom-date"
+						:min="beijingToday"
+						:disabled="submitting"
+						@change="applyCustomDate('move', customMoveDate)"
 					/>
 				</cdx-field>
 			</template>
@@ -597,6 +635,25 @@ watch(open, (value) => {
 
 	&-warn {
 		color: #c00;
+	}
+}
+
+.tw-protect-custom-date {
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 32px;
+	margin-top: 4px;
+	padding: 4px 8px;
+	border: 1px solid var(--border-color-base, #a2a9b1);
+	border-radius: 2px;
+	background-color: var(--background-color-base, #fff);
+	color: var(--color-base, #202122);
+	font-size: 1rem;
+
+	&:focus {
+		border-color: var(--border-color-progressive, #36c);
+		box-shadow: inset 0 0 0 1px var(--box-shadow-color-progressive--focus, #36c);
+		outline: 0;
 	}
 }
 </style>

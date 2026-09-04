@@ -2765,8 +2765,9 @@ import {generateArray} from 'ext.gadget.Util';
 								window.wgULS('您即将编辑全保护页面“', '您即將編輯全保護頁面「') +
 								ctx.pageName +
 								window.wgULS('”（到期：', '」（到期：') +
-								new Morebits.date(ctx.fullyProtected).calendar('utc')
-							} (UTC)）。\n\n${window.wgULS(
+								// 480 minutes: display as Beijing time (UTC+8)
+								new Morebits.date(ctx.fullyProtected).calendar(480)
+							} (UTC+8)）。\n\n${window.wgULS(
 								'单击确定以确定，或单击取消以取消操作。',
 								'點擊確定以確定，或點擊取消以取消操作。'
 							)}`
@@ -4106,8 +4107,9 @@ import {generateArray} from 'ext.gadget.Util';
 							? window.wgULS('”（永久）', '」（永久）')
 							: `${
 									window.wgULS('”（到期：', '」（到期：') +
-									new Morebits.date(editprot.expiry).calendar('utc')
-								} (UTC)）`) +
+									// 480 minutes: display as Beijing time (UTC+8)
+									new Morebits.date(editprot.expiry).calendar(480)
+								} (UTC+8)）`) +
 						window.wgULS('”进行“', '」進行「') +
 						action +
 						window.wgULS('”操作', '」操作') +

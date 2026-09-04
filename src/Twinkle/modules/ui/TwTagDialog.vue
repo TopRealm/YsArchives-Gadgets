@@ -216,13 +216,27 @@ const getSubgroupCheck = (name: string, defaultValue: boolean) => {
 
 const addTag = (value: string, modelValue: string[] | boolean) => {
 	if (Array.isArray(modelValue)) {
-		selectedTags.value = modelValue.filter((item): item is string => typeof item === 'string');
+		const next = modelValue.filter((item): item is string => typeof item === 'string');
+		// Without {{multiple issues}} grouping only a single tag may be
+		// selected; the newly-checked item is appended last.
+		selectedTags.value = !groupByDefault.value && next.length > 1 ? [next.at(-1) ?? value] : next;
 	} else if (modelValue) {
-		selectedTags.value = [...selectedTags.value, value];
+		if (groupByDefault.value) {
+			selectedTags.value = [...selectedTags.value, value];
+		} else {
+			selectedTags.value = [value];
+		}
 	} else {
 		selectedTags.value = selectedTags.value.filter((item) => item !== value);
 	}
 };
+
+// Keep only the most recently selected tag when grouping is turned off
+watch(groupByDefault, (grouped) => {
+	if (!grouped && selectedTags.value.length > 1) {
+		selectedTags.value = [selectedTags.value.at(-1) ?? ''].filter(Boolean);
+	}
+});
 
 const addExisting = (value: string, modelValue: string[] | boolean) => {
 	if (Array.isArray(modelValue)) {

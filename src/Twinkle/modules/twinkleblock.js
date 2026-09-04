@@ -1,6 +1,7 @@
 /* eslint-disable no-jquery/no-global-selector */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import {UTC8_OFFSET_MINUTES, normalizeExpiry} from './utc8';
 import {createApp, h, reactive} from 'vue';
 import TwBlockDialog from './ui/TwBlockDialog.vue';
 import {api} from './api';
@@ -82,7 +83,7 @@ import {generateArray} from 'ext.gadget.Util';
 			} else if (new Morebits.date(Twinkle.block.currentBlockInfo.expiry).isValid()) {
 				statusStr += `${
 					window.wgULS('（终止于', '（終止於') +
-					new Morebits.date(Twinkle.block.currentBlockInfo.expiry).calendar('utc')
+					new Morebits.date(Twinkle.block.currentBlockInfo.expiry).calendar(UTC8_OFFSET_MINUTES)
 				}）`;
 			}
 			let infoStr = window.wgULS('此表单将', '此表單將');
@@ -107,13 +108,15 @@ import {generateArray} from 'ext.gadget.Util';
 							? window.wgULS('IP范围', 'IP範圍')
 							: window.wgULS('用户', '使用者')
 					}曾在` +
-					`${new Morebits.date(blockAction.timestamp).calendar('utc')}` +
+					`${new Morebits.date(blockAction.timestamp).calendar(UTC8_OFFSET_MINUTES)}` +
 					`被${blockAction.user}${window.wgULS('封禁', '封鎖')}` +
 					`${Morebits.string.formatTime(blockAction.params.duration)}`;
 				if (lastBlockAction.action === 'unblock') {
-					logText += `，${new Morebits.date(lastBlockAction.timestamp).calendar('utc')}解封`;
+					logText += `，${new Morebits.date(lastBlockAction.timestamp).calendar(UTC8_OFFSET_MINUTES)}解封`;
 				} else {
-					logText += `，${new Morebits.date(blockAction.params.expiry).calendar('utc')}${window.wgULS('过期', '過期')}`;
+					logText += `，${new Morebits.date(blockAction.params.expiry).calendar(
+						UTC8_OFFSET_MINUTES
+					)}${window.wgULS('过期', '過期')}`;
 				}
 				notices.blockLog = logText;
 			}
@@ -630,8 +633,8 @@ import {generateArray} from 'ext.gadget.Util';
 				name: 'expiry',
 				label: window.wgULS('自定义过期时间', '自訂過期時間'),
 				tooltip: window.wgULS(
-					'您可以使用相对时间，如“1 minute”或“19 days”；或绝对时间，“yyyymmddhhmm”（如“200602011405”是2006年2月1日14:05 UTC。）',
-					'您可以使用相對時間，如「1 minute」或「19 days」；或絕對時間，「yyyymmddhhmm」（如「200602011405」是2006年2月1日14:05 UTC。）'
+					'您可以使用相对时间，如“1 minute”或“19 days”；或绝对时间，“yyyymmddhhmm”（如“200602011405”是2006年2月1日14:05（北京时间，UTC+8））',
+					'您可以使用相對時間，如「1 minute」或「19 days」；或絕對時間，「yyyymmddhhmm」（如「200602011405」是2006年2月1日14:05（北京時間，UTC+8））'
 				),
 				value: Twinkle.block.field_block_options.expiry || Twinkle.block.field_template_options.template_expiry,
 			});
@@ -1167,7 +1170,7 @@ import {generateArray} from 'ext.gadget.Util';
 			} else if (new Morebits.date(Twinkle.block.currentBlockInfo.expiry).isValid()) {
 				statusStr += `${
 					window.wgULS('（终止于', '（終止於') +
-					new Morebits.date(Twinkle.block.currentBlockInfo.expiry).calendar('utc')
+					new Morebits.date(Twinkle.block.currentBlockInfo.expiry).calendar(UTC8_OFFSET_MINUTES)
 				}）`;
 			}
 			let infoStr = window.wgULS('此表单将', '此表單將');
@@ -1215,16 +1218,17 @@ import {generateArray} from 'ext.gadget.Util';
 							? window.wgULS('IP范围', 'IP範圍')
 							: window.wgULS('用户', '使用者')
 					}曾在`,
-					$('<b>').text(new Morebits.date(blockAction.timestamp).calendar('utc'))[0],
+					$('<b>').text(new Morebits.date(blockAction.timestamp).calendar(UTC8_OFFSET_MINUTES))[0],
 					`被${blockAction.user}${window.wgULS('封禁', '封鎖')}`,
 					$('<b>').text(Morebits.string.formatTime(blockAction.params.duration))[0]);
 				if (lastBlockAction.action === 'unblock') {
 					blockloginfo[blockloginfo.length] =
-						`，${new Morebits.date(lastBlockAction.timestamp).calendar('utc')}解封`;
+						`，${new Morebits.date(lastBlockAction.timestamp).calendar(UTC8_OFFSET_MINUTES)}解封`;
 				} else {
 					// block or reblock
-					blockloginfo[blockloginfo.length] =
-						`，${new Morebits.date(blockAction.params.expiry).calendar('utc')}${window.wgULS('过期', '過期')}`;
+					blockloginfo[blockloginfo.length] = `，${new Morebits.date(blockAction.params.expiry).calendar(
+						UTC8_OFFSET_MINUTES
+					)}${window.wgULS('过期', '過期')}`;
 				}
 			}
 			Morebits.status.init($body.find('div[name="hasblocklog"] span').last()[0]);
@@ -2016,7 +2020,8 @@ import {generateArray} from 'ext.gadget.Util';
 			autoblock: params.autoblock,
 			hardblock: params.hardblock,
 			watchuser: params.watchuser,
-			expiry: params.expiry,
+			// Interpret a 12-digit absolute expiry (yyyymmddhhmm) as Beijing time
+			expiry: normalizeExpiry(params.expiry ?? ''),
 			reason: params.reason,
 		};
 		const templateoptions = {
@@ -2280,11 +2285,11 @@ import {generateArray} from 'ext.gadget.Util';
 							const expiryDate = new Morebits.date(logevents.params.expiry);
 							logExpiry +=
 								(expiryDate.isBefore(new Date()) ? window.wgULS('过期于', '過期於') : '直到') +
-								expiryDate.calendar();
+								expiryDate.calendar(UTC8_OFFSET_MINUTES);
 						}
 					} else {
 						// no duration, action=unblock, just show timestamp
-						logExpiry = `於${new Morebits.date(logevents.timestamp).calendar()}`;
+						logExpiry = `於${new Morebits.date(logevents.timestamp).calendar(UTC8_OFFSET_MINUTES)}`;
 					}
 					message += `由${logevents.user}${window.wgULS('以“', '以「')}${logevents.comment}${window.wgULS('”', '」')}${
 						blockActionText[logevents.action]

@@ -4,6 +4,7 @@
 /*! Twinkle.js - twinklebatchdelete.js */
 import {createApp, h, reactive} from 'vue';
 import TwBatchDeleteDialog from './ui/TwBatchDeleteDialog.vue';
+import {UTC8_OFFSET_MINUTES} from './utc8';
 
 (function twinklebatchdelete() {
 	/**
@@ -106,8 +107,8 @@ import TwBatchDeleteDialog from './ui/TwBatchDeleteDialog.vue';
 													($editprot.attr('expiry') === 'infinity'
 														? window.wgULS('无限期', '無限期')
 														: `${new Morebits.date($editprot.attr('expiry')).calendar(
-																'utc'
-															)} (UTC)`) +
+																UTC8_OFFSET_MINUTES
+															)} (UTC+8)`) +
 													window.wgULS('过期', '過期');
 											}
 											if (ns === '6') {
@@ -231,7 +232,9 @@ import TwBatchDeleteDialog from './ui/TwBatchDeleteDialog.vue';
 							window.wgULS('全保护，', '全保護，') +
 							($editprot.attr('expiry') === 'infinity'
 								? window.wgULS('无限期', '無限期')
-								: `${new Morebits.date($editprot.attr('expiry')).calendar('utc')} (UTC)`) +
+								: `${new Morebits.date($editprot.attr('expiry')).calendar(
+										UTC8_OFFSET_MINUTES
+									)} (UTC+8)`) +
 							window.wgULS('过期', '過期');
 					}
 					if (ns === '6') {

@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
+import {UTC8_OFFSET_MINUTES, normalizeExpiry} from './utc8';
 import {createApp, h, reactive} from 'vue';
 import TwProtectDialog from './ui/TwProtectDialog.vue';
 import {api} from './api';
@@ -141,10 +142,9 @@ import {api} from './api';
 		if (Twinkle.protect.hasProtectLog) {
 			protectionInfo.previousNotice = currentlyProtected
 				? window.wgULS('先前保护', '先前保護')
-				: `${window.wgULS(
-						'此页面曾在',
-						'此頁面曾在'
-					)}${new Morebits.date(Twinkle.protect.previousProtectionLog.timestamp).calendar('utc')}` +
+				: `${window.wgULS('此页面曾在', '此頁面曾在')}${new Morebits.date(
+						Twinkle.protect.previousProtectionLog.timestamp
+					).calendar(UTC8_OFFSET_MINUTES)}` +
 					`被${Twinkle.protect.previousProtectionLog.user}${window.wgULS(
 						'保护',
 						'保護'
@@ -523,6 +523,10 @@ import {api} from './api';
 	];
 	Twinkle.protect.callback.evaluate = (params, statusContainer, restore) => {
 		const input = params;
+		// Interpret absolute custom expiries (yyyymmddhhmm) as Beijing time (UTC+8)
+		input.editexpiry = normalizeExpiry(input.editexpiry ?? '');
+		input.moveexpiry = normalizeExpiry(input.moveexpiry ?? '');
+		input.createexpiry = normalizeExpiry(input.createexpiry ?? '');
 		let tagparams;
 		if (
 			input.actiontype === 'tag' ||
@@ -1054,7 +1058,11 @@ import {api} from './api';
 				[, sectionText] = sections;
 			} else {
 				[sectionText] = sections;
-				expiryText = Morebits.string.formatTime(params.expiry);
+				// ISO timestamps are shown as Beijing wall-clock time; relative
+				// values such as "1 week" pass through formatTime unchanged
+				expiryText = /^\d{4}-\d{2}-\d{2}T/.test(params.expiry)
+					? new Morebits.date(params.expiry).format('YYYY-MM-DD HH:mm', UTC8_OFFSET_MINUTES)
+					: Morebits.string.formatTime(params.expiry);
 			}
 			const requestList = sectionText.split(/(?=\n===.+===\s*\n)/);
 			let found = false;
@@ -1180,7 +1188,10 @@ import {api} from './api';
 			if (Morebits.string.isInfinity(settings.expiry)) {
 				description += window.wgULS('（无限期）', '（無限期）');
 			} else {
-				description += `${window.wgULS('（过期：', '（過期：') + new Morebits.date(settings.expiry).calendar('utc')}）`;
+				description += `${
+					window.wgULS('（过期：', '（過期：') +
+					new Morebits.date(settings.expiry).calendar(UTC8_OFFSET_MINUTES)
+				}）`;
 			}
 			if (settings.cascade) {
 				description += window.wgULS('（连锁）', '（連鎖）');
