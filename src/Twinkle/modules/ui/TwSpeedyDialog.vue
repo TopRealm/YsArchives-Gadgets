@@ -3,6 +3,7 @@ import {CdxButton, CdxCheckbox, CdxRadio, CdxSelect, CdxTextInput, type MenuItem
 import {computed, reactive, ref} from 'vue';
 import TwDialog from './TwDialog.vue';
 import TwStatus from './TwStatus.vue';
+import {twinkle} from './twinkleGlobal';
 import {uls} from './useUls';
 
 interface TwStatusExposed {
@@ -89,16 +90,6 @@ const emit = defineEmits<{
 const open = ref(true);
 const submitting = ref(false);
 const statusRef = ref<TwStatusExposed | null>(null);
-
-// Twinkle global access (the gadget object is provided at runtime)
-const twinkle = (
-	window as unknown as {
-		Twinkle: {
-			speedy: {normalizeHash: Record<string, string>};
-			getPref: (name: string) => string[] | string | boolean | number | undefined;
-		};
-	}
-).Twinkle;
 
 // Option states (faithful to the original quickForm defaults)
 const tagOnly = ref(props.isSysop ? !(props.hasCSD || props.deleteSysopDefaultToDelete) : true);
