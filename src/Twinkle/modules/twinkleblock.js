@@ -1035,79 +1035,9 @@ import {generateArray} from 'ext.gadget.Util';
 			[oldfield] = $form.find('fieldset[name="field_block_options"]');
 			oldfield.replaceWith(field_block_options.render());
 			$form.find('fieldset[name="field_64"]').show();
-			$form.find('[name=pagerestrictions]').select2({
-				width: '100%',
-				placeholder: window.wgULS('输入要阻止用户编辑的页面', '輸入要阻止使用者編輯的頁面'),
-				language: {
-					errorLoading: () => {
-						return window.wgULS('搜索词汇不完整或无效', '搜尋詞彙不完整或無效');
-					},
-				},
-				maximumSelectionLength: 10,
-				minimumInputLength: 1,
-				ajax: {
-					url: mw.util.wikiScript('api'),
-					dataType: 'json',
-					delay: 100,
-					data: (params) => {
-						const title = mw.Title.newFromText(params.term);
-						if (!title) {
-							return;
-						}
-						return {
-							action: 'query',
-							format: 'json',
-							list: 'allpages',
-							apfrom: title.title,
-							apnamespace: title.namespace,
-							aplimit: '10',
-						};
-					},
-					processResults: (data) => {
-						return {
-							results: data.query.allpages.map((page) => {
-								const title = mw.Title.newFromText(page.title, page.ns).toText();
-								return {
-									id: title,
-									text: title,
-								};
-							}),
-						};
-					},
-				},
-				templateSelection: (choice) => {
-					return $('<a>')
-						.text(choice.text)
-						.attr({
-							href: mw.util.getUrl(choice.text),
-							target: '_blank',
-							rel: 'noopener noreferrer',
-						});
-				},
-			});
-			$form.find('[name=namespacerestrictions]').select2({
-				width: '100%',
-				matcher: Morebits.select2.matchers.wordBeginning,
-				language: {
-					searching: Morebits.select2.queryInterceptor,
-				},
-				templateResult: Morebits.select2.highlightSearchMatches,
-				placeholder: window.wgULS('选择要禁止用户编辑的命名空间', '選擇要禁止使用者編輯的命名空間'),
-			});
-			mw.util.addCSS(
-				/* Reduce padding;
-				 * Adjust font size;
-				 * Remove black border;
-				 * Make the tiny cross larger
-				 */
-				'.select2-results .select2-results__option{padding-top:1px;padding-bottom:1px}.select2-container .select2-dropdown .select2-results,.select2-container .selection .select2-selection__rendered{font-size:13px}.select2-container--default.select2-container--focus .select2-selection--multiple{border:1px solid #aaa}.select2-selection__choice__remove{font-size:125%}'
-			);
 		} else {
 			$form.find('fieldset[name="field_block_options"]').hide();
 			$form.find('fieldset[name="field_64"]').hide();
-			// Clear select2 options
-			$form.find('[name=pagerestrictions]').val(null).trigger('change');
-			$form.find('[name=namespacerestrictions]').val(null).trigger('change');
 		}
 		if (field_template_options) {
 			[oldfield] = $form.find('fieldset[name="field_template_options"]');

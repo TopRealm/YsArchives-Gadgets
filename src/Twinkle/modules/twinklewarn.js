@@ -921,28 +921,6 @@ import TwWarnDialog from './ui/TwWarnDialog.vue';
 		Morebits.quickForm.resetElementLabel(e.target.root.article);
 		// Trigger custom label/change on main category change
 		Twinkle.warn.callback.change_subcategory(e);
-		// Use select2 to make the select menu searchable
-		if (!Twinkle.getPref('oldSelect')) {
-			$body
-				.find('select[name=sub_group]')
-				.select2({
-					width: '100%',
-					matcher: Morebits.select2.matchers.optgroupFull,
-					templateResult: Morebits.select2.highlightSearchMatches,
-					language: {
-						searching: Morebits.select2.queryInterceptor,
-					},
-				})
-				.change(Twinkle.warn.callback.change_subcategory);
-			$body.find('.select2-selection').on('keydown', Morebits.select2.autoStart).trigger('focus');
-			mw.util.addCSS(
-				/* Increase height;
-				 * Reduce padding;
-				 * Adjust font size.
-				 * */
-				'.select2-container .select2-dropdown .select2-results>.select2-results__options{max-height:350px}.select2-results .select2-results__group,.select2-results .select2-results__option{padding-top:1px;padding-bottom:1px}.select2-container .select2-dropdown .select2-results,.select2-container .selection .select2-selection__rendered{font-size:13px}'
-			);
-		}
 	};
 	Twinkle.warn.callback.change_subcategory = (e) => {
 		const main_group = e.target.form.main_group.value;
