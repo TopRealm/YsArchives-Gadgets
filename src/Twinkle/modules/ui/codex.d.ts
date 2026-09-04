@@ -53,6 +53,7 @@ declare module '@wikimedia/codex' {
 	export const CdxTextInput: new () => {
 		$props: {
 			modelValue: string | number;
+			inputType?: 'text' | 'search' | 'number' | 'email' | 'password' | 'url' | undefined;
 			placeholder?: string | undefined;
 			disabled?: boolean | undefined;
 		};
