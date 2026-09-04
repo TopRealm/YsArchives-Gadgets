@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {CdxButton, CdxCheckbox, CdxRadio, CdxSelect, CdxTextInput, type MenuItemData} from '@wikimedia/codex';
-import {computed, reactive, ref} from 'vue';
+import {computed, reactive, ref, watch} from 'vue';
 import TwDialog from './TwDialog.vue';
 import TwStatus from './TwStatus.vue';
 import {twinkle} from './twinkleGlobal';
@@ -22,7 +22,7 @@ interface SpeedyCriterion {
 	label: string;
 	value: string;
 	tooltip?: string;
-	subgroup?: SubgroupDef | null;
+	subgroup?: SubgroupDef | SubgroupDef[] | null;
 	hideWhenMultiple?: boolean;
 	hideSubgroupWhenMultiple?: boolean;
 	hideWhenSingle?: boolean;
@@ -105,6 +105,12 @@ const multiple = ref(false);
 // Selection state
 const selectedCsd = ref<string[]>([]);
 const subgroupValues = reactive<Record<string, string>>({});
+
+// Prefill the custom rationale from an existing CSD template (sysop mode),
+// mirroring the legacy modeChanged behavior
+if (props.hasCSDReason) {
+	subgroupValues['reason_1'] = props.hasCSDReason;
+}
 
 const sysopMode = computed(() => props.isSysop && !tagOnly.value);
 const isMultiple = computed(() => (sysopMode.value ? delmultiple.value : multiple.value));
@@ -243,9 +249,36 @@ const criteriaGroups = computed<CriteriaSection[]>(() => {
 });
 
 // A subgroup is visible for a selected criterion (or while the radio is open)
-const hasSubgroup = (criterion: SpeedyCriterion) => !!criterion.subgroup;
+// In the original quickForm data, some criteria (e.g. G4) carry an array of
+// subgroup definitions while others carry a single object.
+const subgroupList = (criterion: SpeedyCriterion): SubgroupDef[] => {
+	const subgroup = criterion.subgroup;
+	if (!subgroup) {
+		return [];
+	}
+	return Array.isArray(subgroup) ? subgroup : [subgroup];
+};
+const hasSubgroup = (criterion: SpeedyCriterion) => subgroupList(criterion).length > 0;
 const subgroupVisible = (criterion: SpeedyCriterion) =>
 	hasSubgroup(criterion) && selectedCsd.value.includes(criterion.value);
+
+// Ensure every rendered subgroup has a value entry, mirroring quickForm where
+// the form field always exists (empty by default) and empty input is rejected
+watch(
+	selectedCsd,
+	() => {
+		for (const group of criteriaGroups.value) {
+			for (const criterion of group.items) {
+				for (const subgroup of subgroupList(criterion)) {
+					if (subgroupValues[subgroup.name] === undefined) {
+						subgroupValues[subgroup.name] = '';
+					}
+				}
+			}
+		}
+	},
+	{immediate: true}
+);
 
 const getSubgroupValue = (name: string) => subgroupValues[name] ?? '';
 const setSubgroupValue = (name: string, value: string | number | null) => {
@@ -480,27 +513,29 @@ const saltingTooltip = uls(
 					</span>
 				</cdx-checkbox>
 				<div v-if="criterion.tooltip" class="tw-speedy-tooltip">{{ criterion.tooltip }}</div>
-				<div v-if="subgroupVisible(criterion) && criterion.subgroup" class="tw-speedy-subgroup">
-					<template v-if="criterion.subgroup.type === 'input'">
-						<label :for="`tw-speedy-${criterion.subgroup.name}`">{{ criterion.subgroup.label }}</label>
-						<cdx-text-input
-							:id="`tw-speedy-${criterion.subgroup.name}`"
-							:model-value="getSubgroupValue(criterion.subgroup.name)"
-							@update:model-value="setSubgroupValue(criterion.subgroup.name, $event)"
-						/>
-					</template>
-					<template v-else>
-						<label :for="`tw-speedy-${criterion.subgroup.name}`">{{ criterion.subgroup.label }}</label>
-						<cdx-select
-							:id="`tw-speedy-${criterion.subgroup.name}`"
-							:selected="getSubgroupValue(criterion.subgroup.name)"
-							:menu-items="
-								(criterion.subgroup.list ?? []).map(
-									(item): MenuItemData => ({value: item.value, label: item.label})
-								)
-							"
-							@update:selected="setSubgroupValue(criterion.subgroup.name, $event)"
-						/>
+				<div v-if="subgroupVisible(criterion)" class="tw-speedy-subgroup">
+					<template v-for="subgroup in subgroupList(criterion)" :key="subgroup.name">
+						<template v-if="subgroup.type === 'input'">
+							<label :for="`tw-speedy-${subgroup.name}`">{{ subgroup.label }}</label>
+							<cdx-text-input
+								:id="`tw-speedy-${subgroup.name}`"
+								:model-value="getSubgroupValue(subgroup.name)"
+								@update:model-value="setSubgroupValue(subgroup.name, $event)"
+							/>
+						</template>
+						<template v-else>
+							<label :for="`tw-speedy-${subgroup.name}`">{{ subgroup.label }}</label>
+							<cdx-select
+								:id="`tw-speedy-${subgroup.name}`"
+								:selected="getSubgroupValue(subgroup.name)"
+								:menu-items="
+									(subgroup.list ?? []).map(
+										(item): MenuItemData => ({value: item.value, label: item.label})
+									)
+								"
+								@update:selected="setSubgroupValue(subgroup.name, $event)"
+							/>
+						</template>
 					</template>
 					<cdx-button v-if="radioOpen(criterion)" action="progressive" weight="primary" @click="submit">
 						{{ submitText }}
