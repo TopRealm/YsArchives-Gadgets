@@ -199,6 +199,9 @@ import TwSpeedyDialog from './ui/TwSpeedyDialog.vue';
 			tooltip: '草稿名字空间内六个月内无编辑的页面。',
 		},
 	];
+	// Talk pages have no dedicated CSD criteria; keep the lists defined so the dialog can render them safely.
+	Twinkle.speedy.usertalkList = [];
+	Twinkle.speedy.talkList = [];
 	Twinkle.speedy.userList = [
 		{
 			label: 'O1：用户请求删除自己的用户页。',
@@ -282,7 +285,7 @@ import TwSpeedyDialog from './ui/TwSpeedyDialog.vue';
 			label: 'R1：不能发挥实际作用的重定向。',
 			value: 'r1',
 			tooltip:
-				'包括以下情况：1.指向本身或循环的重定向，如A→B→C→……→A或A→A（繁简重定向不适用此项）；2.格式错误的重定向，包括标题仅为繁体、繁简混用、消歧义使用的括弧或空格错误、间隔号使用错误（因类推简化字未收录至《通用规范汉字表》导致的繁简混杂情形，或系统无法自动进行繁简处理的情形，则不适用）。若重定向页面标题，与合乎命名常规的目标页面标题之间，仅存在繁简字体的区别，而不存在词语用法区别，则不保留该重定向。因系统无法自动繁简转换而必须保留的重定向页面除外。对于其他未列出的情况，若用户认为该重定向无法发挥实际作用，且依据常识没有任何争议，可凭合理理由提请速删，由管理员判断。指向不存在页面的重定向，适用G5准则。',
+				'包括以下情况：1.指向本身或循环的重定向，如A→B→C→……→A或A→A（繁简重定向不适用此项）；2.格式错误的重定向，包括标题仅为繁体、繁简混用、消歧义使用的括弧或空格错误、间隔号使用错误（因类推简化字未收录至《通用规范汉字表》导致的繁简混杂情形，或系统无法自动进行繁简处理的情形，则不适用）。若重定向页面标题，与合乎命名常规的目标页面标题之间，仅存在繁简字体的区别，而不存在词语用法区别，则不保留该重定向。因系统无法自动繁简转换而必须保留的重定向页面除外。对于其他未列出的情况，若用户认为该重定向无法发挥实际作用，且依据常识没有任何争议，可凭合理理由提请速删，由管理员判断。指向不存在页面的重定向，适用G9准则。',
 			subgroup: {
 				name: 'r1_type',
 				type: 'select',
@@ -836,6 +839,9 @@ import TwSpeedyDialog from './ui/TwSpeedyDialog.vue';
 						'请求快速删除',
 						'請求快速刪除'
 					)}（[[LIB:CSD#${params.normalizeds[0].toUpperCase()}|CSD ${params.normalizeds[0].toUpperCase()}]]）`;
+					if (params.normalizeds[0] === 'g6' && params.templateParams[0]['1']) {
+						editsummary += `：${params.templateParams[0]['1']}`;
+					}
 				}
 				// Blank attack pages
 				if (params.blank) {
@@ -1012,6 +1018,14 @@ import TwSpeedyDialog from './ui/TwSpeedyDialog.vue';
 							return null;
 						}
 						currentParams.pagename = pagename;
+					}
+					break;
+				case 'g6':
+					if (subgroups.g6_rationale !== undefined) {
+						const g6rationale = subgroups.g6_rationale;
+						if (g6rationale && g6rationale.trim()) {
+							currentParams['1'] = g6rationale;
+						}
 					}
 					break;
 				case 'f2':
