@@ -56,7 +56,6 @@
 		"jsx-dom": "^8.1.6",
 		"monaco-editor": "^0.54.0",
 		"pinyin-pro": "^3.28.0",
-		"select2": "^4.0.13",
 		"svgo": "^4.0.0",
 		"tippy.js": "^6.3.7",
 		"toastify-js": "^1.12.0"

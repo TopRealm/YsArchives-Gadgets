@@ -1,7 +1,0 @@
-{
-	"enable": true,
-	"description": "<span id=\"Gadget-select2\"></span> [https://github.com/select2/select2/ Select2.js]",
-	"section": "compatibility",
-	"dependencies": ["jquery"],
-	"hidden": true
-}

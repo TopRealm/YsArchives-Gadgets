@@ -35,6 +35,10 @@ const DialogInner = () => (
 			<option value={getMessage('hideReasonRD3')}>{getMessage('hideReasonRD3')}</option>
 			<option value={getMessage('hideReasonRD4')}>{getMessage('hideReasonRD4')}</option>
 			<option value={getMessage('hideReasonRD5')}>{getMessage('hideReasonRD5')}</option>
+			<option value={getMessage('hideReasonOS1')}>{getMessage('hideReasonOS1')}</option>
+			<option value={getMessage('hideReasonOS2')}>{getMessage('hideReasonOS2')}</option>
+			<option value={getMessage('hideReasonOS3')}>{getMessage('hideReasonOS3')}</option>
+			<option value={getMessage('hideReasonOS4')}>{getMessage('hideReasonOS4')}</option>
 			<option value="">{getMessage('hideReasonOther')}</option>
 		</select>
 		<br />

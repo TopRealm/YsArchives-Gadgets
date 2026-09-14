@@ -67,12 +67,11 @@
 * GeoLocationReader-pagestyles[ResourceLoader|hidden|requiresES6]|GeoLocationReader-pagestyles.css
 * i18n[ResourceLoader|dependencies=ext.gadget.Util|hidden|requiresES6]|i18n.js
 * JSX[ResourceLoader|hidden|requiresES6]|JSX.js
-* morebits[ResourceLoader|dependencies=ext.gadget.i18n,ext.gadget.select2,ext.gadget.Util,jquery.ui,mediawiki.Title,mediawiki.user,mediawiki.util|hidden|requiresES6]|morebits.js|morebits.css
+* morebits[ResourceLoader|dependencies=ext.gadget.i18n,ext.gadget.Util,jquery.ui,mediawiki.Title,mediawiki.user,mediawiki.util|hidden|requiresES6]|morebits.js|morebits.css
 * NavFrame-pagestyles[ResourceLoader|hidden|requiresES6]|NavFrame-pagestyles.css
 * NoteTA[ResourceLoader|default|dependencies=ext.gadget.i18n,ext.gadget.JSX,ext.gadget.Util,jquery.makeCollapsible,mediawiki.api,mediawiki.util,oojs-ui-core,oojs-ui-windows|hidden|peers=NoteTA-pagestyles|requiresES6]|NoteTA.js
 * NoteTA-pagestyles[ResourceLoader|hidden|requiresES6]|NoteTA-pagestyles.css
 * PrintOptions[ResourceLoader|dependencies=ext.gadget.i18n,ext.gadget.Util,oojs-ui-core,oojs-ui-widgets,oojs-ui-windows|requiresES6]|PrintOptions.js
-* select2[ResourceLoader|dependencies=jquery|hidden|requiresES6]|select2.js|select2.css
 * SiteCommon[ResourceLoader|default|hidden|requiresES6]|SiteCommon.css
 * SiteCommon_Filepage[ResourceLoader|default|hidden|requiresES6]|SiteCommon_Filepage.css
 * SiteCommon_JS[ResourceLoader|default|dependencies=ext.gadget.i18n,ext.gadget.JSX,ext.gadget.Tippy,ext.gadget.Util,mediawiki.Title,mediawiki.util|hidden|peers=SiteCommon|requiresES6]|SiteCommon_JS.js
@@ -142,7 +141,7 @@
 * RollbackSummary[ResourceLoader|default|dependencies=ext.gadget.FilterAlteredClicks,ext.gadget.i18n,mediawiki.util|rights=rollback|requiresES6]|RollbackSummary.js
 * RRD[ResourceLoader|dependencies=ext.gadget.i18n,ext.gadget.JSX,ext.gadget.Util,jquery.ui,mediawiki.api,mediawiki.util|rights=skipcaptcha|requiresES6]|RRD.js|RRD.css
 * TranslateVariants[ResourceLoader|dependencies=ext.gadget.i18n,ext.gadget.JSX,ext.gadget.Util,mediawiki.api,mediawiki.diff.styles,mediawiki.util|rights=editinterface|requiresES6]|TranslateVariants.js|TranslateVariants.css
-* Twinkle[ResourceLoader|dependencies=ext.gadget.i18n,ext.gadget.morebits,ext.gadget.select2,ext.gadget.Util,mediawiki.api,mediawiki.language,mediawiki.util|peers=Twinkle-pagestyles|rights=skipcaptcha|requiresES6]|Twinkle.js
+* Twinkle[ResourceLoader|dependencies=@wikimedia/codex,ext.gadget.i18n,ext.gadget.morebits,ext.gadget.Util,mediawiki.api,mediawiki.language,mediawiki.util,vue|peers=Twinkle-pagestyles|rights=skipcaptcha|requiresES6]|Twinkle.js|Twinkle.css
 * Twinkle-pagestyles[ResourceLoader|hidden|rights=skipcaptcha|requiresES6]|Twinkle-pagestyles.css
 * UserRightsManager[ResourceLoader|dependencies=ext.gadget.i18n,ext.gadget.morebits,ext.gadget.Util,mediawiki.api,mediawiki.util,mediawiki.widgets.expiry,mediawiki.widgets.SelectWithInputWidget,oojs|rights=protect|requiresES6]|UserRightsManager.js
 * WhoIsActive[ResourceLoader|dependencies=ext.gadget.i18n,ext.gadget.JSX,ext.gadget.Util,mediawiki.api,mediawiki.Title|peers=WhoIsActive-pagestyles|requiresES6]|WhoIsActive.js
