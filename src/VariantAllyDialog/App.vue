@@ -30,7 +30,7 @@ function onOptOut() {
 
 <template>
 	<Teleport :to="desktopMountPoint">
-		<VAVariantPrompt
+		<v-a-variant-prompt
 			v-if="!isMobile"
 			v-model:open="isOpen"
 			v-model:disabled="isDisabled"
@@ -42,7 +42,7 @@ function onOptOut() {
 
 	<!-- Teleport to body because they are always floated at bottom -->
 	<Teleport to="body">
-		<VAVariantPromptMobile
+		<v-a-variant-prompt-mobile
 			v-if="isMobile"
 			v-model:open="isOpen"
 			v-model:disabled="isDisabled"

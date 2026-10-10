@@ -7,7 +7,6 @@ import {getBody} from 'ext.gadget.Util';
 import {linkSearchEditButton} from './modules/linkSearchEditButton';
 import {loadGadgetEditForm} from './modules/loadGadgetEditForm';
 import {replaceRandom} from './modules/replaceRandom';
-import {smartEditIntro} from './modules/smartEditIntro';
 import {smartNewSection} from './modules/smartNewSection';
 
 (function userJS(): void {
@@ -34,8 +33,6 @@ import {smartNewSection} from './modules/smartNewSection';
 		fixSummary($body);
 		/* 在[[Special:LinkSearch]]显示“编辑”按钮 */
 		linkSearchEditButton($body);
-		/* 编辑提示（EditIntro） */
-		smartEditIntro($body);
 		/* 智能讨论页编辑（新建） */
 		smartNewSection($body);
 		/* 替换随机页面链接 */

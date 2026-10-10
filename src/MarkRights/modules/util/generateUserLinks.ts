@@ -3,17 +3,18 @@ const generateUserLinks = ($content: JQuery): Record<string, JQuery<HTMLAnchorEl
 	const $elements = $content.find<HTMLAnchorElement>('a.mw-userlink:not(.mw-anonuserlink)');
 
 	for (const element of $elements) {
-		const $element: JQuery<HTMLAnchorElement> = $(element);
+		const parentLi: HTMLLIElement | null = element.closest('li');
+		if (parentLi?.querySelector('.gadgets-markrights')) {
+			continue;
+		}
 		if (
-			$element.parents('li').find('.gadgets-markrights').length ||
-			$element.siblings('.gadgets-markrights').length
+			element.nextElementSibling?.classList.contains('gadgets-markrights') ||
+			element.previousElementSibling?.classList.contains('gadgets-markrights')
 		) {
 			continue;
 		}
 
-		const {textContent} = element;
-		const user: string | undefined = textContent?.toString();
-
+		const user: string | undefined = element.textContent?.toString();
 		if (!user) {
 			continue;
 		}
@@ -22,8 +23,8 @@ const generateUserLinks = ($content: JQuery): Record<string, JQuery<HTMLAnchorEl
 			continue;
 		}
 
+		const $element = $(element);
 		userLinks[user] ??= [];
-
 		userLinks[user][userLinks[user].length] = $element; // Replace Array#push to avoid core-js polyfilling
 	}
 

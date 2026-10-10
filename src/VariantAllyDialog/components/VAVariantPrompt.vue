@@ -72,7 +72,7 @@ watch(prompt, () => {
 			:aria-labelledby="titleId"
 			:aria-describedby="descId"
 		>
-			<VAButton
+			<v-a-button
 				class="va-variant-prompt__close"
 				weight="quiet"
 				icon="close"
@@ -83,7 +83,7 @@ watch(prompt, () => {
 			/>
 			<h2 :id="titleId" class="va-variant-prompt__title va-title">
 				{{ useI18n(isVariantNarrowed ? 'vp.header.alt' : 'vp.header') }}<br />
-				<VAFadeTransition>
+				<v-a-fade-transition>
 					<span
 						v-if="!isVariantNarrowed"
 						:key="shuffledVariant"
@@ -91,14 +91,14 @@ watch(prompt, () => {
 						class="va-variant-prompt__title__variant"
 						>{{ messages.variants[shuffledVariant] }}</span
 					>
-				</VAFadeTransition>
+				</v-a-fade-transition>
 			</h2>
 			<p :id="descId" class="va-variant-prompt__desc va-para">
 				{{ useI18n(isVariantNarrowed ? 'vp.main.alt' : 'vp.main') }}
 			</p>
 			<div class="va-variant-prompt__options">
 				<!-- inferredVariant is non-null, guarded by isVariantNarrowed -->
-				<VAButton
+				<v-a-button
 					v-for="variant in isVariantNarrowed && inferredVariant !== null
 						? [inferredVariant]
 						: VALID_VARIANTS"
@@ -113,8 +113,8 @@ watch(prompt, () => {
 					@click="select(variant)"
 				>
 					{{ messages.variants[variant] }}
-				</VAButton>
-				<VAButton
+				</v-a-button>
+				<v-a-button
 					v-if="isVariantNarrowed"
 					class="va-variant-prompt__options__button"
 					indicator="arrowNext"
@@ -124,7 +124,7 @@ watch(prompt, () => {
 					@click="isVariantNarrowed = false"
 				>
 					{{ useI18n('vp.button.other') }}
-				</VAButton>
+				</v-a-button>
 			</div>
 			<footer class="va-variant-prompt__footer">
 				<p class="va-para va-para--subtle">

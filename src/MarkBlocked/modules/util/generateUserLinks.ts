@@ -1,5 +1,4 @@
 import * as OPTIONS from '../../options.json';
-import {MwUri} from 'ext.gadget.Util';
 import {generateUserNamespaceTitles} from './generateUserNamespaceTitles';
 
 // Get all aliases for user: & user_talk:
@@ -38,16 +37,17 @@ const generateUserLinks = ($content: JQuery): Record<string, JQuery[]> => {
 		if (mw.util.isIPv6Address(href.replace(/^(?:https?:\/\/)/i, ''))) {
 			continue;
 		}
-		try {
-			// Maybe absolute URL
-			if (new MwUri(href).host !== location.host) {
-				continue;
-			}
-		} catch {
+
+		// Optimization: Trust mw-userlink class to be internal, skip expensive checks
+		if (!element.classList.contains('mw-userlink')) {
 			try {
-				// Maybe relative URL
-				if (new MwUri(location.href + href).host !== location.host) {
-					continue;
+				// Maybe absolute URL
+				// Use native URL for better performance than MwUri, and check only if looks like absolute
+				if (href.includes('://') || href.startsWith('//')) {
+					const url = new URL(href, location.href);
+					if (url.host !== location.host) {
+						continue;
+					}
 				}
 			} catch {
 				continue;

@@ -1,0 +1,136 @@
+@import (reference) '../../variables.less';
+
+/* 字体 */
+/* 定制主题色并调整背景 */
+/* 修正基色对应css属性 */
+:root {
+	--font-family-base: var(--fonts-sans, sans-serif);
+	--font-family-serif: var(--fonts-serif, serif);
+	--font-family-monospace: var(--fonts-monospace, monospace);
+}
+
+/* 滚动条显示主题色 */
+* {
+	scrollbar-color: @color--primary transparent;
+	caret-color: @color--primary;
+}
+
+/* 变体菜单 */
+@media screen and (max-width: 720px) {
+	#citizen-languages__card {
+		right: calc(var(--space-xxl) * 2);
+	}
+}
+
+/* 小工具显示 */
+.page-info__item {
+	display: inline-block;
+}
+
+/* 深色模式颜色主题配置 */
+html.client-darkmode body {
+	/* 因为反色body之后深色模式控件变成了浅色 所以要反回来 怎么样 是不是很神奇 */
+	color-scheme: only light;
+
+	--color-surface-0: hsl(0, 0%, 100%);
+	--color-surface-1: hsl(0, 0%, 90%);
+	--color-surface-2: hsl(210, 17%, 88%);
+	--color-surface-3: hsl(220, 17%, 87%);
+	--color-surface-4: hsl(213, 9%, 85%);
+}
+
+/* 左上角图标不反色 */
+.client-darkmode .skin-citizen .mw-logo-icon {
+	-webkit-filter: invert(1) hue-rotate(180deg);
+	filter: invert(1) hue-rotate(180deg);
+}
+
+/* 修复图片背景色。 by awajie
+.client-darkmode {
+	[typeof~='mw:File'] img,
+	[typeof~='mw:File/Thumb'] img,
+	[typeof~='mw:File/Frame'] img,
+	[typeof~='mw:File/Frameless'] img,
+	.mw-halign-left img,
+	.mw-halign-right img,
+	.mw-halign-center img {
+		width: auto;
+		background: rgba(0, 0, 0, 0) !important;
+	}
+}
+	*/
+
+// 修复tabber扩展在infobox中溢出的问题 by awajie
+// 1.43.0中貌似没有溢出，先注释
+// .infobox {
+// 	tbody {
+// 		> tr:nth-child(1) {
+// 			td {
+// 				display: flex;
+// 				flex-direction: column;
+// 				overflow-x: auto;
+// 				.tabber__header .tabber__header__prev::after,
+// 				.tabber__header .tabber__header__next::after {
+// 					display: block;
+// 					width: 100%;
+// 					height: 100%;
+// 				}
+// 			}
+// 		}
+// 	}
+// }
+
+/* 统一手机端用户字体大小修改版 */
+@media only screen and (max-width: 767px) {
+	body {
+		font-size: 1rem; // 16px
+	}
+	h1 {
+		font-size: 2rem; // 32px
+	}
+	h2 {
+		font-size: 1.75rem; // 28px
+	}
+	h3 {
+		font-size: 1.5rem; // 24px
+	}
+	h4 {
+		font-size: 1.25rem; // 20px
+	}
+	h5 {
+		font-size: 1.125rem; // 18px
+	}
+	h6 {
+		font-size: 1rem; // 16px
+	}
+	p {
+		max-height: 100%;
+	}
+	.mw-special-ViewAvatar {
+		p img {
+			width: 100%;
+			height: auto;
+		}
+	}
+	#file img {
+		max-width: 100%;
+	}
+}
+
+/* 修复图片显示 */
+figure[typeof~='mw:File'] > a:first-child img,
+figure[typeof~='mw:File/Frameless'] > a:first-child img,
+figure[typeof~='mw:File/Thumb'] > a:first-child img,
+figure[typeof~='mw:File/Frame'] > a:first-child img,
+figure[typeof~='mw:File'] > a:first-child source,
+figure[typeof~='mw:File/Frameless'] > a:first-child source,
+figure[typeof~='mw:File/Thumb'] > a:first-child source,
+figure[typeof~='mw:File/Frame'] > a:first-child source {
+	contain: inherit;
+}
+
+// 修复编辑按钮样式异常
+.client-js .citizen-ve-edit-merged#ca-ve-edit > a {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}

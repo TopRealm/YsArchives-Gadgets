@@ -1,0 +1,60 @@
+#pinyin-typing,
+.pinyin-typing {
+	/* hide before javascript initialises */
+	opacity: 0;
+	transition: opacity 0.5s ease-in-out;
+}
+
+.pinyin-typing-container {
+	/* Do not ruin other elements, just wrap behavior */
+	line-height: inherit;
+	font-family: inherit;
+	/* reveal when initialised */
+	opacity: 1 !important;
+}
+
+.pinyin-typing-cursor {
+	display: inline-block;
+	width: 2px;
+	height: 1.1em;
+	background-color: var(--color-base, #222); /* Support MediaWiki standard scheme */
+	vertical-align: text-bottom;
+	margin-left: 2px;
+	animation: pinyin-typing-blink 0.8s step-end infinite;
+
+	html.skin-theme-clientpref-night & {
+		background-color: var(--color-base, #d4d4d4);
+	}
+
+	@media screen and (prefers-color-scheme: dark) {
+		html.skin-theme-clientpref-os & {
+			background-color: var(--color-base, #d4d4d4);
+		}
+	}
+}
+
+.pinyin-typing-ime-text {
+	text-decoration: underline;
+	text-decoration-color: var(--color-subtle, #888);
+	color: var(--color-primary, #0645ad);
+
+	html.skin-theme-clientpref-night & {
+		color: var(--color-primary, #9cdcfe);
+	}
+
+	@media screen and (prefers-color-scheme: dark) {
+		html.skin-theme-clientpref-os & {
+			color: var(--color-primary, #9cdcfe);
+		}
+	}
+}
+
+@keyframes pinyin-typing-blink {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+}

@@ -11,16 +11,9 @@ const markUserRights = ($content: JQuery): void => {
 		return;
 	}
 
-	const $userLinks = Object.values(userLinks).reduce((previousValue, currentValue) => {
-		return [...previousValue, ...currentValue];
-	});
-	if (!$userLinks.length) {
-		return;
-	}
-
 	const promises: (() => Promise<void>)[] = [];
 
-	for (let i = 0; i < users.length; i++) {
+	while (users.length) {
 		const ususers = users.splice(0, 25).filter((element) => {
 			return !(mw.util.isIPv4Address(element) || mw.util.isIPv6Address(element));
 		});
@@ -38,7 +31,14 @@ const markUserRights = ($content: JQuery): void => {
 				console.error('[MarkRights] Ajax error:', error);
 			}
 
-			appendUserRightsMark($userLinks, userGroups);
+			const batchUserLinks: Record<string, JQuery<HTMLAnchorElement>[]> = {};
+			for (const username of ususers) {
+				if (userLinks[username]) {
+					batchUserLinks[username] = userLinks[username];
+				}
+			}
+
+			appendUserRightsMark(batchUserLinks, userGroups);
 		};
 	}
 

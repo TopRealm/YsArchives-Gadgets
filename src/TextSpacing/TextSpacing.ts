@@ -1,5 +1,6 @@
 import './TextSpacing.less';
 import {WRAPPER_CLASS, addSpaceToString, adjustSpacing, getLeafElements} from './modules/spacing';
+import {supportsTextAutospace} from './modules/supportsTextAutospace';
 
 const run = (element: HTMLElement): void => {
 	const leaves: HTMLElement[] = getLeafElements(element);
@@ -53,4 +54,8 @@ const main = (): void => {
 	run(output);
 };
 
-$(main);
+if (supportsTextAutospace()) {
+	console.info('[TextSpacing] text-autospace is supported natively; no need to run the script.');
+} else {
+	$(main);
+}

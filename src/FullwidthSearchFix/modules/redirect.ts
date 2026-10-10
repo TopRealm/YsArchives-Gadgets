@@ -12,7 +12,7 @@ const redirect = (nameSpace: string, pageName: string): void => {
 	);
 
 	const {wgScript} = mw.config.get();
-	const href: string = new MwUri(wgScript)
+	const href: string = new MwUri(wgScript, location.origin)
 		.extend({
 			search: `${nameSpace}:${pageName}`,
 		})

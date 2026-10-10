@@ -1,0 +1,81 @@
+/**
+ * SPDX-License-Identifier: CC-BY-SA-4.0
+ * _addText: '{{Gadget Header|license=CC-BY-SA-4.0}}'
+ *
+ * @source {@link https://github.com/TopRealm/YsArchives-Gadgets/tree/master/src/PinyinTyping-pagestyles}
+ * @license CC-BY-SA-4.0 {@link https://youshou.wiki/wiki/H:CC-BY-SA-4.0}
+ */
+/**
+ * +------------------------------------------------------------+
+ * |            === WARNING: GLOBAL GADGET FILE ===             |
+ * +------------------------------------------------------------+
+ * |       All changes should be made in the repository,        |
+ * |                otherwise they will be lost.                |
+ * +------------------------------------------------------------+
+ * |        Changes to this page may affect many users.         |
+ * | Please discuss changes by opening an issue before editing. |
+ * +------------------------------------------------------------+
+ */
+/* <nowiki> */
+
+/* src/PinyinTyping-pagestyles/PinyinTyping-pagestyles.less */
+#pinyin-typing,
+.pinyin-typing {
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+.pinyin-typing-container {
+  line-height: inherit;
+  font-family: inherit;
+  opacity: 1 !important;
+}
+.pinyin-typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background-color: #222;
+  background-color: var(--color-base, #222);
+  vertical-align: text-bottom;
+  margin-left: 2px;
+  animation: pinyin-typing-blink 0.8s step-end infinite;
+}
+html.skin-theme-clientpref-night .pinyin-typing-cursor {
+  background-color: #d4d4d4;
+  background-color: var(--color-base, #d4d4d4);
+}
+@media screen and (prefers-color-scheme: dark) {
+  html.skin-theme-clientpref-os .pinyin-typing-cursor {
+    background-color: #d4d4d4;
+    background-color: var(--color-base, #d4d4d4);
+  }
+}
+.pinyin-typing-ime-text {
+  -webkit-text-decoration: underline;
+  text-decoration: underline;
+  text-decoration-color: #888;
+  text-decoration-color: var(--color-subtle, #888);
+  color: #0645ad;
+  color: var(--color-primary, #0645ad);
+}
+html.skin-theme-clientpref-night .pinyin-typing-ime-text {
+  color: #9cdcfe;
+  color: var(--color-primary, #9cdcfe);
+}
+@media screen and (prefers-color-scheme: dark) {
+  html.skin-theme-clientpref-os .pinyin-typing-ime-text {
+    color: #9cdcfe;
+    color: var(--color-primary, #9cdcfe);
+  }
+}
+@keyframes pinyin-typing-blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* </nowiki> */
+
+/*# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsiLi4vLi4vc3JjL1BpbnlpblR5cGluZy1wYWdlc3R5bGVzL1BpbnlpblR5cGluZy1wYWdlc3R5bGVzLmxlc3MiXSwKICAic291cmNlc0NvbnRlbnQiOiBbIiNwaW55aW4tdHlwaW5nLFxuLnBpbnlpbi10eXBpbmcge1xuICAvKiBoaWRlIGJlZm9yZSBqYXZhc2NyaXB0IGluaXRpYWxpc2VzICovXG4gIG9wYWNpdHk6IDA7XG4gIHRyYW5zaXRpb246IG9wYWNpdHkgMC41cyBlYXNlLWluLW91dDtcbn1cbi5waW55aW4tdHlwaW5nLWNvbnRhaW5lciB7XG4gIC8qIERvIG5vdCBydWluIG90aGVyIGVsZW1lbnRzLCBqdXN0IHdyYXAgYmVoYXZpb3IgKi9cbiAgbGluZS1oZWlnaHQ6IGluaGVyaXQ7XG4gIGZvbnQtZmFtaWx5OiBpbmhlcml0O1xuICAvKiByZXZlYWwgd2hlbiBpbml0aWFsaXNlZCAqL1xuICBvcGFjaXR5OiAxICFpbXBvcnRhbnQ7XG59XG4ucGlueWluLXR5cGluZy1jdXJzb3Ige1xuICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XG4gIHdpZHRoOiAycHg7XG4gIGhlaWdodDogMS4xZW07XG4gIGJhY2tncm91bmQtY29sb3I6ICMyMjI7XG4gIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWNvbG9yLWJhc2UsICMyMjIpO1xuICAvKiBTdXBwb3J0IE1lZGlhV2lraSBzdGFuZGFyZCBzY2hlbWUgKi9cbiAgdmVydGljYWwtYWxpZ246IHRleHQtYm90dG9tO1xuICBtYXJnaW4tbGVmdDogMnB4O1xuICBhbmltYXRpb246IHBpbnlpbi10eXBpbmctYmxpbmsgMC44cyBzdGVwLWVuZCBpbmZpbml0ZTtcbn1cbmh0bWwuc2tpbi10aGVtZS1jbGllbnRwcmVmLW5pZ2h0IC5waW55aW4tdHlwaW5nLWN1cnNvciB7XG4gIGJhY2tncm91bmQtY29sb3I6ICNkNGQ0ZDQ7XG4gIGJhY2tncm91bmQtY29sb3I6IHZhcigtLWNvbG9yLWJhc2UsICNkNGQ0ZDQpO1xufVxuQG1lZGlhIHNjcmVlbiBhbmQgKHByZWZlcnMtY29sb3Itc2NoZW1lOiBkYXJrKSB7XG4gIGh0bWwuc2tpbi10aGVtZS1jbGllbnRwcmVmLW9zIC5waW55aW4tdHlwaW5nLWN1cnNvciB7XG4gICAgYmFja2dyb3VuZC1jb2xvcjogI2Q0ZDRkNDtcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiB2YXIoLS1jb2xvci1iYXNlLCAjZDRkNGQ0KTtcbiAgfVxufVxuLnBpbnlpbi10eXBpbmctaW1lLXRleHQge1xuICAtd2Via2l0LXRleHQtZGVjb3JhdGlvbjogdW5kZXJsaW5lO1xuICB0ZXh0LWRlY29yYXRpb246IHVuZGVybGluZTtcbiAgdGV4dC1kZWNvcmF0aW9uLWNvbG9yOiAjODg4O1xuICB0ZXh0LWRlY29yYXRpb24tY29sb3I6IHZhcigtLWNvbG9yLXN1YnRsZSwgIzg4OCk7XG4gIGNvbG9yOiAjMDY0NWFkO1xuICBjb2xvcjogdmFyKC0tY29sb3ItcHJpbWFyeSwgIzA2NDVhZCk7XG59XG5odG1sLnNraW4tdGhlbWUtY2xpZW50cHJlZi1uaWdodCAucGlueWluLXR5cGluZy1pbWUtdGV4dCB7XG4gIGNvbG9yOiAjOWNkY2ZlO1xuICBjb2xvcjogdmFyKC0tY29sb3ItcHJpbWFyeSwgIzljZGNmZSk7XG59XG5AbWVkaWEgc2NyZWVuIGFuZCAocHJlZmVycy1jb2xvci1zY2hlbWU6IGRhcmspIHtcbiAgaHRtbC5za2luLXRoZW1lLWNsaWVudHByZWYtb3MgLnBpbnlpbi10eXBpbmctaW1lLXRleHQge1xuICAgIGNvbG9yOiAjOWNkY2ZlO1xuICAgIGNvbG9yOiB2YXIoLS1jb2xvci1wcmltYXJ5LCAjOWNkY2ZlKTtcbiAgfVxufVxuQGtleWZyYW1lcyBwaW55aW4tdHlwaW5nLWJsaW5rIHtcbiAgMCUsXG4gIDEwMCUge1xuICAgIG9wYWNpdHk6IDE7XG4gIH1cbiAgNTAlIHtcbiAgICBvcGFjaXR5OiAwO1xuICB9XG59XG4iXSwKICAibWFwcGluZ3MiOiAiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7QUFBQSxDQUFDO0FBQ0QsQ0FEQztBQUdDLFdBQVM7QUFDVCxjQUFZLFFBQVEsS0FBSztBQUMzQjtBQUNBLENBQUM7QUFFQyxlQUFhO0FBQ2IsZUFBYTtBQUViLFdBQVM7QUFDWDtBQUNBLENBQUM7QUFDQyxXQUFTO0FBQ1QsU0FBTztBQUNQLFVBQVE7QUFDUixvQkFBa0I7QUFDbEIsb0JBQWtCLElBQUksWUFBWSxFQUFFO0FBRXBDLGtCQUFnQjtBQUNoQixlQUFhO0FBQ2IsYUFBVyxvQkFBb0IsS0FBSyxTQUFTO0FBQy9DO0FBQ0EsSUFBSSxDQUFDLDRCQUE0QixDQVhoQztBQVlDLG9CQUFrQjtBQUNsQixvQkFBa0IsSUFBSSxZQUFZLEVBQUU7QUFDdEM7QUFDQSxPQUFPLFlBQVcsc0JBQXVCO0FBQ3ZDLE1BQUksQ0FBQyx5QkFBeUIsQ0FoQi9CO0FBaUJHLHNCQUFrQjtBQUNsQixzQkFBa0IsSUFBSSxZQUFZLEVBQUU7QUFDdEM7QUFDRjtBQUNBLENBQUM7QUFDQywyQkFBeUI7QUFDekIsbUJBQWlCO0FBQ2pCLHlCQUF1QjtBQUN2Qix5QkFBdUIsSUFBSSxjQUFjLEVBQUU7QUFDM0MsU0FBTztBQUNQLFNBQU8sSUFBSSxlQUFlLEVBQUU7QUFDOUI7QUFDQSxJQUFJLENBbEJDLDRCQWtCNEIsQ0FSaEM7QUFTQyxTQUFPO0FBQ1AsU0FBTyxJQUFJLGVBQWUsRUFBRTtBQUM5QjtBQUNBLE9BQU8sWUFBVyxzQkFBdUI7QUFDdkMsTUFBSSxDQWxCQyx5QkFrQnlCLENBYi9CO0FBY0csV0FBTztBQUNQLFdBQU8sSUFBSSxlQUFlLEVBQUU7QUFDOUI7QUFDRjtBQUNBLFdBOUJhO0FBK0JYO0FBRUUsYUFBUztBQUNYO0FBQ0E7QUFDRSxhQUFTO0FBQ1g7QUFDRjsiLAogICJuYW1lcyI6IFtdCn0K */

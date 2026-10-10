@@ -32,7 +32,7 @@ const messages = {
 	editInProgress: 'DisamAssist正在进行编辑。若您将本分页关闭，可能会丧失您的编辑。',
 	ellipsis: '……',
 	notifyCharacter: '✔',
-	summary: '使用[[MediaWiki:Gadget-DisamAssist.js|DisamAssist]]清理[[QW:DAB|消歧义]]链接：[[$1]]（$2）。',
+	summary: '使用[[MediaWiki:Gadget-DisamAssist.js|DisamAssist]]清理[[LIB:DAB|消歧义]]链接：[[$1]]（$2）。',
 	summaryChanged: '改链接至[[$1]]',
 	summaryOmitted: '链接已跳过',
 	summaryRemoved: '链接已移除',

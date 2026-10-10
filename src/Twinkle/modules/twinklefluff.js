@@ -1,3 +1,4 @@
+/* eslint-disable no-jquery/no-global-selector */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
@@ -48,7 +49,7 @@
 				// structuredChangeFilters.ui.initialized is just on load
 				mw.hook('wikipage.content').add((item) => {
 					if (item.is('div')) {
-						Twinkle.fluff.addLinks.recentchanges();
+						Twinkle.fluff.addLinks.recentchanges(item);
 					}
 				});
 			}
@@ -182,26 +183,34 @@
 				}
 			}
 		},
-		recentchanges: () => {
+		recentchanges: ($content) => {
 			if (
 				(mw.config.get('wgCanonicalSpecialPageName') === 'Recentchanges' &&
 					Twinkle.getPref('showRollbackLinks').includes('recentchanges')) ||
 				(mw.config.get('wgCanonicalSpecialPageName') === 'Recentchangeslinked' &&
 					Twinkle.getPref('showRollbackLinks').includes('recentchangeslinked'))
 			) {
+				const $root = $content && $content.length ? $content : $body;
 				// Latest and revertable (not page creations, logs, categorizations, etc.)
-				let $list = $body.find('.mw-changeslist .mw-changeslist-last.mw-changeslist-src-mw-edit');
+				let $list = $root.find('.mw-changeslist .mw-changeslist-last.mw-changeslist-src-mw-edit');
 				// Exclude top-level header if "group changes" preference is used
 				// and find only individual lines or nested lines
 				$list = $list
 					.not('.mw-rcfilters-ui-highlights-enhanced-toplevel')
 					.find('.mw-changeslist-line-inner, td.mw-enhanced-rc-nested');
 				$list.each((_key, current) => {
+					const href = $(current).find('.mw-changeslist-diff').attr('href');
+					const rev = mw.util.getParamValue('diff', href);
+					if (rev && current.querySelector(`#tw-revert${rev}`)) {
+						return;
+					}
+					if (!rev && current.querySelector('#tw-revert')) {
+						return;
+					}
+
 					// The :not is possibly unnecessary, as it appears that
 					// .mw-userlink is simply not present if the username is hidden
 					const vandal = $(current).find('.mw-userlink:not(.history-deleted)').text();
-					const href = $(current).find('.mw-changeslist-diff').attr('href');
-					const rev = mw.util.getParamValue('diff', href);
 					const page = current.dataset.targetPage;
 					current.appendChild(Twinkle.fluff.linkBuilder.rollbackLinks(vandal, true, rev, page));
 				});
@@ -266,23 +275,21 @@
 				oldTitle.insertBefore(revertToRevision, oldTitle.firstChild);
 				if (Twinkle.getPref('customRevertSummary').length > 0) {
 					revertToRevision.appendChild(document.createTextNode(' || '));
-					const revertsummary = new Morebits.quickForm.element({
-						type: 'select',
-						name: 'revertsummary',
-					});
-					revertsummary.append({
-						type: 'option',
-						label: window.wgULS('选择回退理由', '選擇回退理由'),
-						value: '',
-					});
-					$(Twinkle.getPref('customRevertSummary')).each((_, e) => {
-						revertsummary.append({
-							type: 'option',
-							label: e.label,
-							value: e.value,
-						});
-					});
-					revertToRevision.appendChild(revertsummary.render().childNodes[0]);
+					// Inline select for a custom revert summary (native element,
+					// no dialog involved)
+					const revertsummary = document.createElement('select');
+					revertsummary.setAttribute('name', 'revertsummary');
+					const defaultOption = document.createElement('option');
+					defaultOption.value = '';
+					defaultOption.textContent = window.wgULS('选择回退理由', '選擇回退理由');
+					revertsummary.appendChild(defaultOption);
+					for (const item of Twinkle.getPref('customRevertSummary')) {
+						const option = document.createElement('option');
+						option.value = item.value;
+						option.textContent = item.label;
+						revertsummary.appendChild(option);
+					}
+					revertToRevision.appendChild(revertsummary);
 				}
 			}
 			// Newer revision

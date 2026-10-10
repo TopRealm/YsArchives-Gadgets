@@ -3,7 +3,7 @@ import {addParsedWikitext} from '../util/addParsedWikitext';
 import {api} from '../api';
 import {getLanguage} from '../util/getLanguage';
 
-const {skin} = mw.config.get();
+const skin = mw.config.get('skin') as ApiParseParams['useskin'];
 
 // 加入预览内容
 const mwAddWikiText = async (wikitext: string, pageName: string, isPreview: boolean): Promise<void> => {
@@ -18,7 +18,7 @@ const mwAddWikiText = async (wikitext: string, pageName: string, isPreview: bool
 			text: wikitext,
 			prop: 'text',
 			uselang: getLanguage(),
-			useskin: skin,
+			...(skin && {useskin: skin}),
 		};
 		if (isPreview) {
 			params.disableeditsection = true;
@@ -97,7 +97,7 @@ const mwAddLuaText = async (
 				text: `{{${moduleCall.wikitext}${tempModuleName}|main}}`,
 				prop: 'text',
 				uselang: getLanguage(),
-				useskin: skin,
+				...(skin && {useskin: skin}),
 			};
 			if (isPreview) {
 				params.preview = true;

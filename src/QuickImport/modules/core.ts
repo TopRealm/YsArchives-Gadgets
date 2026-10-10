@@ -5,6 +5,22 @@ import {toastify} from 'ext.gadget.Toastify';
 type DetectIfFileRedirect = (pageNames: string | string[], isFileNS?: boolean) => Promise<void>;
 type RefreshPage = (title?: string) => void;
 
+type QueryImageInfoResponse = {
+	query?: {
+		normalized?: {from: string; to: string}[];
+		redirects?: {from: string; to: string}[];
+		pages?: {
+			title: string;
+			missing?: boolean;
+			redirect?: boolean;
+			imagerepository?: string;
+			imageinfo?: {
+				url: string;
+			}[];
+		}[];
+	};
+};
+
 let toastifyInstance: ToastifyInstance = {
 	hideToast: () => {},
 };
@@ -28,7 +44,7 @@ const refreshPage: RefreshPage = (title) => {
 
 const importPage = async (pageName: string, isFileNS: boolean = false): Promise<boolean> => {
 	// 将导入源统一为qwbk
-	const iwprefix: string = 'qwbk';
+	const iwprefix = 'qwbk';
 
 	toastifyInstance.hideToast();
 	toastifyInstance = toastify(
@@ -44,7 +60,7 @@ const importPage = async (pageName: string, isFileNS: boolean = false): Promise<
 		summary += '；文件作者请参见此页面及来源页面记载';
 	}
 
-	const params: ApiImportParams = {
+	const params = {
 		action: 'import',
 		format: 'json',
 		assignknownusers: true,
@@ -52,7 +68,7 @@ const importPage = async (pageName: string, isFileNS: boolean = false): Promise<
 		interwikiprefix: iwprefix,
 		interwikisource: iwprefix,
 		summary: `［${summary}］`,
-	};
+	} as unknown as ApiImportParams;
 	const result = await api.postWithEditToken(params);
 
 	if (result['import'] && result['import'][0] && result['import'].revisions) {
@@ -118,7 +134,7 @@ const queryImageInfo = async (titles: string | string[]) => {
 		iiprop: ['url'],
 		redirects: true,
 	};
-	const response = await api.get(params);
+	const response = (await api.get(params)) as QueryImageInfoResponse;
 
 	return response;
 };
@@ -155,7 +171,7 @@ const detectIfFileRedirect: DetectIfFileRedirect = async (pageNames, isFileNS = 
 				//// Import
 				if (response['query'].pages) {
 					for (const page1 of response['query'].pages) {
-						const title = page1.title as string;
+						const {title} = page1;
 
 						if (!page1.missing) {
 							continue;
@@ -178,10 +194,10 @@ const detectIfFileRedirect: DetectIfFileRedirect = async (pageNames, isFileNS = 
 			if (isFileNS) {
 				//// Query
 				const response2 = await queryImageInfo(titles);
-				if (response2['query']) {
+				if (response2.query) {
 					//// Normalize
-					if (response2['query'].normalized) {
-						for (const {from, to} of response2['query'].normalized as {from: string; to: string}[]) {
+					if (response2.query.normalized) {
+						for (const {from, to} of response2.query.normalized) {
 							titles = titles.map((element) => {
 								return element === from ? to : element;
 							});
@@ -189,9 +205,9 @@ const detectIfFileRedirect: DetectIfFileRedirect = async (pageNames, isFileNS = 
 					}
 
 					//// upload
-					if (response2['query'].pages) {
-						for (const page2 of response2['query'].pages) {
-							const title = page2.title as string;
+					if (response2.query.pages) {
+						for (const page2 of response2.query.pages) {
+							const {title} = page2;
 
 							if (page2.missing || page2.redirect) {
 								continue;
@@ -213,8 +229,8 @@ const detectIfFileRedirect: DetectIfFileRedirect = async (pageNames, isFileNS = 
 						}
 					}
 
-					if (response2['query'].redirects) {
-						for (const {to} of response2['query'].redirects as {from: string; to: string}[]) {
+					if (response2.query.redirects) {
+						for (const {to} of response2.query.redirects) {
 							tos[tos.length] = to;
 						}
 					}

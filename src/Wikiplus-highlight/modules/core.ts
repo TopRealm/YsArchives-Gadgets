@@ -91,7 +91,7 @@ const getPageMode = async (value: string): Promise<[string, (number | undefined)
 };
 
 const submit = /** 提交编辑 */ (): true => {
-		document.querySelector('#Wikiplus-Quickedit-Submit')!.dispatchEvent(new MouseEvent('click'));
+		document.querySelector('#Wikiplus-Quickedit-Submit')!.dispatchEvent(new PointerEvent('click'));
 		return true;
 	},
 	submitMinor = /** 提交小编辑 */ (): true => {
@@ -102,7 +102,7 @@ const submit = /** 提交编辑 */ (): true => {
 		const settings: Record<string, unknown> | null = getObject('Wikiplus_Settings'),
 			escToExitQuickEdit = settings && (settings['esc_to_exit_quickedit'] || settings['escToExitQuickEdit']);
 		if (escToExitQuickEdit === true || escToExitQuickEdit === 'true') {
-			document.querySelector('#Wikiplus-Quickedit-Back')!.dispatchEvent(new MouseEvent('click'));
+			document.querySelector('#Wikiplus-Quickedit-Back')!.dispatchEvent(new PointerEvent('click'));
 			return true;
 		}
 		return false;

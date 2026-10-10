@@ -1,6 +1,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 /*! Twinkle.js - twinkleunlink.js */
+import {createApp, h, reactive} from 'vue';
+import TwUnlinkDialog from './ui/TwUnlinkDialog.vue';
+
 (function twinkleunlink() {
 	/**
 	 * twinkleunlink.js: Unlink module
@@ -25,70 +28,71 @@
 	// the parameter is used when invoking unlink from admin speedy
 	Twinkle.unlink.callback = (presetReason) => {
 		const fileSpace = mw.config.get('wgNamespaceNumber') === 6;
-		const Window = new Morebits.simpleWindow(600, 440);
-		Window.setTitle(
-			window.wgULS('取消链入', '取消連入') +
-				(fileSpace ? window.wgULS('和模板、文件使用', '和模板、檔案使用') : '')
-		);
-		Window.setScriptName('Twinkle');
-		Window.addFooterLink(window.wgULS('链入设置', '連入設定'), 'H:TW/PREF#unlink');
-		Window.addFooterLink(window.wgULS('Twinkle帮助', 'Twinkle說明'), 'H:TW/DOC#unlink');
-		const form = new Morebits.quickForm(Twinkle.unlink.callback.evaluate);
-		// prepend some documentation: files are commented out, while any
-		// display text is preserved for links (otherwise the link itself is used)
-		const linkTextBefore = Morebits.htmlNode(
-			'code',
-			`[[${fileSpace ? ':' : ''}${Morebits.pageNameNorm}${window.wgULS('|链接文字]]', '|連結文字]]')}`
-		);
-		const linkTextAfter = Morebits.htmlNode('code', window.wgULS('链接文字', '連結文字'));
-		const linkPlainBefore = Morebits.htmlNode('code', `[[${Morebits.pageNameNorm}]]`);
-		const linkTemplateBefore = Morebits.htmlNode('code', `{{${mw.config.get('wgTitle')}}}`);
-		let linkPlainAfter;
-		if (fileSpace) {
-			linkPlainAfter = Morebits.htmlNode('code', `<!-- [[${Morebits.pageNameNorm}]] -->`);
-		} else {
-			linkPlainAfter = Morebits.htmlNode('code', Morebits.pageNameNorm);
-		}
-		for (const node of [linkTextBefore, linkTextAfter, linkPlainBefore, linkPlainAfter, linkTemplateBefore]) {
-			node.style.fontFamily = 'monospace';
-			node.style.fontStyle = 'normal';
-		}
-		form.append({
-			type: 'div',
-			style: 'margin-bottom: 0.5em; font-style: normal',
-			label: [
-				`${
-					window.wgULS(
-						'这个工具可以取消所有指向该页的链接（“链入”）',
-						'這個工具可以取消所有指向該頁的連結（「連入」）'
-					) +
-					(fileSpace
-						? window.wgULS(
-								'，或通过加入<!-- -->注释标记隐藏所有对此文件的使用',
-								'，或透過加入<!-- -->注釋標記隱藏所有對此檔案的使用'
-							)
-						: '')
-				}。例如：`,
-				linkTextBefore,
-				window.wgULS('将会变成', '將會變成'),
-				linkTextAfter,
-				'，',
-				linkPlainBefore,
-				window.wgULS('将会变成', '將會變成'),
-				linkPlainAfter,
-				'，',
-				linkTemplateBefore,
-				window.wgULS('将会被移除', '將會被移除'),
-				window.wgULS('。请小心使用。', '。請小心使用。'),
-			],
+		const root = document.createElement('div');
+		document.body.append(root);
+		const listData = reactive({
+			backlinks: [],
+			imageusage: [],
+			namespacesText: '',
+			loaded: false,
 		});
-		form.append({
-			type: 'input',
-			name: 'reason',
-			label: '理由：',
-			value: presetReason || '',
-			size: 60,
+		const escape = mw.html.escape;
+		const pageName = Morebits.pageNameNorm;
+		const linkPlainAfter = fileSpace ? `<!-- [[${escape(pageName)}]] -->` : escape(pageName);
+		const docHtml =
+			`${
+				window.wgULS(
+					'这个工具可以取消所有指向该页的链接（“链入”）',
+					'這個工具可以取消所有指向該頁的連結（「連入」）'
+				) +
+				(fileSpace
+					? window.wgULS(
+							'，或通过加入<!-- -->注释标记隐藏所有对此文件的使用',
+							'，或透過加入<!-- -->注釋標記隱藏所有對此檔案的使用'
+						)
+					: '')
+			}。例如：` +
+			`<code>[[${fileSpace ? ':' : ''}${escape(pageName)}${escape(
+				window.wgULS('|链接文字]]', '|連結文字]]')
+			)}</code>` +
+			`${window.wgULS('将会变成', '將會變成')}<code>${window.wgULS('链接文字', '連結文字')}</code>，` +
+			`<code>[[${escape(pageName)}]]</code>` +
+			`${window.wgULS('将会变成', '將會變成')}<code>${linkPlainAfter}</code>，` +
+			`<code>{{${escape(mw.config.get('wgTitle'))}}}</code>` +
+			`${window.wgULS('将会被移除', '將會被移除')}${window.wgULS('。请小心使用。', '。請小心使用。')}`;
+		let dialogInstance = null;
+		const app = createApp({
+			render: () => {
+				return h(TwUnlinkDialog, {
+					ref: (instance) => {
+						dialogInstance = instance;
+					},
+					title:
+						window.wgULS('取消链入', '取消連入') +
+						(fileSpace ? window.wgULS('和模板、文件使用', '和模板、檔案使用') : ''),
+					fileSpace,
+					presetReason: presetReason || '',
+					docHtml,
+					list: listData,
+					footerLinks: [
+						{text: window.wgULS('链入设置', '連入設定'), href: mw.util.getUrl('H:TW/PREF#unlink')},
+						{text: window.wgULS('Twinkle帮助', 'Twinkle說明'), href: mw.util.getUrl('H:TW/DOC#unlink')},
+					],
+					onSubmit: (params, statusContainer) => {
+						Twinkle.unlink.callback.evaluate(params, statusContainer);
+					},
+					onClose: () => {
+						app.unmount();
+						root.remove();
+					},
+				});
+			},
 		});
+		app.mount(root);
+		const statusRoot = dialogInstance?.exposed?.getStatusRoot?.() ?? null;
+		if (statusRoot) {
+			Morebits.status.init(statusRoot);
+		}
 		const query = {
 			action: 'query',
 			list: 'backlinks',
@@ -113,31 +117,21 @@
 			Twinkle.unlink.callbacks.display.backlinks
 		);
 		ysarchives_api.params = {
-			form,
-			Window,
+			list: listData,
 			image: fileSpace,
 		};
-		ysarchives_api.post();
-		const root = document.createElement('div');
-		root.style.padding = '15px'; // just so it doesn't look broken
-		Morebits.status.init(root);
 		ysarchives_api.statelem.status(window.wgULS('加载中……', '載入中……'));
-		Window.setContent(root);
-		Window.display();
+		ysarchives_api.post();
 	};
-	Twinkle.unlink.callback.evaluate = (event) => {
-		const form = event.target;
-		const input = Morebits.quickForm.getInputData(form);
-		if (!input.reason) {
+	Twinkle.unlink.callback.evaluate = (params, statusContainer) => {
+		if (!params.reason) {
 			void mw.notify(window.wgULS('您必须指定取消链入的理由。', '您必須指定取消連入的理由。'), {
 				type: 'warn',
 				tag: 'twinkleunlink',
 			});
 			return;
 		}
-		input.backlinks ||= [];
-		input.imageusage ||= [];
-		const pages = Morebits.array.uniq([...input.backlinks, ...input.imageusage]);
+		const pages = Morebits.array.uniq([...params.backlinks, ...params.imageusage]);
 		if (!pages.length) {
 			void mw.notify(
 				window.wgULS('您必须至少选择一个要取消链入的页面。', '您必須至少選擇一個要取消連入的頁面。'),
@@ -148,20 +142,19 @@
 			);
 			return;
 		}
-		Morebits.simpleWindow.setButtonsEnabled(false);
-		Morebits.status.init(form);
+		Morebits.status.init(statusContainer);
 		const unlinker = new Morebits.batchOperation(
 			`取消${
-				input.backlinks.length
+				params.backlinks.length
 					? window.wgULS('链入', '連入') +
-						(input.imageusage.length ? window.wgULS('与文件使用', '與檔案使用') : '')
+						(params.imageusage.length ? window.wgULS('与文件使用', '與檔案使用') : '')
 					: window.wgULS('文件使用', '檔案使用')
 			}`
 		);
 		unlinker.setOption('preserveIndividualStatusLines', true);
 		unlinker.setPageList(pages);
-		const params = {
-			reason: input.reason,
+		const batchParams = {
+			reason: params.reason,
 			unlinker,
 		};
 		unlinker.run((pageName) => {
@@ -171,9 +164,9 @@
 			);
 			ysarchives_page.setBotEdit(true); // unlink considered a floody operation
 			ysarchives_page.setCallbackParameters({
-				doBacklinks: input.backlinks.includes(pageName),
-				doImageusage: input.imageusage.includes(pageName),
-				...params,
+				doBacklinks: params.backlinks.includes(pageName),
+				doImageusage: params.imageusage.includes(pageName),
+				...batchParams,
 			});
 			ysarchives_page.load(Twinkle.unlink.callbacks.unlinkBacklinks);
 		});
@@ -182,157 +175,28 @@
 		display: {
 			backlinks: (apiobj) => {
 				const response = apiobj.getResponse();
-				let havecontent = false;
-				let list;
-				let namespaces;
-				let i;
+				const {list} = apiobj.params;
+				const namespaces = [];
+				for (const v of Twinkle.getPref('unlinkNamespaces')) {
+					namespaces[namespaces.length] =
+						v === '0' ? window.wgULS('（条目）', '（條目）') : mw.config.get('wgFormattedNamespaces')[v];
+				}
+				list.namespacesText = window.wgULS('已选择的命名空间：', '已選擇的命名空間：') + namespaces.join('、');
 				if (apiobj.params.image) {
-					const imageusage = response.query.imageusage.sort(Twinkle.sortByNamespace);
-					list = [];
-					for (i = 0; i < imageusage.length; ++i) {
-						// Label made by Twinkle.generateBatchPageLinks
-						list[list.length] = {
-							label: '',
-							value: imageusage[i].title,
-							checked: true,
-						};
-					}
-					if (list.length) {
-						apiobj.params.form.append({
-							type: 'header',
-							label: window.wgULS('文件使用', '檔案使用'),
-						});
-						namespaces = [];
-						for (const v of Twinkle.getPref('unlinkNamespaces')) {
-							namespaces[namespaces.length] =
-								v === '0'
-									? window.wgULS('（条目）', '（條目）')
-									: mw.config.get('wgFormattedNamespaces')[v];
-						}
-						apiobj.params.form.append({
-							type: 'div',
-							label: window.wgULS('已选择的命名空间：', '已選擇的命名空間：') + namespaces.join('、'),
-							tooltip: window.wgULS(
-								'您可在Twinkle参数设置中更改相关选项，请参见[[H:TW/PREF]]',
-								'您可在Twinkle偏好設定中更改相關選項，請參見[[H:TW/PREF]]'
-							),
-						});
-						if (response['query-continue'] && response['query-continue'].imageusage) {
-							apiobj.params.form.append({
-								type: 'div',
-								label:
-									window.wgULS('显示前', '顯示前') +
-									mw.language.convertNumber(list.length) +
-									window.wgULS('个文件使用。', '個檔案使用。'),
-							});
-						}
-						apiobj.params.form.append({
-							type: 'button',
-							label: window.wgULS('全选', '全選'),
-							event: (e) => {
-								$(Morebits.quickForm.getElements(e.target.form, 'imageusage')).prop('checked', true);
-							},
-						});
-						apiobj.params.form.append({
-							type: 'button',
-							label: window.wgULS('全不选', '全不選'),
-							event: (e) => {
-								$(Morebits.quickForm.getElements(e.target.form, 'imageusage')).prop('checked', false);
-							},
-						});
-						apiobj.params.form.append({
-							type: 'checkbox',
-							name: 'imageusage',
-							shiftClickSupport: true,
-							list,
-						});
-						havecontent = true;
-					} else {
-						apiobj.params.form.append({
-							type: 'div',
-							label: window.wgULS('未找到文件使用。', '未找到檔案使用。'),
-						});
-					}
+					const imageusage = response.query.imageusage ?? [];
+					list.imageusage.push(
+						...imageusage.sort(Twinkle.sortByNamespace).map((item) => {
+							return item.title;
+						})
+					);
 				}
-				const backlinks = response.query.backlinks.sort(Twinkle.sortByNamespace);
-				if (backlinks.length > 0) {
-					list = [];
-					for (i = 0; i < backlinks.length; ++i) {
-						// Label made by Twinkle.generateBatchPageLinks
-						list[list.length] = {
-							label: '',
-							value: backlinks[i].title,
-							checked: true,
-						};
-					}
-					apiobj.params.form.append({
-						type: 'header',
-						label: window.wgULS('链入', '連入'),
-					});
-					namespaces = [];
-					for (const v of Twinkle.getPref('unlinkNamespaces')) {
-						namespaces[namespaces.length] =
-							v === '0'
-								? window.wgULS('（条目）', '（條目）')
-								: mw.config.get('wgFormattedNamespaces')[v];
-					}
-					apiobj.params.form.append({
-						type: 'div',
-						label: window.wgULS('已选择的命名空间：', '已選擇的命名空間：') + namespaces.join('、'),
-						tooltip: window.wgULS(
-							'您可在Twinkle参数设置中更改相关选项，请参见[[H:TW/PREF]]',
-							'您可在Twinkle偏好設定中更改相關選項，請參見[[H:TW/PREF]]'
-						),
-					});
-					if (response['query-continue'] && response['query-continue'].backlinks) {
-						apiobj.params.form.append({
-							type: 'div',
-							label:
-								window.wgULS('显示前', '顯示前') +
-								mw.language.convertNumber(list.length) +
-								window.wgULS('个链入。', '個連入。'),
-						});
-					}
-					apiobj.params.form.append({
-						type: 'button',
-						label: window.wgULS('全选', '全選'),
-						event: (e) => {
-							$(Morebits.quickForm.getElements(e.target.form, 'backlinks')).prop('checked', true);
-						},
-					});
-					apiobj.params.form.append({
-						type: 'button',
-						label: window.wgULS('全不选', '全不選'),
-						event: (e) => {
-							$(Morebits.quickForm.getElements(e.target.form, 'backlinks')).prop('checked', false);
-						},
-					});
-					apiobj.params.form.append({
-						type: 'checkbox',
-						name: 'backlinks',
-						shiftClickSupport: true,
-						list,
-					});
-					havecontent = true;
-				} else {
-					apiobj.params.form.append({
-						type: 'div',
-						label: window.wgULS('未找到链入。', '未找到連入。'),
-					});
-				}
-				if (havecontent) {
-					apiobj.params.form.append({
-						type: 'submit',
-					});
-				}
-				const result = apiobj.params.form.render();
-				apiobj.params.Window.setContent(result);
-				for (const link of Morebits.quickForm.getElements(result, 'backlinks')) {
-					Twinkle.generateBatchPageLinks(link);
-				}
-				for (const link of Morebits.quickForm.getElements(result, 'imageusage')) {
-					Twinkle.generateBatchPageLinks(link);
-				}
+				const backlinks = response.query.backlinks ?? [];
+				list.backlinks.push(
+					...backlinks.sort(Twinkle.sortByNamespace).map((item) => {
+						return item.title;
+					})
+				);
+				list.loaded = true;
 			},
 		},
 		unlinkBacklinks: (pageobj) => {

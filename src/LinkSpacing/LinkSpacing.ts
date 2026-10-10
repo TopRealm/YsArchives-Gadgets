@@ -12,8 +12,19 @@ for (const [index, link] of links.entries()) {
 		continue;
 	}
 
+	if (
+		link.classList.contains('mw-file-description') ||
+		link.classList.contains('mw-file-source') ||
+		beforeElement.classList.contains('mw-file-description') ||
+		beforeElement.classList.contains('mw-file-source') ||
+		link.querySelector('img') ||
+		beforeElement.querySelector('img')
+	) {
+		continue;
+	}
+
 	if (beforeElement.nextSibling === link) {
 		const spacer = LinkSpace().cloneNode();
-		link.before(spacer, link);
+		link.before(spacer);
 	}
 }

@@ -1,5 +1,3 @@
-import './Twinkle.less';
-
 (async function twinkleLoad() {
 	await import('./modules/twinkle');
 	await import('./modules/twinklearv');

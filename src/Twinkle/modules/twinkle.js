@@ -1,3 +1,4 @@
+/* eslint-disable no-jquery/no-global-selector */
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import {api} from './api';
@@ -233,7 +234,7 @@ import {api} from './api';
 				$body.find('#page-tools .sidebar-inner').length > 0 ? 'page-more' : null;
 			break;
 		case 'citizen':
-			Twinkle.defaultConfig.portletArea = '#page-actions-more__card .citizen-menu__card-content';
+			Twinkle.defaultConfig.portletArea = '#citizen-page-actions-more__card .citizen-menu__card-content';
 			Twinkle.defaultConfig.portletId = 'p-twinkle';
 			Twinkle.defaultConfig.portletName = 'Twinkle';
 			Twinkle.defaultConfig.portletType = 'nav';
